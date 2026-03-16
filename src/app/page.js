@@ -8,7 +8,7 @@ const LINKS = {
 const FEATURED_PROJECTS = [
   {
     title: "Social Media Platform — Backend",
-    subtitle: "Full-stack backend for a social media application (professional)",
+    subtitle: "Production REST API for a social media application",
     type: "professional",
     tech: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Stripe", "JWT"],
     bullets: [
@@ -22,7 +22,7 @@ const FEATURED_PROJECTS = [
   },
   {
     title: "Workforce Management — Android App",
-    subtitle: "Native Android app with real-time computer vision (professional)",
+    subtitle: "Native Android app with real-time computer vision",
     type: "professional",
     tech: ["Kotlin", "Jetpack Compose", "CameraX", "ML Kit", "AWS Rekognition", "Room", "Hilt"],
     bullets: [
@@ -35,7 +35,7 @@ const FEATURED_PROJECTS = [
     links: [],
   },
   {
-    title: "FocusNode — Productivity Chrome Extension",
+    title: "FocusNode — Chrome Extension",
     subtitle: "Blocks distracting sites during focus sessions",
     type: "personal",
     tech: ["React", "Vite", "Chrome Extensions API", "JavaScript"],
@@ -49,7 +49,7 @@ const FEATURED_PROJECTS = [
   },
   {
     title: "Tuesday.com — Hackathon Project Manager",
-    subtitle: "Built at HackED 2025 (forked repo on GitHub)",
+    subtitle: "Built at HackED 2025",
     type: "personal",
     tech: ["Node.js", "Express", "MongoDB", "JavaScript"],
     bullets: [
@@ -62,7 +62,7 @@ const FEATURED_PROJECTS = [
   },
   {
     title: "ASCII — Image to ASCII Converter",
-    subtitle: "Convert images into terminal-friendly ASCII art",
+    subtitle: "CLI utility for terminal art",
     type: "personal",
     tech: ["Python"],
     bullets: [
@@ -108,12 +108,30 @@ const SKILLS = {
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "BioAMP EXG"],
 };
 
+/* ── components ── */
+
 function Pill({ children }) {
   return <span className="pill">{children}</span>;
 }
 
 function Card({ children }) {
   return <div className="card">{children}</div>;
+}
+
+function TermCard({ title, children }) {
+  return (
+    <div className="termCard">
+      <div className="termBar">
+        <span className="termDot r" />
+        <span className="termDot y" />
+        <span className="termDot g" />
+        <span className="termBarTitle">{title}</span>
+      </div>
+      <div className="termBody">
+        {children}
+      </div>
+    </div>
+  );
 }
 
 function Section({ id, title, subtitle, children }) {
@@ -134,53 +152,57 @@ export default function Page() {
       {/* HERO */}
       <section className="hero">
         <div className="heroLeft">
+          <p className="muted" style={{ margin: '0 0 8px', fontSize: 13 }}>
+            <span className="promptUser">ayaan</span>
+            <span className="promptAt">@</span>
+            <span className="promptDir">portfolio</span>
+            {' '}
+            <span className="promptArrow">~</span>
+            {' '}
+            <span style={{ color: 'var(--fg-dark)' }}>cat about.md</span>
+          </p>
           <h1>
             Ayaan Hafeez
             <span className="dot">.</span>
+            <span className="cursor" />
           </h1>
           <p className="lead">
             3rd-year Computer Engineering (Software) co-op student at the University of Alberta —
             AI Developer @ Elev8AI, building production backends, Android apps, and LLM systems.
           </p>
           <div className="ctaRow">
-            <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">GitHub</a>
-            <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-            <a className="btn ghost" href={`mailto:${LINKS.email}`}>Email</a>
-            <a className="btn ghost" href={LINKS.resume}>Resume PDF</a>
+            <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
+            <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+            <a className="btn ghost" href={`mailto:${LINKS.email}`}>~/email</a>
+            <a className="btn ghost" href={LINKS.resume}>~/resume.pdf</a>
           </div>
 
           <div className="quickFacts">
             <Pill>AI / RAG / NL2SQL</Pill>
             <Pill>FastAPI + PostgreSQL</Pill>
-            <Pill>Kotlin + Jetpack Compose</Pill>
+            <Pill>Kotlin + Compose</Pill>
             <Pill>React + Node</Pill>
             <Pill>Embedded + FPGA</Pill>
           </div>
         </div>
 
-        <div className="heroRight">
-          <Card>
-            <h3>Now</h3>
-            <ul className="list">
-              <li>Building LLM-powered automation + retrieval systems</li>
-              <li>Shipping production backends and mobile apps</li>
-              <li>Looking for co-op opportunities</li>
-            </ul>
-          </Card>
+        <div className="heroRight" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <TermCard title="~/now">
+            <span className="termLine"><span className="prompt">$</span> Building LLM-powered automation + retrieval systems</span>
+            <span className="termLine"><span className="prompt">$</span> Shipping production backends and mobile apps</span>
+            <span className="termLine"><span className="prompt">$</span> Looking for co-op opportunities</span>
+          </TermCard>
 
-          <Card>
-            <h3>Links</h3>
-            <ul className="list">
-              <li><a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></li>
-              <li><a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></li>
-              <li><a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></li>
-            </ul>
-          </Card>
+          <TermCard title="~/links">
+            <span className="termLine"><span className="prompt">&gt;</span> <a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
+            <span className="termLine"><span className="prompt">&gt;</span> <a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>
+            <span className="termLine"><span className="prompt">&gt;</span> <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></span>
+          </TermCard>
         </div>
       </section>
 
       {/* PROJECTS */}
-      <Section id="projects" title="Featured Projects" subtitle="Professional and personal work.">
+      <Section id="projects" title="projects" subtitle="-- professional and personal work">
         <div className="grid">
           {FEATURED_PROJECTS.map((p) => (
             <Card key={p.title}>
@@ -191,7 +213,7 @@ export default function Page() {
                 </div>
                 {p.type && (
                   <span className={`typeBadge ${p.type}`}>
-                    {p.type === "professional" ? "Pro" : "Personal"}
+                    {p.type === "professional" ? "pro" : "personal"}
                   </span>
                 )}
               </div>
@@ -206,7 +228,7 @@ export default function Page() {
 
               {p.nda && (
                 <div className="ndaNotice">
-                  Source code under NDA
+                  ⚠ source under NDA
                 </div>
               )}
 
@@ -226,7 +248,7 @@ export default function Page() {
         <div className="spacer" />
 
         <Card>
-          <h3>More repos</h3>
+          <h3 style={{ margin: '0 0 4px', fontSize: 15 }}>more repos</h3>
           <div className="miniGrid">
             {MORE_REPOS.map((r) => (
               <a key={r.href} className="miniCard" href={r.href} target="_blank" rel="noreferrer">
@@ -239,12 +261,12 @@ export default function Page() {
       </Section>
 
       {/* EXPERIENCE */}
-      <Section id="experience" title="Experience" subtitle="What I've been doing recently.">
+      <Section id="experience" title="experience" subtitle="-- what i've been doing recently">
         {EXPERIENCE.map((e) => (
           <Card key={e.role + e.org}>
             <div className="expHead">
               <div>
-                <h3 className="cardTitle">{e.role} — {e.org}</h3>
+                <h3 className="cardTitle">{e.role} <span style={{ color: 'var(--purple)' }}>@</span> {e.org}</h3>
                 <p className="muted">{e.location}</p>
               </div>
               <div className="muted">{e.time}</div>
@@ -257,11 +279,11 @@ export default function Page() {
       </Section>
 
       {/* SKILLS */}
-      <Section id="skills" title="Skills" subtitle="Quick scan list.">
+      <Section id="skills" title="skills" subtitle="-- quick scan list">
         <div className="grid2">
           {Object.entries(SKILLS).map(([group, items]) => (
             <Card key={group}>
-              <h3>{group}</h3>
+              <h3 className="skillGroup">{group}</h3>
               <div className="pillRow">
                 {items.map((it) => <Pill key={it}>{it}</Pill>)}
               </div>
@@ -271,17 +293,29 @@ export default function Page() {
       </Section>
 
       {/* CONTACT */}
-      <Section id="contact" title="Contact" subtitle="Best way to reach me.">
-        <Card>
-          <p className="lead" style={{ marginTop: 0 }}>
-            Email me at <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>
-          </p>
+      <Section id="contact" title="contact" subtitle="-- best way to reach me">
+        <TermCard title="~/contact">
+          <span className="termLine">
+            <span className="prompt">$</span>{' '}
+            <span style={{ color: 'var(--fg-dark)' }}>echo $EMAIL</span>
+          </span>
+          <span className="termLine">
+            <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>
+          </span>
+          <span className="termLine" style={{ marginTop: 8 }}>
+            <span className="prompt">$</span>{' '}
+            <span style={{ color: 'var(--fg-dark)' }}>cat links.txt</span>
+          </span>
+          <span className="termLine"><a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
+          <span className="termLine"><a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>
+        </TermCard>
+        <div style={{ marginTop: 12 }}>
           <div className="ctaRow">
-            <a className="btn" href={`mailto:${LINKS.email}`}>Email</a>
-            <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">GitHub</a>
-            <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a className="btn" href={`mailto:${LINKS.email}`}>~/email</a>
+            <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
+            <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
           </div>
-        </Card>
+        </div>
       </Section>
     </>
   );

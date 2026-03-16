@@ -12,12 +12,12 @@ export default function RootLayout({ children }) {
         <div className="bg" />
         <header className="nav">
           <div className="navInner">
-            <a className="brand" href="#top">Ayaan</a>
+            <a className="brand" href="#top">ayaan.dev</a>
             <nav className="links">
-              <a href="#projects">Projects</a>
-              <a href="#experience">Experience</a>
-              <a href="#skills">Skills</a>
-              <a href="#contact">Contact</a>
+              <a href="#projects">projects</a>
+              <a href="#experience">experience</a>
+              <a href="#skills">skills</a>
+              <a href="#contact">contact</a>
             </nav>
           </div>
         </header>
@@ -28,11 +28,12 @@ export default function RootLayout({ children }) {
 
         <footer className="footer">
           <div className="container">
-            <p>© {new Date().getFullYear()} Ayaan Hafeez</p>
+            <p style={{ margin: 0 }}>
+              <span style={{ color: 'var(--comment)' }}>--</span> © {new Date().getFullYear()} Ayaan Hafeez <span style={{ color: 'var(--comment)' }}>|</span> built with next.js
+            </p>
           </div>
         </footer>
       </body>
     </html>
   );
 }
-
