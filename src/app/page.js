@@ -2,14 +2,42 @@ const LINKS = {
   email: "mhafeez1@ualberta.ca",
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
-  // If you add your resume PDF later: put it at /public/resume.pdf
   resume: "/resume.pdf",
 };
 
 const FEATURED_PROJECTS = [
   {
+    title: "Social Media Platform — Backend",
+    subtitle: "Full-stack backend for a social media application (professional)",
+    type: "professional",
+    tech: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Stripe", "JWT"],
+    bullets: [
+      "Designed and built a production REST API with role-based access control, JWT auth, and Argon2 password hashing.",
+      "Integrated Stripe for subscription management with webhook-driven payment sync.",
+      "Built a pluggable ML-powered identity verification pipeline with OCR, face matching, liveness detection, and tamper checks.",
+      "Containerized with Docker Compose (FastAPI + PostgreSQL + Redis) for reproducible deployments.",
+    ],
+    nda: true,
+    links: [],
+  },
+  {
+    title: "Workforce Management — Android App",
+    subtitle: "Native Android app with real-time computer vision (professional)",
+    type: "professional",
+    tech: ["Kotlin", "Jetpack Compose", "CameraX", "ML Kit", "AWS Rekognition", "Room", "Hilt"],
+    bullets: [
+      "Built a native Android app using Kotlin + Jetpack Compose with clean MVVM architecture and Hilt DI.",
+      "Implemented real-time face detection pipeline with Google ML Kit, including quality checks for size, position, and head angles.",
+      "Integrated AWS Rekognition for cloud-based face recognition with configurable confidence thresholds.",
+      "Used Room for offline-first local persistence with coroutine-based reactive data flows.",
+    ],
+    nda: true,
+    links: [],
+  },
+  {
     title: "FocusNode — Productivity Chrome Extension",
     subtitle: "Blocks distracting sites during focus sessions",
+    type: "personal",
     tech: ["React", "Vite", "Chrome Extensions API", "JavaScript"],
     bullets: [
       "Blocks user-defined domains in real time and redirects tabs quickly.",
@@ -20,8 +48,9 @@ const FEATURED_PROJECTS = [
     ],
   },
   {
-    title: "Tuesday.com — Hackathon Project Management App",
+    title: "Tuesday.com — Hackathon Project Manager",
     subtitle: "Built at HackED 2025 (forked repo on GitHub)",
+    type: "personal",
     tech: ["Node.js", "Express", "MongoDB", "JavaScript"],
     bullets: [
       "Hackathon team app with AI-driven task automation concept.",
@@ -34,6 +63,7 @@ const FEATURED_PROJECTS = [
   {
     title: "ASCII — Image to ASCII Converter",
     subtitle: "Convert images into terminal-friendly ASCII art",
+    type: "personal",
     tech: ["Python"],
     bullets: [
       "CLI-style utility for turning images into printable ASCII output.",
@@ -51,7 +81,6 @@ const MORE_REPOS = [
     subtitle: "C++ repo (forked)",
     href: "https://github.com/mayaanhafeez/PlayMG",
   },
-  // You can add your NL2SQL / scraper repo here when public
 ];
 
 const EXPERIENCE = [
@@ -65,14 +94,17 @@ const EXPERIENCE = [
       "Improved retrieval quality with context selection + entity recognition + relevance scoring; ~70% precision gain and ~4s faster responses.",
       "Optimized pipeline with tokenization tuning, caching, and query restructuring; ~6s latency under production workloads.",
       "Automated API documentation extraction from JS-rendered sites using Selenium + Playwright; normalized 100+ endpoints into OpenAPI-style schemas.",
+      "Built a production FastAPI backend with PostgreSQL, Redis, Stripe integration, JWT auth, and an ML-powered identity verification pipeline.",
+      "Developed an Android app in Kotlin + Jetpack Compose with real-time face detection (ML Kit) and cloud recognition (AWS Rekognition).",
     ],
   },
 ];
 
 const SKILLS = {
-  Languages: ["Python", "Java", "C/C++", "JavaScript", "SQL", "NoSQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["Node.js", "React", "Vite", "Express", "Flask", "LangChain", "NumPy", "pandas"],
-  Tools: ["Git", "Docker", "VS Code", "Chrome DevTools"],
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "SQL", "NoSQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "NumPy", "pandas"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "AWS", "Stripe", "VS Code", "Android Studio", "Chrome DevTools"],
+  "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "BioAMP EXG"],
 };
 
@@ -108,7 +140,7 @@ export default function Page() {
           </h1>
           <p className="lead">
             3rd-year Computer Engineering (Software) co-op student at the University of Alberta —
-            AI Developer @ Elev8AI.
+            AI Developer @ Elev8AI, building production backends, Android apps, and LLM systems.
           </p>
           <div className="ctaRow">
             <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">GitHub</a>
@@ -119,6 +151,8 @@ export default function Page() {
 
           <div className="quickFacts">
             <Pill>AI / RAG / NL2SQL</Pill>
+            <Pill>FastAPI + PostgreSQL</Pill>
+            <Pill>Kotlin + Jetpack Compose</Pill>
             <Pill>React + Node</Pill>
             <Pill>Embedded + FPGA</Pill>
           </div>
@@ -129,7 +163,7 @@ export default function Page() {
             <h3>Now</h3>
             <ul className="list">
               <li>Building LLM-powered automation + retrieval systems</li>
-              <li>Shipping web tools (extensions, apps)</li>
+              <li>Shipping production backends and mobile apps</li>
               <li>Looking for co-op opportunities</li>
             </ul>
           </Card>
@@ -146,7 +180,7 @@ export default function Page() {
       </section>
 
       {/* PROJECTS */}
-      <Section id="projects" title="Featured Projects" subtitle="A few things you can click right now.">
+      <Section id="projects" title="Featured Projects" subtitle="Professional and personal work.">
         <div className="grid">
           {FEATURED_PROJECTS.map((p) => (
             <Card key={p.title}>
@@ -155,6 +189,11 @@ export default function Page() {
                   <h3 className="cardTitle">{p.title}</h3>
                   <p className="muted">{p.subtitle}</p>
                 </div>
+                {p.type && (
+                  <span className={`typeBadge ${p.type}`}>
+                    {p.type === "professional" ? "Pro" : "Personal"}
+                  </span>
+                )}
               </div>
 
               <div className="pillRow">
@@ -165,13 +204,21 @@ export default function Page() {
                 {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
               </ul>
 
-              <div className="linkRow">
-                {p.links.map((l) => (
-                  <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
-                    {l.label} →
-                  </a>
-                ))}
-              </div>
+              {p.nda && (
+                <div className="ndaNotice">
+                  Source code under NDA
+                </div>
+              )}
+
+              {p.links.length > 0 && (
+                <div className="linkRow">
+                  {p.links.map((l) => (
+                    <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
+                      {l.label} →
+                    </a>
+                  ))}
+                </div>
+              )}
             </Card>
           ))}
         </div>
@@ -192,7 +239,7 @@ export default function Page() {
       </Section>
 
       {/* EXPERIENCE */}
-      <Section id="experience" title="Experience" subtitle="What I’ve been doing recently.">
+      <Section id="experience" title="Experience" subtitle="What I've been doing recently.">
         {EXPERIENCE.map((e) => (
           <Card key={e.role + e.org}>
             <div className="expHead">
@@ -239,4 +286,3 @@ export default function Page() {
     </>
   );
 }
-
