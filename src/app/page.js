@@ -1,3 +1,9 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+
+/* ── data ── */
+
 const LINKS = {
   email: "mhafeez1@ualberta.ca",
   github: "https://github.com/mayaanhafeez",
@@ -5,81 +11,75 @@ const LINKS = {
   resume: "/resume.pdf",
 };
 
-const FEATURED_PROJECTS = [
+const SECTIONS = [
+  { id: "about", label: "about.md", icon: "📄" },
+  { id: "projects", label: "projects.md", icon: "📂" },
+  { id: "experience", label: "experience.md", icon: "💼" },
+  { id: "skills", label: "skills.md", icon: "⚡" },
+  { id: "contact", label: "contact.sh", icon: "📨" },
+];
+
+const PROJECTS = [
   {
     title: "Social Media Platform — Backend",
     subtitle: "Production REST API for a social media application",
     type: "professional",
     tech: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Stripe", "JWT"],
     bullets: [
-      "Designed and built a production REST API with role-based access control, JWT auth, and Argon2 password hashing.",
-      "Integrated Stripe for subscription management with webhook-driven payment sync.",
-      "Built a pluggable ML-powered identity verification pipeline with OCR, face matching, liveness detection, and tamper checks.",
-      "Containerized with Docker Compose (FastAPI + PostgreSQL + Redis) for reproducible deployments.",
+      "Production REST API with RBAC, JWT auth, and Argon2 hashing.",
+      "Stripe subscription management with webhook-driven payment sync.",
+      "Pluggable ML identity verification: OCR, face matching, liveness, tamper detection.",
+      "Containerized with Docker Compose (FastAPI + PostgreSQL + Redis).",
     ],
     nda: true,
     links: [],
   },
   {
-    title: "Workforce Management — Android App",
-    subtitle: "Native Android app with real-time computer vision",
+    title: "Workforce Mgmt — Android App",
+    subtitle: "Native Android with real-time CV",
     type: "professional",
     tech: ["Kotlin", "Jetpack Compose", "CameraX", "ML Kit", "AWS Rekognition", "Room", "Hilt"],
     bullets: [
-      "Built a native Android app using Kotlin + Jetpack Compose with clean MVVM architecture and Hilt DI.",
-      "Implemented real-time face detection pipeline with Google ML Kit, including quality checks for size, position, and head angles.",
-      "Integrated AWS Rekognition for cloud-based face recognition with configurable confidence thresholds.",
-      "Used Room for offline-first local persistence with coroutine-based reactive data flows.",
+      "Kotlin + Jetpack Compose with MVVM architecture and Hilt DI.",
+      "Real-time face detection via ML Kit with quality validation.",
+      "AWS Rekognition for cloud face recognition with confidence thresholds.",
+      "Room for offline-first persistence with coroutine reactive flows.",
     ],
     nda: true,
     links: [],
   },
   {
     title: "FocusNode — Chrome Extension",
-    subtitle: "Blocks distracting sites during focus sessions",
+    subtitle: "Blocks distracting sites during focus",
     type: "personal",
     tech: ["React", "Vite", "Chrome Extensions API", "JavaScript"],
     bullets: [
-      "Blocks user-defined domains in real time and redirects tabs quickly.",
-      "Stores settings persistently with Chrome Storage for reliable state across restarts.",
+      "Blocks user-defined domains in real time and redirects tabs.",
+      "Persistent settings with Chrome Storage across restarts.",
     ],
-    links: [
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" },
-    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" }],
   },
   {
-    title: "Tuesday.com — Hackathon Project Manager",
+    title: "Tuesday.com — Hackathon App",
     subtitle: "Built at HackED 2025",
     type: "personal",
     tech: ["Node.js", "Express", "MongoDB", "JavaScript"],
     bullets: [
-      "Hackathon team app with AI-driven task automation concept.",
-      "Shipped an end-to-end demo within a 48-hour window.",
+      "Team app with AI-driven task automation concept.",
+      "End-to-end demo shipped in 48 hours.",
     ],
-    links: [
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/tuesday.com" },
-    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/tuesday.com" }],
   },
   {
-    title: "ASCII — Image to ASCII Converter",
+    title: "ASCII — Image Converter",
     subtitle: "CLI utility for terminal art",
     type: "personal",
     tech: ["Python"],
     bullets: [
-      "CLI-style utility for turning images into printable ASCII output.",
-      "Good for terminal demos and quick visuals.",
+      "Converts images into printable ASCII output.",
+      "Terminal-friendly demos and quick visuals.",
     ],
-    links: [
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
-    ],
-  },
-];
-
-const MORE_REPOS = [
-  {
-    title: "PlayMG",
-    subtitle: "C++ repo (forked)",
-    href: "https://github.com/mayaanhafeez/PlayMG",
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" }],
   },
 ];
 
@@ -90,12 +90,12 @@ const EXPERIENCE = [
     time: "May 2025 – Present",
     location: "Remote",
     bullets: [
-      "Production chatbot platform using open-source LLMs, RAG, LangChain + NL2SQL; ~85% internal benchmark accuracy.",
-      "Improved retrieval quality with context selection + entity recognition + relevance scoring; ~70% precision gain and ~4s faster responses.",
-      "Optimized pipeline with tokenization tuning, caching, and query restructuring; ~6s latency under production workloads.",
-      "Automated API documentation extraction from JS-rendered sites using Selenium + Playwright; normalized 100+ endpoints into OpenAPI-style schemas.",
-      "Built a production FastAPI backend with PostgreSQL, Redis, Stripe integration, JWT auth, and an ML-powered identity verification pipeline.",
-      "Developed an Android app in Kotlin + Jetpack Compose with real-time face detection (ML Kit) and cloud recognition (AWS Rekognition).",
+      "Production chatbot platform using LLMs, RAG, LangChain + NL2SQL; ~85% benchmark accuracy.",
+      "Context selection + entity recognition + relevance scoring; ~70% precision gain, ~4s faster.",
+      "Tokenization tuning, caching, query restructuring; ~6s latency in production.",
+      "Selenium + Playwright automation; normalized 100+ endpoints into OpenAPI schemas.",
+      "FastAPI backend with PostgreSQL, Redis, Stripe, JWT, and ML identity verification.",
+      "Android app in Kotlin + Jetpack Compose with ML Kit and AWS Rekognition.",
     ],
   },
 ];
@@ -103,10 +103,14 @@ const EXPERIENCE = [
 const SKILLS = {
   Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "SQL", "NoSQL", "Bash", "ARM/MIPS", "VHDL"],
   Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "NumPy", "pandas"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "AWS", "Stripe", "VS Code", "Android Studio", "Chrome DevTools"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "BioAMP EXG"],
 };
+
+const MORE_REPOS = [
+  { title: "PlayMG", subtitle: "C++ repo (forked)", href: "https://github.com/mayaanhafeez/PlayMG" },
+];
 
 /* ── components ── */
 
@@ -114,209 +118,310 @@ function Pill({ children }) {
   return <span className="pill">{children}</span>;
 }
 
-function Card({ children }) {
-  return <div className="card">{children}</div>;
-}
-
-function TermCard({ title, children }) {
-  return (
-    <div className="termCard">
-      <div className="termBar">
-        <span className="termDot r" />
-        <span className="termDot y" />
-        <span className="termDot g" />
-        <span className="termBarTitle">{title}</span>
-      </div>
-      <div className="termBody">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Section({ id, title, subtitle, children }) {
-  return (
-    <section id={id} className="section">
-      <div className="sectionHead">
-        <h2>{title}</h2>
-        {subtitle ? <p className="muted">{subtitle}</p> : null}
-      </div>
-      {children}
-    </section>
-  );
-}
-
 export default function Page() {
+  const [active, setActive] = useState("about");
+  const editorRef = useRef(null);
+  const sectionRefs = useRef({});
+
+  const scrollTo = useCallback((id) => {
+    const el = sectionRefs.current[id];
+    if (el && editorRef.current) {
+      editorRef.current.scrollTo({
+        top: el.offsetTop - 12,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  /* track which section is in view */
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const onScroll = () => {
+      const ids = SECTIONS.map((s) => s.id);
+      let current = ids[0];
+      for (const id of ids) {
+        const el = sectionRefs.current[id];
+        if (el && el.offsetTop - 20 <= editor.scrollTop) {
+          current = id;
+        }
+      }
+      setActive(current);
+    };
+
+    editor.addEventListener("scroll", onScroll, { passive: true });
+    return () => editor.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+
   return (
-    <>
-      {/* HERO */}
-      <section className="hero">
-        <div className="heroLeft">
-          <p className="muted" style={{ margin: '0 0 8px', fontSize: 13 }}>
-            <span className="promptUser">ayaan</span>
-            <span className="promptAt">@</span>
-            <span className="promptDir">portfolio</span>
-            {' '}
-            <span className="promptArrow">~</span>
-            {' '}
-            <span style={{ color: 'var(--fg-dark)' }}>cat about.md</span>
-          </p>
-          <h1>
-            Ayaan Hafeez
-            <span className="dot">.</span>
-            <span className="cursor" />
-          </h1>
-          <p className="lead">
-            3rd-year Computer Engineering (Software) co-op student at the University of Alberta —
-            AI Developer @ Elev8AI, building production backends, Android apps, and LLM systems.
-          </p>
-          <div className="ctaRow">
-            <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
-            <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
-            <a className="btn ghost" href={`mailto:${LINKS.email}`}>~/email</a>
-            <a className="btn ghost" href={LINKS.resume}>~/resume.pdf</a>
+    <div className="shell">
+      {/* ── titlebar ── */}
+      <div className="titlebar">
+        <span className="titlebarDot r" />
+        <span className="titlebarDot y" />
+        <span className="titlebarDot g" />
+        <span className="titlebarTitle">ayaan.dev — nvim</span>
+      </div>
+
+      {/* ── tabline ── */}
+      <div className="tabline">
+        {SECTIONS.map((s) => (
+          <div
+            key={s.id}
+            className={`tab ${active === s.id ? "active" : ""}`}
+            onClick={() => scrollTo(s.id)}
+          >
+            <span className="tabIcon">{s.icon}</span>
+            {s.label}
+            <span className="tabClose">×</span>
           </div>
+        ))}
+      </div>
 
-          <div className="quickFacts">
-            <Pill>AI / RAG / NL2SQL</Pill>
-            <Pill>FastAPI + PostgreSQL</Pill>
-            <Pill>Kotlin + Compose</Pill>
-            <Pill>React + Node</Pill>
-            <Pill>Embedded + FPGA</Pill>
+      {/* ── body ── */}
+      <div className="ideBody">
+        {/* sidebar / neo-tree */}
+        <aside className="sidebar">
+          <div className="sidebarHeader">explorer</div>
+          <div className="sidebarTree">
+            <div className="treeFolder">
+              <span className="treeFolderIcon">▾</span>
+              ~/portfolio
+            </div>
+
+            {SECTIONS.map((s) => (
+              <div
+                key={s.id}
+                className={`treeItem ${active === s.id ? "active" : ""}`}
+                onClick={() => scrollTo(s.id)}
+              >
+                <span className="treeIcon">{s.icon}</span>
+                <span className="treeName">{s.label}</span>
+              </div>
+            ))}
+
+            <div className="treeFolder" style={{ marginTop: 16 }}>
+              <span className="treeFolderIcon">▸</span>
+              ~/links
+            </div>
+            <a href={LINKS.github} target="_blank" rel="noreferrer" className="treeItem" style={{ textDecoration: "none" }}>
+              <span className="treeIcon">🔗</span>
+              <span className="treeName">github</span>
+            </a>
+            <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="treeItem" style={{ textDecoration: "none" }}>
+              <span className="treeIcon">🔗</span>
+              <span className="treeName">linkedin</span>
+            </a>
+            <a href={LINKS.resume} className="treeItem" style={{ textDecoration: "none" }}>
+              <span className="treeIcon">📎</span>
+              <span className="treeName">resume.pdf</span>
+            </a>
           </div>
-        </div>
+        </aside>
 
-        <div className="heroRight" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <TermCard title="~/now">
-            <span className="termLine"><span className="prompt">$</span> Building LLM-powered automation + retrieval systems</span>
-            <span className="termLine"><span className="prompt">$</span> Shipping production backends and mobile apps</span>
-            <span className="termLine"><span className="prompt">$</span> Looking for co-op opportunities</span>
-          </TermCard>
+        {/* main editor */}
+        <div className="editorPane" ref={editorRef} style={{ position: "relative" }}>
+          <div className="editorContent">
 
-          <TermCard title="~/links">
-            <span className="termLine"><span className="prompt">&gt;</span> <a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
-            <span className="termLine"><span className="prompt">&gt;</span> <a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>
-            <span className="termLine"><span className="prompt">&gt;</span> <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></span>
-          </TermCard>
-        </div>
-      </section>
-
-      {/* PROJECTS */}
-      <Section id="projects" title="projects" subtitle="-- professional and personal work">
-        <div className="grid">
-          {FEATURED_PROJECTS.map((p) => (
-            <Card key={p.title}>
-              <div className="cardTop">
-                <div>
-                  <h3 className="cardTitle">{p.title}</h3>
-                  <p className="muted">{p.subtitle}</p>
+            {/* ── about ── */}
+            <div
+              className="sectionBlock"
+              id="about"
+              ref={(el) => { sectionRefs.current.about = el; }}
+            >
+              <div className="heroBlock">
+                <h1 className="heroName">
+                  Ayaan Hafeez
+                  <span className="heroDot">.</span>
+                  <span className="heroCursor" />
+                </h1>
+                <p className="heroSub">
+                  3rd-year Computer Engineering (Software) co-op student at the University of Alberta —
+                  AI Developer @ Elev8AI, building production backends, Android apps, and LLM systems.
+                </p>
+                <div className="ctaRow">
+                  <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
+                  <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+                  <a className="btn ghost" href={`mailto:${LINKS.email}`}>~/email</a>
+                  <a className="btn ghost" href={LINKS.resume}>~/resume.pdf</a>
                 </div>
-                {p.type && (
-                  <span className={`typeBadge ${p.type}`}>
-                    {p.type === "professional" ? "pro" : "personal"}
-                  </span>
-                )}
+                <div className="pillRow">
+                  <Pill>AI / RAG / NL2SQL</Pill>
+                  <Pill>FastAPI + PostgreSQL</Pill>
+                  <Pill>Kotlin + Compose</Pill>
+                  <Pill>React + Node</Pill>
+                  <Pill>Embedded + FPGA</Pill>
+                </div>
+              </div>
+            </div>
+
+            {/* ── projects ── */}
+            <div
+              className="sectionBlock"
+              id="projects"
+              ref={(el) => { sectionRefs.current.projects = el; }}
+            >
+              <h2 className="sectionHeading">projects</h2>
+              <p className="sectionSub">-- professional and personal work</p>
+
+              <div className="projectGrid">
+                {PROJECTS.map((p) => (
+                  <div className="projectCard" key={p.title}>
+                    <div className="projectTop">
+                      <h3 className="projectTitle">{p.title}</h3>
+                      {p.type && (
+                        <span className={`typeBadge ${p.type}`}>
+                          {p.type === "professional" ? "pro" : "personal"}
+                        </span>
+                      )}
+                    </div>
+                    <p className="projectSub">{p.subtitle}</p>
+                    <div className="pillRow">
+                      {p.tech.map((t) => <Pill key={t}>{t}</Pill>)}
+                    </div>
+                    <ul className="projectList">
+                      {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                    </ul>
+                    {p.nda && <div className="ndaNotice">⚠ source under NDA</div>}
+                    {p.links && p.links.length > 0 && (
+                      <div className="linkRow">
+                        {p.links.map((l) => (
+                          <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
+                            {l.label} →
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
 
-              <div className="pillRow">
-                {p.tech.map((t) => <Pill key={t}>{t}</Pill>)}
-              </div>
-
-              <ul className="list">
-                {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
-              </ul>
-
-              {p.nda && (
-                <div className="ndaNotice">
-                  ⚠ source under NDA
-                </div>
-              )}
-
-              {p.links.length > 0 && (
-                <div className="linkRow">
-                  {p.links.map((l) => (
-                    <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
-                      {l.label} →
+              <div className="moreRepos">
+                <div className="moreReposTitle">more repos</div>
+                <div className="miniGrid">
+                  {MORE_REPOS.map((r) => (
+                    <a key={r.href} className="miniCard" href={r.href} target="_blank" rel="noreferrer">
+                      <div className="miniTitle">{r.title}</div>
+                      <div style={{ color: "var(--comment)", fontSize: 11 }}>{r.subtitle}</div>
                     </a>
                   ))}
                 </div>
-              )}
-            </Card>
-          ))}
-        </div>
-
-        <div className="spacer" />
-
-        <Card>
-          <h3 style={{ margin: '0 0 4px', fontSize: 15 }}>more repos</h3>
-          <div className="miniGrid">
-            {MORE_REPOS.map((r) => (
-              <a key={r.href} className="miniCard" href={r.href} target="_blank" rel="noreferrer">
-                <div className="miniTitle">{r.title}</div>
-                <div className="muted">{r.subtitle}</div>
-              </a>
-            ))}
-          </div>
-        </Card>
-      </Section>
-
-      {/* EXPERIENCE */}
-      <Section id="experience" title="experience" subtitle="-- what i've been doing recently">
-        {EXPERIENCE.map((e) => (
-          <Card key={e.role + e.org}>
-            <div className="expHead">
-              <div>
-                <h3 className="cardTitle">{e.role} <span style={{ color: 'var(--purple)' }}>@</span> {e.org}</h3>
-                <p className="muted">{e.location}</p>
               </div>
-              <div className="muted">{e.time}</div>
             </div>
-            <ul className="list">
-              {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
-            </ul>
-          </Card>
-        ))}
-      </Section>
 
-      {/* SKILLS */}
-      <Section id="skills" title="skills" subtitle="-- quick scan list">
-        <div className="grid2">
-          {Object.entries(SKILLS).map(([group, items]) => (
-            <Card key={group}>
-              <h3 className="skillGroup">{group}</h3>
-              <div className="pillRow">
-                {items.map((it) => <Pill key={it}>{it}</Pill>)}
+            {/* ── experience ── */}
+            <div
+              className="sectionBlock"
+              id="experience"
+              ref={(el) => { sectionRefs.current.experience = el; }}
+            >
+              <h2 className="sectionHeading">experience</h2>
+              <p className="sectionSub">-- what i&apos;ve been doing recently</p>
+
+              {EXPERIENCE.map((e) => (
+                <div className="expCard" key={e.role + e.org}>
+                  <div className="expHead">
+                    <div>
+                      <div className="expRole">
+                        {e.role} <span className="expAt">@</span> {e.org}
+                      </div>
+                      <div className="expMeta">{e.location}</div>
+                    </div>
+                    <div className="expMeta">{e.time}</div>
+                  </div>
+                  <ul className="expList">
+                    {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* ── skills ── */}
+            <div
+              className="sectionBlock"
+              id="skills"
+              ref={(el) => { sectionRefs.current.skills = el; }}
+            >
+              <h2 className="sectionHeading">skills</h2>
+              <p className="sectionSub">-- quick scan list</p>
+
+              <div className="skillsGrid">
+                {Object.entries(SKILLS).map(([group, items]) => (
+                  <div className="skillCard" key={group}>
+                    <div className="skillGroup">{group}</div>
+                    <div className="pillRow">
+                      {items.map((it) => <Pill key={it}>{it}</Pill>)}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </Card>
-          ))}
-        </div>
-      </Section>
+            </div>
 
-      {/* CONTACT */}
-      <Section id="contact" title="contact" subtitle="-- best way to reach me">
-        <TermCard title="~/contact">
-          <span className="termLine">
-            <span className="prompt">$</span>{' '}
-            <span style={{ color: 'var(--fg-dark)' }}>echo $EMAIL</span>
-          </span>
-          <span className="termLine">
-            <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>
-          </span>
-          <span className="termLine" style={{ marginTop: 8 }}>
-            <span className="prompt">$</span>{' '}
-            <span style={{ color: 'var(--fg-dark)' }}>cat links.txt</span>
-          </span>
-          <span className="termLine"><a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
-          <span className="termLine"><a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>
-        </TermCard>
-        <div style={{ marginTop: 12 }}>
-          <div className="ctaRow">
-            <a className="btn" href={`mailto:${LINKS.email}`}>~/email</a>
-            <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
-            <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+            {/* ── contact ── */}
+            <div
+              className="sectionBlock"
+              id="contact"
+              ref={(el) => { sectionRefs.current.contact = el; }}
+            >
+              <h2 className="sectionHeading">contact</h2>
+              <p className="sectionSub">-- best way to reach me</p>
+
+              <div className="contactTerm">
+                <div className="contactTermBar">
+                  <span className="contactTermDot r" />
+                  <span className="contactTermDot y" />
+                  <span className="contactTermDot g" />
+                  <span style={{ marginLeft: 8 }}>~/contact.sh</span>
+                </div>
+                <div className="contactTermBody">
+                  <span className="termLine">
+                    <span className="prompt">$</span>{" "}
+                    <span style={{ color: "var(--fg-dark)" }}>echo $EMAIL</span>
+                  </span>
+                  <span className="termLine">
+                    <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>
+                  </span>
+                  <span className="termLine" style={{ marginTop: 8 }}>
+                    <span className="prompt">$</span>{" "}
+                    <span style={{ color: "var(--fg-dark)" }}>cat links.txt</span>
+                  </span>
+                  <span className="termLine">
+                    <a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a>
+                  </span>
+                  <span className="termLine">
+                    <a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a>
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 12 }}>
+                <div className="ctaRow">
+                  <a className="btn" href={`mailto:${LINKS.email}`}>~/email</a>
+                  <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
+                  <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-      </Section>
-    </>
+      </div>
+
+      {/* ── statusline ── */}
+      <div className="statusline">
+        <div className="statusSeg statusMode">normal</div>
+        <div className="statusSeg statusBranch hideMobile">⎇ main</div>
+        <div className="statusSeg statusFile">{SECTIONS.find((s) => s.id === active)?.label ?? "about.md"}</div>
+        <div className="statusSpacer" />
+        <div className="statusSeg statusRight hideMobile">ayaan.dev</div>
+        <div className="statusSeg statusEncoding hideMobile">utf-8</div>
+        <div className="statusSeg statusPos">Ln {SECTIONS.findIndex((s) => s.id === active) + 1}</div>
+        <div className="statusSeg statusTime hideMobile">{timeStr}</div>
+      </div>
+    </div>
   );
 }
