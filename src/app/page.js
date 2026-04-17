@@ -73,6 +73,27 @@ const PROJECTS = [
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/tuesday.com" }],
   },
   {
+    title: "Bare Metal Raspberry Pi OS",
+    subtitle: "OS kernel from scratch in C and ARM Assembly",
+    type: "personal",
+    tech: ["C", "ARM Assembly", "Raspberry Pi"],
+    bullets: [
+      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
+      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
+    ],
+    links: [],
+  },
+  {
+    title: "EMG Controller",
+    subtitle: "Real-time muscle-to-keystroke input device",
+    type: "personal",
+    tech: ["Arduino", "BioAmp EXG Pills", "Python", "C"],
+    bullets: [
+      "Built a real-time EMG-based input controller that converts muscle contractions to keystrokes with <50 ms end-to-end latency and 40% fewer false activations.",
+    ],
+    links: [],
+  },
+  {
     title: "ASCII — Image Converter",
     subtitle: "CLI utility for terminal art",
     type: "personal",
@@ -92,22 +113,20 @@ const EXPERIENCE = [
     time: "May 2025 – Present",
     location: "Remote",
     bullets: [
-      "Production chatbot platform using LLMs, RAG, LangChain + NL2SQL; ~85% benchmark accuracy.",
-      "Context selection + entity recognition + relevance scoring; ~70% precision gain, ~4s faster.",
-      "Tokenization tuning, caching, query restructuring; ~6s latency in production.",
-      "Selenium + Playwright automation; normalized 100+ endpoints into OpenAPI schemas.",
-      "FastAPI backend with PostgreSQL, Redis, Stripe, JWT, and ML identity verification.",
-      "Android app in Kotlin + Jetpack Compose with ML Kit and AWS Rekognition.",
+      "NL2SQL network-monitoring chatbot using LangChain, Ollama, ChromaDB, and PostgreSQL with RAG retrieval and session-aware context management; 85% answer accuracy.",
+      "Multi-turn LangChain SQL agents and prompt pipelines for an AI trip-planning platform using GPT-4, enabling structured itinerary generation across database-backed and general-knowledge destinations.",
+      "Social media platform backend with JWT auth, Stripe payments, and AWS Textract/Rekognition ID verification; Selenium scraper extracting 100+ endpoints into OpenAPI schemas, cutting developer hours by 90%.",
+      "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit — real-time face detection, head-pose estimation, and frame-level deduplication.",
     ],
   },
 ];
 
 const SKILLS = {
   Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "SQL", "NoSQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "NumPy", "pandas"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "AWS", "Stripe", "VS Code", "Android Studio"],
+  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "SQLAlchemy", "scikit-learn", "NumPy", "pandas"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "ChromaDB", "Selenium", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
-  Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "BioAMP EXG"],
+  Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
 
 const MORE_REPOS = [
@@ -539,7 +558,7 @@ export default function Page() {
                 Ayaan Hafeez<span className="welcomeNameDot">.</span>
               </div>
               <div className="welcomeSub">
-                AI Developer @ Elev8AI — backends, Android apps, LLM systems.
+                AI Developer @ Elev8AI — LLM pipelines, backends, Android apps, bare-metal systems.
                 <br />
                 Type <span style={{ color: "var(--cyan)" }}>:</span> to enter a command, or pick an action below.
               </div>
@@ -582,8 +601,9 @@ export default function Page() {
                     Ayaan Hafeez<span className="heroDot">.</span><span className="heroCursor" />
                   </h1>
                   <p className="heroSub">
-                    3rd-year Computer Engineering (Software) co-op student at the University of Alberta —
-                    AI Developer @ Elev8AI, building production backends, Android apps, and LLM systems.
+                    Computer Engineering student at the University of Alberta with production experience spanning
+                    AI-powered backend systems, full-stack development, and low-level hardware programming —
+                    AI Developer @ Elev8AI, shipping LLM pipelines, NL2SQL chatbots, and REST APIs.
                   </p>
                   <div className="ctaRow">
                     <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
@@ -596,6 +616,7 @@ export default function Page() {
                     <Pill>FastAPI + PostgreSQL</Pill>
                     <Pill>Kotlin + Compose</Pill>
                     <Pill>React + Node</Pill>
+                    <Pill>Bare Metal OS / ARM</Pill>
                     <Pill>Embedded + FPGA</Pill>
                   </div>
                 </div>
