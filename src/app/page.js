@@ -13,6 +13,19 @@ const LINKS = {
   resume: "/resume.pdf",
 };
 
+const THEMES = [
+  { id: "tokyo-night", label: "Tokyo Night" },
+  { id: "catppuccin",  label: "Catppuccin"  },
+  { id: "rose-pine",   label: "Rosé Pine"   },
+  { id: "gruvbox",     label: "Gruvbox"     },
+  { id: "nord",        label: "Nord"        },
+  { id: "dracula",     label: "Dracula"     },
+  { id: "one-dark",    label: "One Dark"    },
+  { id: "solarized",   label: "Solarized"   },
+  { id: "everforest",  label: "Everforest"  },
+  { id: "monokai",     label: "Monokai"     },
+];
+
 const SECTIONS = [
   { id: "about", label: "about.md", icon: "📄", desc: "About me" },
   { id: "projects", label: "projects.md", icon: "📂", desc: "Featured projects" },
@@ -181,6 +194,14 @@ const HELP_DATA = [
     ],
   },
   {
+    title: "Display",
+    cmds: [
+      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai)" },
+      { cmd: ":theme", desc: "Cycle to next theme" },
+      { cmd: "Ctrl+T", desc: "Cycle theme" },
+    ],
+  },
+  {
     title: "Fun",
     cmds: [
       { cmd: ":q / :quit / :wq", desc: "Try to quit (good luck)" },
@@ -214,6 +235,7 @@ export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [theme, setTheme] = useState("tokyo-night");
 
   const editorRef = useRef(null);
   const sectionRefs = useRef({});
@@ -341,8 +363,41 @@ export default function Page() {
       return;
     }
 
+    // theme
+    if (cmd === "theme" || cmd === "colorscheme" || cmd === "cs") {
+      if (!arg) {
+        const idx = THEMES.findIndex((t) => t.id === theme);
+        const next = THEMES[(idx + 1) % THEMES.length];
+        setTheme(next.id);
+        flashMsg(`-- theme: ${next.label} --`, "success");
+      } else {
+        const found = THEMES.find(
+          (t) => t.id === arg || t.id.startsWith(arg) || t.label.toLowerCase() === arg
+        );
+        if (found) {
+          setTheme(found.id);
+          flashMsg(`-- theme: ${found.label} --`, "success");
+        } else {
+          flashMsg(`E: unknown theme "${arg}". available: ${THEMES.map((t) => t.id).join(", ")}`, "error");
+        }
+      }
+      return;
+    }
+
     flashMsg(`E492: Not an editor command: ${cmd}`, "error");
-  }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view]);
+  }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view, theme]);
+
+  /* ── theme: load from localStorage on mount ── */
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved && THEMES.some((t) => t.id === saved)) setTheme(saved);
+  }, []);
+
+  /* ── theme: sync to <html> and persist ── */
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   /* ── track scroll ── */
   useEffect(() => {
@@ -384,6 +439,16 @@ export default function Page() {
         setTeleQuery("");
         setTeleIdx(0);
         setTimeout(() => teleInputRef.current?.focus(), 0);
+        return;
+      }
+
+      // Ctrl+T — cycle theme
+      if ((e.ctrlKey || e.metaKey) && e.key === "t") {
+        e.preventDefault();
+        const idx = THEMES.findIndex((t) => t.id === theme);
+        const next = THEMES[(idx + 1) % THEMES.length];
+        setTheme(next.id);
+        flashMsg(`-- theme: ${next.label} --`, "success");
         return;
       }
 
@@ -439,7 +504,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showTelescope, showHelp, enterCommand, exitCommand, enterEditor]);
+  }, [mode, view, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg]);
 
   /* ── telescope filtering ── */
   const teleFiltered = TELESCOPE_ITEMS.filter((item) => {
@@ -751,6 +816,7 @@ export default function Page() {
         </div>
         <div className="statusSpacer" />
         <div className="statusSeg statusRight hideMobile">ayaan.dev</div>
+        <div className="statusSeg statusTheme hideMobile">{theme}</div>
         <div className="statusSeg statusEncoding hideMobile">utf-8</div>
         <div className="statusSeg statusPos">
           {view === "welcome" ? "~" : `Ln ${SECTIONS.findIndex((s) => s.id === active) + 1}`}
@@ -787,7 +853,7 @@ export default function Page() {
               if (e.key === "Tab") {
                 e.preventDefault();
                 const partial = cmdText.toLowerCase();
-                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit"];
+                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit", "theme", "colorscheme"];
                 const match = allCmds.find((c) => c.startsWith(partial));
                 if (match) setCmdText(match);
               }
