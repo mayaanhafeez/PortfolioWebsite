@@ -95,14 +95,18 @@ const PROJECTS = [
   },
   {
     title: "ASCII — Image Converter",
-    subtitle: "CLI utility for terminal art",
+    subtitle: "Web app + CLI for converting images to ASCII art",
     type: "personal",
-    tech: ["Python"],
+    tech: ["Python", "HTML/CSS/JS", "Vercel", "Pillow"],
     bullets: [
-      "Converts images into printable ASCII output.",
-      "Terminal-friendly demos and quick visuals.",
+      "Drag-and-drop web UI with live preview, adjustable ramp, width/height, contrast, gamma, dither, and invert controls.",
+      "Serverless Python API (Vercel Functions) accepting base64 images and returning ASCII output with CORS support.",
+      "CLI tool with configurable ramps (detailed, blocks, classic), chat-mode code-fence output, and gamma/contrast pipeline.",
     ],
-    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" }],
+    links: [
+      { label: "Live Demo", href: "https://ascii-ayaan.vercel.app/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
+    ],
   },
 ];
 
