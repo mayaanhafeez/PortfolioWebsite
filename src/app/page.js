@@ -121,6 +121,21 @@ const PROJECTS = [
       { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
     ],
   },
+  {
+    title: "Terminal Mystery",
+    subtitle: "Murder-mystery game played through a fake terminal",
+    type: "personal",
+    wip: true,
+    tech: ["Lua", "LÖVE"],
+    bullets: [
+      "The mansion is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
+      "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
+      "Vertical slice: one murder, four suspects, five rooms, solvable in one sitting.",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
+    ],
+  },
 ];
 
 const EXPERIENCE = [
@@ -713,6 +728,7 @@ export default function Page() {
                       <ul className="projectList">
                         {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
                       </ul>
+                      {p.wip && <div className="wipNotice">◌ work in progress</div>}
                       {p.nda && <div className="ndaNotice">⚠ source under NDA</div>}
                       {p.links && p.links.length > 0 && (
                         <div className="linkRow">
