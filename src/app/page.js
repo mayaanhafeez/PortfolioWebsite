@@ -23,7 +23,8 @@ const THEMES = [
   { id: "one-dark",    label: "One Dark"    },
   { id: "solarized",   label: "Solarized"   },
   { id: "everforest",  label: "Everforest"  },
-  { id: "monokai",     label: "Monokai"     },
+  { id: "monokai",              label: "Monokai"              },
+  { id: "tomorrow-night-burns", label: "Tomorrow Night Burns"  },
 ];
 
 const SECTIONS = [
@@ -211,7 +212,7 @@ const HELP_DATA = [
   {
     title: "Display",
     cmds: [
-      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai)" },
+      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns)" },
       { cmd: ":theme", desc: "Cycle to next theme" },
       { cmd: "Ctrl+T", desc: "Cycle theme" },
     ],

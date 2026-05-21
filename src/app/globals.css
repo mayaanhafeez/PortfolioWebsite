@@ -147,6 +147,17 @@
   --red:#f92672; --magenta:#f92672; --teal:#a1efe4;
 }
 
+[data-theme="tomorrow-night-burns"] {
+  --bg:#151515; --bg-dark:#0f0f0f; --bg-float:#252525; --bg-highlight:#2d2d2d;
+  --bg-sidebar:#0f0f0f; --bg-statusline:#0f0f0f; --bg-tabline:#0f0f0f;
+  --bg-tab-active:#151515; --bg-tab-inactive:#0f0f0f;
+  --border:#252525; --border-highlight:#3a3a3a;
+  --fg:#a1b0b8; --fg-dark:#7a8f98; --comment:#5d6f71;
+  --cyan:#df9395; --blue:#ba8586; --purple:#d3494e;
+  --green:#ba8586; --yellow:#df9395; --orange:#d3494e;
+  --red:#fc595f; --magenta:#a63c40; --teal:#df9395;
+}
+
 *{ box-sizing:border-box; margin: 0; padding: 0; }
 html,body{ height: 100%; overflow: hidden; }
 
