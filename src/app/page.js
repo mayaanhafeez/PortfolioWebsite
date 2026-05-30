@@ -8,6 +8,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 const LINKS = {
   email: "mhafeez1@ualberta.ca",
+  personalEmail: "m.ayaan.hafeez@gmail.com",
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
   resume: "/resume.pdf",
@@ -37,15 +38,54 @@ const SECTIONS = [
 
 const PROJECTS = [
   {
-    title: "Social Media Platform — Backend",
-    subtitle: "Production REST API for a social media application",
-    type: "professional",
-    tech: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Stripe", "JWT"],
+    title: "Bare Metal Raspberry Pi OS",
+    subtitle: "OS kernel from scratch in C and ARM Assembly",
+    type: "personal",
+    wip: true,
+    tech: ["C", "ARM Assembly", "Raspberry Pi"],
     bullets: [
-      "Production REST API with RBAC, JWT auth, and Argon2 hashing.",
+      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
+      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
+  },
+  {
+    title: "Terminal Mystery",
+    subtitle: "Murder-mystery game played through a fake terminal",
+    type: "personal",
+    wip: true,
+    tech: ["Lua", "LÖVE"],
+    bullets: [
+      "The mansion is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
+      "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
+      "Vertical slice: one murder, four suspects, five rooms, solvable in one sitting.",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
+    ],
+  },
+  {
+    title: "EMG Controller",
+    subtitle: "Real-time muscle-to-keystroke input device",
+    type: "personal",
+    tech: ["Arduino", "Python", "BioAmp EXG Pills", "scipy", "NumPy", "asyncio"],
+    bullets: [
+      "Reads 5 EMG channels concurrently via asyncio; band-pass filtering, envelope detection, and peak analysis isolate muscle contractions from noise.",
+      "Maps left/right fist-clench gestures to directional keyboard inputs with <50 ms end-to-end latency and 40% fewer false activations via tuned peak thresholds and startup-spike suppression.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/PlayMG" }],
+  },
+  {
+    title: "Social Media Platform",
+    subtitle: "Full-stack social media application — REST API + React frontend",
+    type: "professional",
+    wip: true,
+    tech: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Redis", "Docker", "Stripe", "JWT", "Tailwind CSS"],
+    bullets: [
+      "Production REST API with RBAC, JWT auth, and Argon2 hashing; containerized with Docker Compose (FastAPI + PostgreSQL + Redis).",
       "Stripe subscription management with webhook-driven payment sync.",
       "Pluggable ML identity verification: OCR, face matching, liveness, tamper detection.",
-      "Containerized with Docker Compose (FastAPI + PostgreSQL + Redis).",
+      "React + TypeScript SPA with React Router and context-based auth; served behind nginx in Docker.",
     ],
     nda: true,
     links: [],
@@ -63,6 +103,72 @@ const PROJECTS = [
     ],
     nda: true,
     links: [],
+  },
+  {
+    title: "Network Monitoring Chatbot",
+    subtitle: "NL2SQL chatbot for ISP network performance analytics",
+    type: "professional",
+    tech: ["Python", "FastAPI", "LangChain", "Ollama", "ChromaDB", "PostgreSQL"],
+    bullets: [
+      "Intent classifier routes queries to NL2SQL, RAG, or general-knowledge paths; session-aware context management across multi-turn conversations.",
+      "SQL agent generates queries against a network KPI database (QoE, download, ping, DNS, PLT) with bot/region name resolution and 85% answer accuracy.",
+      "Produces downloadable CSV and matplotlib graph artifacts alongside natural-language answers.",
+    ],
+    nda: true,
+    links: [],
+  },
+  {
+    title: "API Documentation Scraper",
+    subtitle: "Crawl-to-OpenAPI pipeline for docs sites, GitHub repos, and PDFs",
+    type: "professional",
+    wip: true,
+    tech: ["Python", "Selenium", "OpenAI", "BeautifulSoup", "OpenAPI"],
+    bullets: [
+      "4-stage pipeline: Selenium-powered crawl → content cleaning → LLM endpoint extraction → structured JSON output.",
+      "Handles docs sites, GitHub repos, and PDFs; LLM extraction converts unstructured text into typed endpoint schemas.",
+      "Validation layer merges multi-source results and compares against reference OpenAPI specs — extracted 100+ endpoints, cutting developer hours by 90%.",
+    ],
+    nda: true,
+    links: [],
+  },
+  {
+    title: "ASCII — Image Converter",
+    subtitle: "Web app + CLI for converting images to ASCII art",
+    type: "personal",
+    tech: ["Python", "HTML/CSS/JS", "Vercel", "Pillow"],
+    bullets: [
+      "Drag-and-drop web UI with live preview, adjustable ramp, width/height, contrast, gamma, dither, and invert controls.",
+      "Serverless Python API (Vercel Functions) accepting base64 images and returning ASCII output with CORS support.",
+      "CLI tool with configurable ramps (detailed, blocks, classic), chat-mode code-fence output, and gamma/contrast pipeline.",
+    ],
+    links: [
+      { label: "Live Demo", href: "https://ascii-ayaan.vercel.app/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
+    ],
+  },
+  {
+    title: "surgraft",
+    subtitle: "Token-efficient code grafting — AST-locate, byte-copy, LLM-edit",
+    type: "personal",
+    tech: ["Python", "Claude API", "AST"],
+    bullets: [
+      "AST parsing locates exact function boundaries (zero tokens); shell-level byte copy moves code without involving the LLM.",
+      "Optional LLM edit pass sees only the extracted snippet — ~98% token reduction vs. naive rewrite on a 5,000-line file.",
+      "CLI + library API; supports Python (exact via ast module) and JS/TS/JSX/TSX (regex heuristic).",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/surgraft" }],
+  },
+  {
+    title: "lualings",
+    subtitle: "Hands-on Lua learning via broken programs — rustlings for Lua",
+    type: "personal",
+    tech: ["Lua"],
+    bullets: [
+      "32 fix-the-broken-program exercises spanning 13 topics: variables, tables, closures, metatables, OOP, coroutines, and more.",
+      "CLI runner with watch mode, per-exercise hints, and a verify command that grades all exercises at once.",
+      "Inspired by rustlings and ziglings; built to gain enough Lua fluency to write Terminal Mystery.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/lualings" }],
   },
   {
     title: "FocusNode — Chrome Extension",
@@ -86,57 +192,6 @@ const PROJECTS = [
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/tuesday.com" }],
   },
-  {
-    title: "Bare Metal Raspberry Pi OS",
-    subtitle: "OS kernel from scratch in C and ARM Assembly",
-    type: "personal",
-    tech: ["C", "ARM Assembly", "Raspberry Pi"],
-    bullets: [
-      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
-      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
-    ],
-    links: [],
-  },
-  {
-    title: "EMG Controller",
-    subtitle: "Real-time muscle-to-keystroke input device",
-    type: "personal",
-    tech: ["Arduino", "BioAmp EXG Pills", "Python", "C"],
-    bullets: [
-      "Built a real-time EMG-based input controller that converts muscle contractions to keystrokes with <50 ms end-to-end latency and 40% fewer false activations.",
-    ],
-    links: [],
-  },
-  {
-    title: "ASCII — Image Converter",
-    subtitle: "Web app + CLI for converting images to ASCII art",
-    type: "personal",
-    tech: ["Python", "HTML/CSS/JS", "Vercel", "Pillow"],
-    bullets: [
-      "Drag-and-drop web UI with live preview, adjustable ramp, width/height, contrast, gamma, dither, and invert controls.",
-      "Serverless Python API (Vercel Functions) accepting base64 images and returning ASCII output with CORS support.",
-      "CLI tool with configurable ramps (detailed, blocks, classic), chat-mode code-fence output, and gamma/contrast pipeline.",
-    ],
-    links: [
-      { label: "Live Demo", href: "https://ascii-ayaan.vercel.app/" },
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
-    ],
-  },
-  {
-    title: "Terminal Mystery",
-    subtitle: "Murder-mystery game played through a fake terminal",
-    type: "personal",
-    wip: true,
-    tech: ["Lua", "LÖVE"],
-    bullets: [
-      "The mansion is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
-      "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
-      "Vertical slice: one murder, four suspects, five rooms, solvable in one sitting.",
-    ],
-    links: [
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
-    ],
-  },
 ];
 
 const EXPERIENCE = [
@@ -146,25 +201,23 @@ const EXPERIENCE = [
     time: "May 2025 – Present",
     location: "Remote",
     bullets: [
-      "NL2SQL network-monitoring chatbot using LangChain, Ollama, ChromaDB, and PostgreSQL with RAG retrieval and session-aware context management; 85% answer accuracy.",
+      "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, session-aware context management, and CSV/graph artifact generation; 85% answer accuracy.",
       "Multi-turn LangChain SQL agents and prompt pipelines for an AI trip-planning platform using GPT-4, enabling structured itinerary generation across database-backed and general-knowledge destinations.",
-      "Social media platform backend with JWT auth, Stripe payments, and AWS Textract/Rekognition ID verification; Selenium scraper extracting 100+ endpoints into OpenAPI schemas, cutting developer hours by 90%.",
+      "Full-stack social media platform: FastAPI backend with RBAC, JWT auth, Stripe payments, and AWS Textract/Rekognition ML identity verification; React + TypeScript frontend served via nginx in Docker.",
+      "API documentation scraper (Selenium + OpenAI) crawling docs sites, GitHub repos, and PDFs into typed OpenAPI schemas — extracted 100+ endpoints, cutting developer hours by 90%.",
       "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit — real-time face detection, head-pose estimation, and frame-level deduplication.",
     ],
   },
 ];
 
 const SKILLS = {
-  Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "SQL", "NoSQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "SQLAlchemy", "scikit-learn", "NumPy", "pandas"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "ChromaDB", "Selenium", "AWS", "Stripe", "VS Code", "Android Studio"],
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
 
-const MORE_REPOS = [
-  { title: "PlayMG", subtitle: "C++ repo (forked)", href: "https://github.com/mayaanhafeez/PlayMG" },
-];
 
 /* all items searchable via telescope */
 const TELESCOPE_ITEMS = [
@@ -426,6 +479,9 @@ export default function Page() {
         const el = sectionRefs.current[id];
         if (el && el.offsetTop - 20 <= editor.scrollTop) current = id;
       }
+      if (editor.scrollHeight - editor.scrollTop - editor.clientHeight <= 5) {
+        current = ids[ids.length - 1];
+      }
       setActive(current);
     };
     editor.addEventListener("scroll", onScroll, { passive: true });
@@ -563,23 +619,6 @@ export default function Page() {
         <span className="titlebarTitle">ayaan.dev — nvim</span>
       </div>
 
-      {/* ── tabline (only in editor) ── */}
-      {view === "editor" && (
-        <div className="tabline">
-          {SECTIONS.map((s) => (
-            <div
-              key={s.id}
-              className={`tab ${active === s.id ? "active" : ""}`}
-              onClick={() => scrollTo(s.id)}
-            >
-              <span className="tabIcon">{s.icon}</span>
-              {s.label}
-              <span className="tabClose">×</span>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* ── body ── */}
       <div className="ideBody">
         {/* sidebar */}
@@ -686,9 +725,10 @@ export default function Page() {
                     Ayaan Hafeez<span className="heroDot">.</span><span className="heroCursor" />
                   </h1>
                   <p className="heroSub">
-                    Computer Engineering student at the University of Alberta with production experience spanning
-                    AI-powered backend systems, full-stack development, and low-level hardware programming —
-                    AI Developer @ Elev8AI, shipping LLM pipelines, NL2SQL chatbots, and REST APIs.
+                    Computer Engineering student at the University of Alberta with production experience across
+                    full-stack development, AI/LLM pipelines, and low-level systems programming —
+                    AI Developer @ Elev8AI, shipping NL2SQL chatbots, REST APIs, API scrapers, and Android ML apps;
+                    personal projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
                   </p>
                   <div className="ctaRow">
                     <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
@@ -743,17 +783,6 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
-                <div className="moreRepos">
-                  <div className="moreReposTitle">more repos</div>
-                  <div className="miniGrid">
-                    {MORE_REPOS.map((r) => (
-                      <a key={r.href} className="miniCard" href={r.href} target="_blank" rel="noreferrer">
-                        <div className="miniTitle">{r.title}</div>
-                        <div style={{ color: "var(--comment)", fontSize: 11 }}>{r.subtitle}</div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {/* ── experience ── */}
@@ -806,6 +835,7 @@ export default function Page() {
                   <div className="contactTermBody">
                     <span className="termLine"><span className="prompt">$</span> <span style={{ color: "var(--fg-dark)" }}>echo $EMAIL</span></span>
                     <span className="termLine"><a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></span>
+                    <span className="termLine"><a href={`mailto:${LINKS.personalEmail}`}>{LINKS.personalEmail}</a></span>
                     <span className="termLine" style={{ marginTop: 8 }}><span className="prompt">$</span> <span style={{ color: "var(--fg-dark)" }}>cat links.txt</span></span>
                     <span className="termLine"><a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
                     <span className="termLine"><a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>

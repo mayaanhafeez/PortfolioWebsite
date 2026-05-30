@@ -345,7 +345,7 @@ a:hover{ text-decoration: underline; }
   position: relative;
 }
 .editorContent{
-  max-width: 820px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 28px 36px 60px;
 }
@@ -714,10 +714,10 @@ a:hover{ text-decoration: underline; }
 .heroCursor{
   display: inline-block;
   width: 10px;
-  height: 32px;
+  height: 1em;
   background: var(--green);
   margin-left: 4px;
-  vertical-align: text-bottom;
+  vertical-align: -0.1em;
   animation: blink 1s step-end infinite;
 }
 @keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:0; } }
@@ -799,7 +799,7 @@ a:hover{ text-decoration: underline; }
 /* project cards */
 .projectGrid{
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
 }
 .projectCard{
@@ -966,7 +966,7 @@ a:hover{ text-decoration: underline; }
 /* skills */
 .skillsGrid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
   gap:10px;
 }
 .skillCard{
