@@ -65,6 +65,19 @@ const PROJECTS = [
     ],
   },
   {
+    title: "macwifi — Wi-Fi TUI for macOS",
+    subtitle: "Clean-room macOS port of impala (Linux/iwd)",
+    type: "personal",
+    wip: true,
+    tech: ["Rust", "ratatui", "tokio", "CoreWLAN", "objc2", "Security.framework"],
+    bullets: [
+      "Terminal UI for managing Wi-Fi on macOS — live scan/associate (open, WPA-PSK, WPA-Enterprise PEAP, hidden networks), saved-network management, QR sharing, and an adapter info popup.",
+      "Split daemon/client architecture over a Unix socket: a LaunchAgent-managed daemon owns the CoreWLAN interface in a proper Aqua session so scans return real SSIDs instead of redacted strings.",
+      "Reads Wi-Fi passwords via Security.framework so Keychain grants attach to the app's code-signing identity; ships a self-contained, code-signed .app bundle with Location entitlements.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/macwifi" }],
+  },
+  {
     title: "EMG Controller",
     subtitle: "Real-time muscle-to-keystroke input device",
     type: "personal",
@@ -171,13 +184,13 @@ const PROJECTS = [
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/lualings" }],
   },
   {
-    title: "FocusNode — Chrome Extension",
-    subtitle: "Blocks distracting sites during focus",
+    title: "FocusNode — Browser Extension",
+    subtitle: "Blocks distracting sites during focus — Chrome, Firefox, and Zen",
     type: "personal",
-    tech: ["React", "Vite", "Chrome Extensions API", "JavaScript"],
+    tech: ["React", "Vite", "WebExtensions API", "JavaScript"],
     bullets: [
-      "Blocks user-defined domains in real time and redirects tabs.",
-      "Persistent settings with Chrome Storage across restarts.",
+      "Cross-browser extension (Chrome, Firefox, Zen) that blocks user-defined domains in real time, covers subdomains, and redirects tabs back when focus mode is turned off.",
+      "Persistent settings and block list via the storage API across browser restarts.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" }],
   },
@@ -211,8 +224,8 @@ const EXPERIENCE = [
 ];
 
 const SKILLS = {
-  Languages: ["Python", "Kotlin", "Java", "C/C++", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
   Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
