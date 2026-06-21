@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+My personal portfolio site, styled as a [Neovim](https://neovim.io/) editor —
+sidebar file tree, tabline, statusline, a Telescope-style fuzzy finder, and
+vim keybindings for navigation. Built with Next.js 16 (App Router) and React 19.
 
-First, run the development server:
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # dev server at http://localhost:3000
+npm run build    # production build
+npm start        # serve the production build
+npm run lint     # ESLint (next/core-web-vitals)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No test framework is configured.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The whole app is two files:
 
-## Learn More
+- `src/app/page.js` — a single `"use client"` component holding all state,
+  logic, content, and rendering.
+- `src/app/globals.css` — all styling, including the color themes.
 
-To learn more about Next.js, take a look at the following resources:
+### Views
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+A `view` state variable switches between:
+- **welcome** — landing screen with ASCII art and action prompts
+- **editor** — the nvim-style UI (sidebar, tabline, content pane, statusline)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The editor has five sections — *about, projects, experience, skills, contact* —
+and all portfolio content (projects, experience, skills, links) is hardcoded as
+constants at the top of `page.js`.
 
-## Deploy on Vercel
+### Modal overlays
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Telescope** (`Ctrl+P`) — fuzzy finder over the site's content
+- **Help** (`:help`) — keybindings reference
+- **Command bar** (`:` or `/`) — vim-style commands dispatched to a handler
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Keybindings
+
+Handled via a `keydown` listener on `window`: `j`/`k` scroll, `gg`/`G` jump,
+`Ctrl+P` Telescope, `Ctrl+T` cycle theme, `:` command mode, `Esc` close
+overlays.
+
+### Theming
+
+Ten dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
+Dracula, One Dark, Solarized, Everforest, Monokai), defined as
+`[data-theme="…"]` blocks in `globals.css`. The selected theme is persisted to
+`localStorage` and applied as `data-theme` on the root element.
+
+## Deploy
+
+Optimized for [Vercel](https://vercel.com/) — push to deploy. Uses
+[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
+to load and optimize fonts.
