@@ -68,7 +68,6 @@ const PROJECTS = [
     title: "macwifi — Wi-Fi TUI for macOS",
     subtitle: "Clean-room macOS port of impala (Linux/iwd)",
     type: "personal",
-    wip: true,
     tech: ["Rust", "ratatui", "tokio", "CoreWLAN", "objc2", "Security.framework"],
     bullets: [
       "Terminal UI for managing Wi-Fi on macOS — live scan/associate (open, WPA-PSK, WPA-Enterprise PEAP, hidden networks), saved-network management, QR sharing, and an adapter info popup.",
@@ -76,6 +75,18 @@ const PROJECTS = [
       "Reads Wi-Fi passwords via Security.framework so Keychain grants attach to the app's code-signing identity; ships a self-contained, code-signed .app bundle with Location entitlements.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/macwifi" }],
+  },
+  {
+    title: "ssht — Persistent SSH Sessions",
+    subtitle: "Every SSH connection becomes a resumable tmux session",
+    type: "personal",
+    tech: ["Rust", "ratatui", "tokio", "rusqlite", "nucleo", "tmux"],
+    bullets: [
+      "Wraps the system ssh binary (not a reimplementation) and runs tmux new-session -A on the remote, so connections survive sleep/network drops and reattach from any machine — ProxyJump, IdentityFile, and hardware keys all keep working.",
+      "From-scratch SSH config parser handles Include globbing/recursion, Match blocks, and wildcard Host entries that naive line-scanners miss; falls back to known_hosts.",
+      "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
   },
   {
     title: "EMG Controller",
