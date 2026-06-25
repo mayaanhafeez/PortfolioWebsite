@@ -7,6 +7,21 @@ const THEMES = [
 
 const PROJECTS = [
   {
+    title: "ayaan.dev — Portfolio",
+    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
+    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
+    bullets: [
+      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
+      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+    ],
+    links: [
+      { label: "Live", href: "https://ayaan.dev" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
+    ],
+    type: "personal",
+  },
+  {
     title: "Bare Metal Raspberry Pi OS",
     subtitle: "OS kernel from scratch in C and ARM Assembly",
     tech: ["C", "ARM Assembly", "Raspberry Pi"],
@@ -103,6 +118,17 @@ const PROJECTS = [
     type: "personal",
   },
   {
+    title: "keyboard_cleaner",
+    subtitle: "Freeze your Mac's keyboard so you can wipe it down",
+    tech: ["Swift", "CoreGraphics", "CGEventTap", "Bash"],
+    bullets: [
+      "Installs a CGEventTap at the session level that returns nil for every key-down/up, modifier change, and NX_SYSDEFINED media event — keyboard goes dead without locking the screen, so a countdown stays visible.",
+      "Emergency unlock: Esc held for 3 continuous seconds re-enables the keyboard; a RunLoop timer ticks 4×/second to redraw the countdown, enforce auto-unlock, and re-enable the tap if macOS ever disables it. Single Swift file, zero dependencies.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/keyboard_cleaner" }],
+    type: "personal",
+  },
+  {
     title: "FocusNode — Browser Extension",
     subtitle: "Blocks distracting sites during focus — Chrome, Firefox, and Zen",
     tech: ["React", "Vite", "WebExtensions API", "JavaScript"],
@@ -111,6 +137,42 @@ const PROJECTS = [
       "Persistent settings and block list via the storage API across browser restarts.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" }],
+    type: "personal",
+  },
+  {
+    title: "Workforce Mgmt — Android App",
+    subtitle: "Native Android with real-time CV",
+    tech: ["Kotlin", "Jetpack Compose", "CameraX", "ML Kit", "AWS Rekognition", "Room", "Hilt"],
+    bullets: [
+      "Kotlin + Jetpack Compose with MVVM architecture and Hilt DI.",
+      "Real-time face detection via ML Kit with quality validation.",
+      "AWS Rekognition for cloud face recognition with confidence thresholds.",
+      "Room for offline-first persistence with coroutine reactive flows.",
+    ],
+    links: [],
+    type: "professional",
+  },
+  {
+    title: "API Documentation Scraper",
+    subtitle: "Crawl-to-OpenAPI pipeline for docs sites, GitHub repos, and PDFs",
+    tech: ["Python", "Selenium", "OpenAI", "BeautifulSoup", "OpenAPI"],
+    bullets: [
+      "4-stage pipeline: Selenium-powered crawl → content cleaning → LLM endpoint extraction → structured JSON output.",
+      "Handles docs sites, GitHub repos, and PDFs; LLM extraction converts unstructured text into typed endpoint schemas.",
+      "Validation layer merges multi-source results and compares against reference OpenAPI specs — extracted 100+ endpoints, cutting developer hours by 90%.",
+    ],
+    links: [],
+    type: "professional", wip: true,
+  },
+  {
+    title: "Tuesday.com — Hackathon App",
+    subtitle: "Built at HackED 2025",
+    tech: ["Node.js", "Express", "MongoDB", "JavaScript"],
+    bullets: [
+      "Team app with AI-driven task automation concept.",
+      "End-to-end demo shipped in 48 hours.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/tuesday.com" }],
     type: "personal",
   },
   {
@@ -146,19 +208,19 @@ const EXPERIENCE = [
     org: "Elev8AI",
     time: "May 2025 – Present",
     bullets: [
-      "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, and CSV/graph artifact generation; 85% answer accuracy.",
-      "Multi-turn LangChain SQL agents for an AI trip-planning platform using GPT-4.",
-      "Full-stack social media platform: FastAPI backend with RBAC, JWT auth, Stripe payments, and AWS Textract/Rekognition ML identity verification.",
-      "API documentation scraper (Selenium + OpenAI) extracting 100+ endpoints, cutting developer hours by 90%.",
-      "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit.",
+      "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, session-aware context management, and CSV/graph artifact generation; 85% answer accuracy.",
+      "Multi-turn LangChain SQL agents and prompt pipelines for an AI trip-planning platform using GPT-4, enabling structured itinerary generation across database-backed and general-knowledge destinations.",
+      "Full-stack social media platform: FastAPI backend with RBAC, JWT auth, Stripe payments, and AWS Textract/Rekognition ML identity verification; React + TypeScript frontend served via nginx in Docker.",
+      "API documentation scraper (Selenium + OpenAI) crawling docs sites, GitHub repos, and PDFs into typed OpenAPI schemas — extracted 100+ endpoints, cutting developer hours by 90%.",
+      "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit — real-time face detection, head-pose estimation, and frame-level deduplication.",
     ],
   },
 ];
 
 const SKILLS = {
-  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "Swift", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
