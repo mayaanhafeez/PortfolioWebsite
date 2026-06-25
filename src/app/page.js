@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import AIChat from "./components/AIChat";
 
 /* ════════════════════════════════════════
    DATA
@@ -38,6 +39,21 @@ const SECTIONS = [
 
 const PROJECTS = [
   {
+    title: "ayaan.dev — Portfolio",
+    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
+    type: "personal",
+    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
+    bullets: [
+      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
+      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+    ],
+    links: [
+      { label: "Live", href: "https://ayaan.dev" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
+    ],
+  },
+  {
     title: "Bare Metal Raspberry Pi OS",
     subtitle: "OS kernel from scratch in C and ARM Assembly",
     type: "personal",
@@ -72,7 +88,7 @@ const PROJECTS = [
     bullets: [
       "Terminal UI for managing Wi-Fi on macOS — live scan/associate (open, WPA-PSK, WPA-Enterprise PEAP, hidden networks), saved-network management, QR sharing, and an adapter info popup.",
       "Split daemon/client architecture over a Unix socket: a LaunchAgent-managed daemon owns the CoreWLAN interface in a proper Aqua session so scans return real SSIDs instead of redacted strings.",
-      "Reads Wi-Fi passwords via Security.framework so Keychain grants attach to the app's code-signing identity; ships a self-contained, code-signed .app bundle with Location entitlements.",
+      "Silent reconnect via macwifi's own login-keychain cache: passwords entered on first connect are stored under the app's stable code-signing identity, so reconnects are promptless. QR-share reads from the System keychain (one admin-auth dialog per share — unavoidable for any third-party app). Ships a self-contained, code-signed .app bundle with Location entitlements.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/macwifi" }],
   },
@@ -195,6 +211,17 @@ const PROJECTS = [
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/lualings" }],
   },
   {
+    title: "keyboard_cleaner",
+    subtitle: "Freeze your Mac's keyboard so you can wipe it down",
+    type: "personal",
+    tech: ["Swift", "CoreGraphics", "CGEventTap", "Bash"],
+    bullets: [
+      "Installs a CGEventTap at the session level that returns nil for every key-down/up, modifier change, and NX_SYSDEFINED media event — keyboard goes dead without locking the screen, so a countdown stays visible.",
+      "Emergency unlock: Esc held for 3 continuous seconds re-enables the keyboard; a RunLoop timer ticks 4×/second to redraw the countdown, enforce auto-unlock, and re-enable the tap if macOS ever disables it. Single Swift file, zero dependencies.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/keyboard_cleaner" }],
+  },
+  {
     title: "FocusNode — Browser Extension",
     subtitle: "Blocks distracting sites during focus — Chrome, Firefox, and Zen",
     type: "personal",
@@ -235,9 +262,9 @@ const EXPERIENCE = [
 ];
 
 const SKILLS = {
-  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "Swift", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
@@ -274,6 +301,7 @@ const HELP_DATA = [
     cmds: [
       { cmd: "Ctrl+P", desc: "Open Telescope fuzzy finder" },
       { cmd: ":help", desc: "Show this help popup" },
+      { cmd: ":ai  or  :chat", desc: "Open AI assistant — ask about projects, navigate, change theme" },
       { cmd: "Esc", desc: "Close any popup / exit command mode" },
     ],
   },
@@ -329,11 +357,16 @@ export default function Page() {
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [theme, setTheme] = useState("tokyo-night");
+  const [showAI, setShowAI] = useState(false);
+  const [aiInitialPrompt, setAiInitialPrompt] = useState(null);
+  const [aiMessages, setAiMessages] = useState([]);
+  const [aiLoading, setAiLoading] = useState(false);
 
   const editorRef = useRef(null);
   const sectionRefs = useRef({});
   const cmdInputRef = useRef(null);
   const teleInputRef = useRef(null);
+  const aiInputRef = useRef(null);
 
   /* ── helpers ── */
 
@@ -347,6 +380,12 @@ export default function Page() {
 
   const openLink = useCallback((href) => {
     window.open(href, "_blank", "noopener");
+  }, []);
+
+  const openAIForProject = useCallback((project) => {
+    setAiMessages([]);
+    setAiInitialPrompt(`Explain the ${project.title} project`);
+    setShowAI(true);
   }, []);
 
   const flashMsg = useCallback((text, type = "info") => {
@@ -443,6 +482,12 @@ export default function Page() {
       return;
     }
 
+    // ai chat
+    if (cmd === "ai" || cmd === "chat") {
+      setShowAI(true);
+      return;
+    }
+
     // home / welcome
     if (cmd === "home" || cmd === "welcome" || cmd === "dashboard") {
       setView("welcome");
@@ -517,11 +562,12 @@ export default function Page() {
     const onKey = (e) => {
       // don't intercept if user is in an input that isn't ours
       const tag = e.target.tagName;
-      const isOurInput = e.target === cmdInputRef.current || e.target === teleInputRef.current;
+      const isOurInput = e.target === cmdInputRef.current || e.target === teleInputRef.current || e.target === aiInputRef.current;
       if (!isOurInput && (tag === "INPUT" || tag === "TEXTAREA")) return;
 
       // Escape — close everything
       if (e.key === "Escape") {
+        if (showAI) { setShowAI(false); return; }
         if (showTelescope) { setShowTelescope(false); setTeleQuery(""); return; }
         if (showHelp) { setShowHelp(false); return; }
         if (mode === "command") { exitCommand(); return; }
@@ -548,8 +594,8 @@ export default function Page() {
         return;
       }
 
-      // if telescope is open, let it handle keys
-      if (showTelescope || showHelp) return;
+      // if any overlay is open, let it handle keys
+      if (showAI || showTelescope || showHelp) return;
 
       // command mode input handling
       if (mode === "command") return;
@@ -600,7 +646,137 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg]);
+
+  /* ── AI: execute tool calls returned by the model ── */
+  const executeToolCalls = useCallback((calls) => {
+    const results = [];
+    for (const call of calls) {
+      let result = "done";
+      if (call.name === "navigate_section") {
+        if (view !== "editor") enterEditor(call.args.section_id);
+        else scrollTo(call.args.section_id);
+        setShowAI(false);
+        flashMsg(`-- navigated to ${call.args.section_id} --`, "success");
+        result = `Navigated to the ${call.args.section_id} section.`;
+      } else if (call.name === "set_theme") {
+        setTheme(call.args.theme_id);
+        flashMsg(`-- theme: ${call.args.theme_id} --`, "success");
+        result = `Theme changed to ${call.args.theme_id}.`;
+      } else if (call.name === "open_link") {
+        openLink(call.args.url);
+        flashMsg(`-- opening ${call.args.label ?? call.args.url} --`, "success");
+        result = `Opened ${call.args.label ?? call.args.url}.`;
+      }
+      results.push({ tool_call_id: call.id, content: result });
+    }
+    return results;
+  }, [view, enterEditor, scrollTo, setTheme, openLink, flashMsg]);
+
+  /* ── AI: consume an SSE stream and append deltas to the last assistant message ── */
+  const consumeStream = useCallback(async (response) => {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let started = false;
+
+    setAiMessages((prev) => {
+      if (prev.length > 0 && prev[prev.length - 1].role === "assistant" && prev[prev.length - 1].content === "") {
+        return prev;
+      }
+      return [...prev, { role: "assistant", content: "" }];
+    });
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const raw = line.slice(6).trim();
+        if (!raw || raw === "[DONE]") continue;
+        try {
+          const chunk = JSON.parse(raw);
+          if (chunk.type === "delta" && chunk.content) {
+            if (!started) { started = true; setAiLoading(false); }
+            setAiMessages((prev) => {
+              const updated = [...prev];
+              updated[updated.length - 1] = {
+                ...updated[updated.length - 1],
+                content: updated[updated.length - 1].content + chunk.content,
+              };
+              return updated;
+            });
+          }
+          if (chunk.type === "done") setAiLoading(false);
+        } catch {
+          // skip malformed chunks
+        }
+      }
+    }
+    setAiLoading(false);
+  }, []);
+
+  /* ── AI: send a message, handle tool call round-trips, stream the response ── */
+  const onAISend = useCallback(async (userText) => {
+    const history = aiMessages;
+    setAiMessages((prev) => [...prev, { role: "user", content: userText }]);
+    setAiLoading(true);
+
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText, history }),
+      });
+
+      const contentType = res.headers.get("content-type") ?? "";
+
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.type === "tool_calls") {
+          const toolResults = executeToolCalls(data.calls);
+          // Follow-up: stream the final answer with tool results injected
+          const followUp = await fetch("/api/ai", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: userText,
+              history,
+              toolCalls: data.calls,
+              toolResults,
+            }),
+          });
+          if (!followUp.ok) {
+            const err = await followUp.json().catch(() => ({}));
+            setAiMessages((prev) => [...prev, { role: "assistant", content: err.error ?? "Something went wrong." }]);
+          } else {
+            await consumeStream(followUp);
+          }
+        } else {
+          setAiMessages((prev) => [...prev, { role: "assistant", content: data.error ?? "Something went wrong." }]);
+        }
+        setAiLoading(false);
+        return;
+      }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setAiMessages((prev) => [...prev, { role: "assistant", content: err.error ?? "Something went wrong." }]);
+        setAiLoading(false);
+        return;
+      }
+
+      await consumeStream(res);
+    } catch {
+      setAiMessages((prev) => [...prev, { role: "assistant", content: "Network error. Please try again." }]);
+      setAiLoading(false);
+    }
+  }, [aiMessages, executeToolCalls, consumeStream]);
 
   /* ── telescope filtering ── */
   const teleFiltered = TELESCOPE_ITEMS.filter((item) => {
@@ -711,6 +887,10 @@ export default function Page() {
                 Type <span style={{ color: "var(--cyan)" }}>:</span> to enter a command, or pick an action below.
               </div>
               <div className="welcomeActions">
+                <div className="welcomeAction welcomeActionAI" onClick={() => setShowAI(true)}>
+                  <span className="welcomeActionKey">:ai</span>
+                  <span className="welcomeActionLabel">Ask the AI assistant</span>
+                </div>
                 <div className="welcomeAction" onClick={() => enterEditor("about")}>
                   <span className="welcomeActionKey">Enter</span>
                   <span className="welcomeActionLabel">Open portfolio</span>
@@ -795,15 +975,16 @@ export default function Page() {
                       </ul>
                       {p.wip && <div className="wipNotice">◌ work in progress</div>}
                       {p.nda && <div className="ndaNotice">⚠ source under NDA</div>}
-                      {p.links && p.links.length > 0 && (
-                        <div className="linkRow">
-                          {p.links.map((l) => (
-                            <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
-                              {l.label} →
-                            </a>
-                          ))}
-                        </div>
-                      )}
+                      <div className="linkRow">
+                        {p.links && p.links.map((l) => (
+                          <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
+                            {l.label} →
+                          </a>
+                        ))}
+                        <button className="askAiBtn" onClick={() => openAIForProject(p)}>
+                          ⬡ ask AI
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -924,7 +1105,7 @@ export default function Page() {
               if (e.key === "Tab") {
                 e.preventDefault();
                 const partial = cmdText.toLowerCase();
-                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit", "theme", "colorscheme"];
+                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit", "theme", "colorscheme", "ai", "chat"];
                 const match = allCmds.find((c) => c.startsWith(partial));
                 if (match) setCmdText(match);
               }
@@ -990,6 +1171,18 @@ export default function Page() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ── ai chat overlay ── */}
+      {showAI && (
+        <AIChat
+          messages={aiMessages}
+          loading={aiLoading}
+          onSend={onAISend}
+          initialPrompt={aiInitialPrompt}
+          onClose={() => { setShowAI(false); setAiInitialPrompt(null); }}
+          inputRef={aiInputRef}
+        />
       )}
 
       {/* ── help overlay ── */}

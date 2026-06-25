@@ -1,0 +1,228 @@
+const SECTIONS = ["about", "projects", "experience", "skills", "contact"];
+
+const THEMES = [
+  "tokyo-night", "catppuccin", "rose-pine", "gruvbox", "nord",
+  "dracula", "one-dark", "solarized", "everforest", "monokai", "tomorrow-night-burns",
+];
+
+const PROJECTS = [
+  {
+    title: "Bare Metal Raspberry Pi OS",
+    subtitle: "OS kernel from scratch in C and ARM Assembly",
+    tech: ["C", "ARM Assembly", "Raspberry Pi"],
+    bullets: [
+      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
+      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
+    type: "personal", wip: true,
+  },
+  {
+    title: "Terminal Mystery",
+    subtitle: "Murder-mystery game played through a fake terminal",
+    tech: ["Lua", "LÖVE"],
+    bullets: [
+      "The mansion is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
+      "Commands unlock progressively; grep -r is the core mechanic for correlating evidence across rooms.",
+      "Vertical slice: one murder, four suspects, five rooms, solvable in one sitting.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" }],
+    type: "personal", wip: true,
+  },
+  {
+    title: "macwifi — Wi-Fi TUI for macOS",
+    subtitle: "Clean-room macOS port of impala (Linux/iwd)",
+    tech: ["Rust", "ratatui", "tokio", "CoreWLAN", "objc2", "Security.framework"],
+    bullets: [
+      "Terminal UI for managing Wi-Fi on macOS — live scan/associate (open, WPA-PSK, WPA-Enterprise PEAP, hidden networks), saved-network management, QR sharing, and an adapter info popup.",
+      "Split daemon/client architecture over a Unix socket: a LaunchAgent-managed daemon owns the CoreWLAN interface in a proper Aqua session so scans return real SSIDs instead of redacted strings.",
+      "Reads Wi-Fi passwords via Security.framework; ships a self-contained, code-signed .app bundle with Location entitlements.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/macwifi" }],
+    type: "personal",
+  },
+  {
+    title: "ssht — Persistent SSH Sessions",
+    subtitle: "Every SSH connection becomes a resumable tmux session",
+    tech: ["Rust", "ratatui", "tokio", "rusqlite", "nucleo", "tmux"],
+    bullets: [
+      "Wraps the system ssh binary and runs tmux new-session -A on the remote, so connections survive sleep/network drops — ProxyJump, IdentityFile, and hardware keys all keep working.",
+      "From-scratch SSH config parser handles Include globbing/recursion, Match blocks, and wildcard Host entries; falls back to known_hosts.",
+      "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently. SQLite stores last-connected times, counts, and notes.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
+    type: "personal",
+  },
+  {
+    title: "EMG Controller",
+    subtitle: "Real-time muscle-to-keystroke input device",
+    tech: ["Arduino", "Python", "BioAmp EXG Pills", "scipy", "NumPy", "asyncio"],
+    bullets: [
+      "Reads 5 EMG channels concurrently via asyncio; band-pass filtering, envelope detection, and peak analysis isolate muscle contractions from noise.",
+      "Maps left/right fist-clench gestures to directional keyboard inputs with <50 ms end-to-end latency and 40% fewer false activations via tuned peak thresholds.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/PlayMG" }],
+    type: "personal",
+  },
+  {
+    title: "ASCII Image Converter",
+    subtitle: "Web app + CLI for converting images to ASCII art",
+    tech: ["Python", "HTML/CSS/JS", "Vercel", "Pillow"],
+    bullets: [
+      "Drag-and-drop web UI with live preview, adjustable ramp, width/height, contrast, gamma, dither, and invert controls.",
+      "Serverless Python API (Vercel Functions) accepting base64 images and returning ASCII output.",
+      "CLI tool with configurable ramps, chat-mode code-fence output, and gamma/contrast pipeline.",
+    ],
+    links: [
+      { label: "Live Demo", href: "https://ascii-ayaan.vercel.app/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
+    ],
+    type: "personal",
+  },
+  {
+    title: "surgraft",
+    subtitle: "Token-efficient code grafting — AST-locate, byte-copy, LLM-edit",
+    tech: ["Python", "Claude API", "AST"],
+    bullets: [
+      "AST parsing locates exact function boundaries (zero tokens); shell-level byte copy moves code without involving the LLM.",
+      "Optional LLM edit pass sees only the extracted snippet — ~98% token reduction vs. naive rewrite on a 5,000-line file.",
+      "CLI + library API; supports Python (exact via ast module) and JS/TS/JSX/TSX (regex heuristic).",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/surgraft" }],
+    type: "personal",
+  },
+  {
+    title: "lualings",
+    subtitle: "Hands-on Lua learning via broken programs — rustlings for Lua",
+    tech: ["Lua"],
+    bullets: [
+      "32 fix-the-broken-program exercises spanning 13 topics: variables, tables, closures, metatables, OOP, coroutines, and more.",
+      "CLI runner with watch mode, per-exercise hints, and a verify command that grades all exercises at once.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/lualings" }],
+    type: "personal",
+  },
+  {
+    title: "FocusNode — Browser Extension",
+    subtitle: "Blocks distracting sites during focus — Chrome, Firefox, and Zen",
+    tech: ["React", "Vite", "WebExtensions API", "JavaScript"],
+    bullets: [
+      "Cross-browser extension that blocks user-defined domains in real time, covers subdomains, and redirects tabs back when focus mode is turned off.",
+      "Persistent settings and block list via the storage API across browser restarts.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" }],
+    type: "personal",
+  },
+  {
+    title: "Network Monitoring Chatbot",
+    subtitle: "NL2SQL chatbot for ISP network performance analytics",
+    tech: ["Python", "FastAPI", "LangChain", "Ollama", "ChromaDB", "PostgreSQL"],
+    bullets: [
+      "Intent classifier routes queries to NL2SQL, RAG, or general-knowledge paths; session-aware context management across multi-turn conversations.",
+      "SQL agent generates queries against a network KPI database with 85% answer accuracy.",
+      "Produces downloadable CSV and matplotlib graph artifacts alongside natural-language answers.",
+    ],
+    links: [],
+    type: "professional",
+  },
+  {
+    title: "Social Media Platform",
+    subtitle: "Full-stack social media application — REST API + React frontend",
+    tech: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Redis", "Docker", "Stripe", "JWT"],
+    bullets: [
+      "Production REST API with RBAC, JWT auth, and Argon2 hashing; containerized with Docker Compose.",
+      "Stripe subscription management with webhook-driven payment sync.",
+      "Pluggable ML identity verification: OCR, face matching, liveness, tamper detection.",
+      "React + TypeScript SPA with React Router and context-based auth; served behind nginx in Docker.",
+    ],
+    links: [],
+    type: "professional",
+  },
+];
+
+const EXPERIENCE = [
+  {
+    role: "AI Developer",
+    org: "Elev8AI",
+    time: "May 2025 – Present",
+    bullets: [
+      "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, and CSV/graph artifact generation; 85% answer accuracy.",
+      "Multi-turn LangChain SQL agents for an AI trip-planning platform using GPT-4.",
+      "Full-stack social media platform: FastAPI backend with RBAC, JWT auth, Stripe payments, and AWS Textract/Rekognition ML identity verification.",
+      "API documentation scraper (Selenium + OpenAI) extracting 100+ endpoints, cutting developer hours by 90%.",
+      "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit.",
+    ],
+  },
+];
+
+const SKILLS = {
+  Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
+  Frameworks: ["FastAPI", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
+  "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
+  Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
+};
+
+const LINKS = {
+  github: "https://github.com/mayaanhafeez",
+  linkedin: "https://linkedin.com/in/ayaanhafeez",
+  email: "mhafeez1@ualberta.ca",
+  resume: "/resume.pdf",
+};
+
+function serializeProjects() {
+  return PROJECTS.map((p) => {
+    const linkStr = p.links.length
+      ? p.links.map((l) => `${l.label}: ${l.href}`).join(", ")
+      : p.type === "professional" ? "NDA — no public link" : "no links";
+    return `- ${p.title}${p.wip ? " [WIP]" : ""} (${p.type}): ${p.subtitle}. Tech: ${p.tech.join(", ")}. Links: ${linkStr}`;
+  }).join("\n");
+}
+
+function serializeSkills() {
+  return Object.entries(SKILLS)
+    .map(([cat, items]) => `  ${cat}: ${items.join(", ")}`)
+    .join("\n");
+}
+
+export function buildSystemPrompt() {
+  return `You are an AI assistant embedded in Ayaan Hafeez's portfolio website. The site is styled as a Neovim editor.
+
+SCOPE: Only answer questions about Ayaan, his projects, skills, experience, and how to use this portfolio interface. If asked anything unrelated, politely decline in one sentence.
+
+RESPONSE STYLE: Be concise and direct. Max 300 words. No markdown headers or bullet lists — use plain prose or short comma-separated lists. Terminal-friendly tone.
+
+TOOLS: Call tools only when the user explicitly requests an action:
+- navigate_section: when the user asks to go to, navigate to, or open a section. Do not call it when merely answering a question that mentions a section.
+- set_theme: only when the user asks to change / switch / set the theme
+- open_link: only when the user explicitly asks to open, visit, or go to a URL or external page — NEVER call open_link just because a URL appears in the data you are referencing
+
+---
+
+PORTFOLIO INTERFACE
+- Sections: ${SECTIONS.join(", ")}
+- Commands: :open <section>, :theme <name>, :github, :linkedin, :email, :resume, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme)
+- Themes (${THEMES.length} available): ${THEMES.join(", ")}
+
+---
+
+ABOUT AYAAN
+3rd-year Computer Engineering student at University of Alberta. AI Developer at Elev8AI (May 2025 – present). Interests: systems programming, AI/ML, TUI tools, embedded systems.
+
+Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | Resume: ${LINKS.resume}
+
+---
+
+EXPERIENCE
+${EXPERIENCE.map((e) => `${e.role} @ ${e.org} (${e.time}): ${e.bullets[0]}`).join("\n")}
+
+---
+
+SKILLS
+${serializeSkills()}
+
+---
+
+PROJECTS (${PROJECTS.length} total)
+${serializeProjects()}`;
+}
