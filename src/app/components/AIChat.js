@@ -22,6 +22,10 @@ export default function AIChat({ messages, loading, onSend, onClose, inputRef, i
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  useEffect(() => {
+    if (!loading) inputRef?.current?.focus();
+  }, [loading]);
+
   function handleKeyDown(e) {
     if (e.key === "Escape") { onClose(); return; }
     if (e.key === "Enter" && !e.shiftKey && input.trim() && !loading) {
