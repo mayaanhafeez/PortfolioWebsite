@@ -7,21 +7,6 @@ const THEMES = [
 
 const PROJECTS = [
   {
-    title: "ayaan.dev — Portfolio",
-    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
-    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
-    bullets: [
-      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
-      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
-    ],
-    links: [
-      { label: "Live", href: "https://ayaan.dev" },
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
-    ],
-    type: "personal",
-  },
-  {
     title: "Bare Metal Raspberry Pi OS",
     subtitle: "OS kernel from scratch in C and ARM Assembly",
     tech: ["C", "ARM Assembly", "Raspberry Pi"],
@@ -67,6 +52,35 @@ const PROJECTS = [
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
     type: "personal",
+  },
+  {
+    title: "ayaan.dev — Portfolio",
+    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
+    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
+    bullets: [
+      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
+      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+    ],
+    links: [
+      { label: "Live", href: "https://ayaan.dev" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
+    ],
+    type: "personal",
+  },
+  {
+    title: "The Rubber Duck Blog",
+    subtitle: "Neovim-styled developer blog",
+    tech: ["Astro", "TypeScript", "MDX", "Vercel"],
+    bullets: [
+      "Documents my dev experiences — issues I faced while coding and how I overcame them.",
+      "Named after rubber duck debugging — because half my bugs get solved the moment I start writing about them.",
+    ],
+    links: [
+      { label: "Live", href: "https://the-rubber-duck-blog.vercel.app/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/blog_post" },
+    ],
+    type: "personal", wip: true,
   },
   {
     title: "EMG Controller",
@@ -230,6 +244,7 @@ const LINKS = {
   linkedin: "https://linkedin.com/in/ayaanhafeez",
   email: "mhafeez1@ualberta.ca",
   resume: "/resume.pdf",
+  blog: "https://the-rubber-duck-blog.vercel.app/",
 };
 
 function serializeProjects() {
@@ -263,7 +278,7 @@ TOOLS: Call tools only when the user explicitly requests an action:
 
 PORTFOLIO INTERFACE
 - Sections: ${SECTIONS.join(", ")}
-- Commands: :open <section>, :theme <name>, :github, :linkedin, :email, :resume, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme)
+- Commands: :open <section>, :theme <name>, :github, :linkedin, :email, :resume, :blog, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme)
 - Themes (${THEMES.length} available): ${THEMES.join(", ")}
 
 ---
@@ -271,7 +286,7 @@ PORTFOLIO INTERFACE
 ABOUT AYAAN
 3rd-year Computer Engineering student at University of Alberta. AI Developer at Elev8AI (May 2025 – present). Interests: systems programming, AI/ML, TUI tools, embedded systems.
 
-Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | Resume: ${LINKS.resume}
+Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | Resume: ${LINKS.resume} | Blog: ${LINKS.blog}
 
 ---
 

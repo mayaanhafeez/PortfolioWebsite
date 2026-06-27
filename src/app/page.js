@@ -13,6 +13,7 @@ const LINKS = {
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
   resume: "/resume.pdf",
+  blog: "https://the-rubber-duck-blog.vercel.app/",
 };
 
 const THEMES = [
@@ -38,21 +39,6 @@ const SECTIONS = [
 ];
 
 const PROJECTS = [
-  {
-    title: "ayaan.dev — Portfolio",
-    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
-    type: "personal",
-    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
-    bullets: [
-      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
-      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
-    ],
-    links: [
-      { label: "Live", href: "https://ayaan.dev" },
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
-    ],
-  },
   {
     title: "Bare Metal Raspberry Pi OS",
     subtitle: "OS kernel from scratch in C and ARM Assembly",
@@ -103,6 +89,36 @@ const PROJECTS = [
       "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
+  },
+  {
+    title: "ayaan.dev — Portfolio",
+    subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
+    type: "personal",
+    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
+    bullets: [
+      "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
+      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+    ],
+    links: [
+      { label: "Live", href: "https://ayaan.dev" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
+    ],
+  },
+  {
+    title: "The Rubber Duck Blog",
+    subtitle: "Neovim-styled developer blog",
+    type: "personal",
+    wip: true,
+    tech: ["Astro", "TypeScript", "MDX", "Vercel"],
+    bullets: [
+      "Documents my dev experiences — issues I faced while coding and how I overcame them.",
+      "Named after rubber duck debugging — because half my bugs get solved the moment I start writing about them.",
+    ],
+    links: [
+      { label: "Live", href: "https://the-rubber-duck-blog.vercel.app/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/blog_post" },
+    ],
   },
   {
     title: "EMG Controller",
@@ -277,6 +293,7 @@ const TELESCOPE_ITEMS = [
   { type: "link", id: "linkedin", icon: "🔗", label: "linkedin", desc: "Open LinkedIn profile", href: LINKS.linkedin },
   { type: "link", id: "email", icon: "✉️", label: "email", desc: `Mail ${LINKS.email}`, href: `mailto:${LINKS.email}` },
   { type: "link", id: "resume", icon: "📎", label: "resume.pdf", desc: "Download resume", href: LINKS.resume },
+  { type: "link", id: "blog", icon: "📝", label: "blog", desc: "Open The Rubber Duck Blog", href: LINKS.blog },
   { type: "action", id: "help", icon: "❓", label: ":help", desc: "Show all commands" },
 ];
 
@@ -312,6 +329,7 @@ const HELP_DATA = [
       { cmd: ":linkedin", desc: "Open LinkedIn profile" },
       { cmd: ":email", desc: "Compose email" },
       { cmd: ":resume", desc: "Open resume PDF" },
+      { cmd: ":blog", desc: "Open The Rubber Duck Blog" },
     ],
   },
   {
@@ -457,6 +475,7 @@ export default function Page() {
     if (cmd === "linkedin" || cmd === "li") { openLink(LINKS.linkedin); flashMsg("Opening LinkedIn...", "success"); return; }
     if (cmd === "email" || cmd === "mail") { openLink(`mailto:${LINKS.email}`); flashMsg("Opening email...", "success"); return; }
     if (cmd === "resume" || cmd === "cv") { openLink(LINKS.resume); flashMsg("Opening resume...", "success"); return; }
+    if (cmd === "blog") { openLink(LINKS.blog); flashMsg("Opening blog...", "success"); return; }
 
     // quit easter egg
     if (cmd === "q" || cmd === "quit" || cmd === "q!" || cmd === "wq" || cmd === "wq!" || cmd === "x") {
@@ -914,6 +933,10 @@ export default function Page() {
                 <div className="welcomeAction" onClick={() => openLink(LINKS.resume)}>
                   <span className="welcomeActionKey">:resume</span>
                   <span className="welcomeActionLabel">Download resume</span>
+                </div>
+                <div className="welcomeAction" onClick={() => openLink(LINKS.blog)}>
+                  <span className="welcomeActionKey">:blog</span>
+                  <span className="welcomeActionLabel">Read my blog</span>
                 </div>
               </div>
               <div className="welcomeVersion">ayaan.dev v1.0 — nvim-inspired portfolio</div>
