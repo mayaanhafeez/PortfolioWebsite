@@ -3,6 +3,9 @@ import "./globals.css";
 export const metadata = {
   title: "Ayaan Hafeez | Portfolio",
   description: "AI Developer @ Elev8AI — projects, experience, and contact.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

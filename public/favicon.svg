@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#1a1b26"/>
+  <!-- top bar -->
+  <rect x="2" y="4" width="28" height="5" fill="#7dcfff"/>
+  <!-- upper legs -->
+  <rect x="2" y="9" width="8" height="5" fill="#7dcfff"/>
+  <rect x="22" y="9" width="8" height="5" fill="#7dcfff"/>
+  <!-- crossbar -->
+  <rect x="2" y="14" width="28" height="5" fill="#7dcfff"/>
+  <!-- lower legs -->
+  <rect x="2" y="19" width="8" height="5" fill="#7dcfff"/>
+  <rect x="22" y="19" width="8" height="5" fill="#7dcfff"/>
+  <!-- bottom legs -->
+  <rect x="2" y="24" width="8" height="5" fill="#7dcfff"/>
+  <rect x="22" y="24" width="8" height="5" fill="#7dcfff"/>
+</svg>

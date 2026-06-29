@@ -198,16 +198,20 @@ a:hover{ text-decoration: underline; }
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   user-select: none;
+  position: relative;
 }
 .titlebarDot{ width: 12px; height: 12px; border-radius: 50%; }
 .titlebarDot.r{ background: #ff5f57; }
 .titlebarDot.y{ background: #febc2e; }
 .titlebarDot.g{ background: #28c840; }
 .titlebarTitle{
-  flex: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
   text-align: center;
   color: var(--comment);
   font-size: 12px;
+  pointer-events: none;
 }
 
 /* ── tabline ── */
@@ -333,6 +337,26 @@ a:hover{ text-decoration: underline; }
   font-family: var(--font);
   font-size: 10px;
   color: var(--fg-dark);
+}
+
+/* ── sidebar AI button ── */
+.sidebarAIBtn{
+  margin: 8px 10px;
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  color: var(--cyan);
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+  width: calc(100% - 20px);
+  text-align: left;
+  transition: background .1s, color .1s;
+}
+.sidebarAIBtn:hover{
+  background: var(--cyan);
+  color: var(--bg-dark);
 }
 
 /* ── editor pane ── */
@@ -634,12 +658,18 @@ a:hover{ text-decoration: underline; }
 }
 
 .welcomeAscii{
+  /* JetBrains Mono's webfont subset lacks box-drawing glyphs, so they fall
+     back to a different-width font and the art skews. Use a complete system
+     monospace where blocks + box-drawing share one cell width. */
+  font-family: 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
   color: var(--blue);
   font-size: 11px;
-  line-height: 1.3;
-  margin-bottom: 20px;
+  line-height: 1;
+  margin-bottom: 24px;
   white-space: pre;
-  opacity: .8;
+  opacity: .85;
+  letter-spacing: 0;
+  text-align: left;
 }
 
 .welcomeName{
@@ -653,7 +683,7 @@ a:hover{ text-decoration: underline; }
   color: var(--comment);
   font-size: 13px;
   margin-bottom: 28px;
-  width: 280px;
+  white-space: nowrap;
   line-height: 1.6;
 }
 
@@ -673,9 +703,16 @@ a:hover{ text-decoration: underline; }
   transition: all .1s;
   border: 1px solid transparent;
 }
-.welcomeAction:hover{
+.welcomeAction:hover,
+.welcomeAction.selected{
   background: var(--bg-highlight);
   border-color: var(--border);
+}
+.welcomeAction.selected{
+  border-color: var(--blue);
+}
+.welcomeAction.selected .welcomeActionLabel{
+  color: var(--fg);
 }
 .welcomeActionKey{
   font-size: 11px;
@@ -696,7 +733,8 @@ a:hover{ text-decoration: underline; }
   border-color: var(--cyan) !important;
   background: rgba(125,207,255,.04);
 }
-.welcomeActionAI:hover{
+.welcomeActionAI:hover,
+.welcomeActionAI.selected{
   background: rgba(125,207,255,.1) !important;
 }
 .welcomeActionAI .welcomeActionKey{

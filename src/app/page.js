@@ -38,6 +38,18 @@ const SECTIONS = [
   { id: "contact", label: "contact.sh", icon: "📨", desc: "Get in touch" },
 ];
 
+// Dashboard (welcome view) actions — display data only; dispatch lives in runWelcomeAction
+const WELCOME_ACTIONS = [
+  { key: ":ai", label: "Ask the AI assistant", className: "welcomeActionAI" },
+  { key: "Enter", label: "Open portfolio" },
+  { key: "Ctrl+P", label: "Find anything" },
+  { key: ":help", label: "Show all commands" },
+  { key: ":github", label: "GitHub profile" },
+  { key: ":linkedin", label: "LinkedIn profile" },
+  { key: ":resume", label: "Download resume" },
+  { key: ":blog", label: "Read my blog" },
+];
+
 const PROJECTS = [
   {
     title: "Bare Metal Raspberry Pi OS",
@@ -364,6 +376,7 @@ function Pill({ children }) {
 
 export default function Page() {
   const [view, setView] = useState("welcome"); // "welcome" | "editor"
+  const [welcomeIdx, setWelcomeIdx] = useState(-1); // selected dashboard action (-1 = none)
   const [active, setActive] = useState("about");
   const [mode, setMode] = useState("normal"); // "normal" | "command"
   const [cmdText, setCmdText] = useState("");
@@ -576,6 +589,28 @@ export default function Page() {
     return () => editor.removeEventListener("scroll", onScroll);
   }, [view]);
 
+  /* ── open the telescope finder ── */
+  const openTelescope = useCallback(() => {
+    setShowTelescope(true);
+    setTeleQuery("");
+    setTeleIdx(0);
+    setTimeout(() => teleInputRef.current?.focus(), 0);
+  }, []);
+
+  /* ── dashboard actions (welcome view): run the action at index i ── */
+  const runWelcomeAction = useCallback((i) => {
+    switch (i) {
+      case 0: setShowAI(true); break;
+      case 1: enterEditor("about"); break;
+      case 2: openTelescope(); break;
+      case 3: setShowHelp(true); break;
+      case 4: openLink(LINKS.github); break;
+      case 5: openLink(LINKS.linkedin); break;
+      case 6: openLink(LINKS.resume); break;
+      case 7: openLink(LINKS.blog); break;
+    }
+  }, [enterEditor, openLink, openTelescope]);
+
   /* ── global keyboard shortcuts ── */
   useEffect(() => {
     const onKey = (e) => {
@@ -636,9 +671,25 @@ export default function Page() {
         return;
       }
 
-      // welcome screen — Enter to go to editor
-      if (view === "welcome" && e.key === "Enter") {
-        enterEditor("about");
+      // welcome screen — j/k or arrows to select an action, Enter to run it.
+      // Nothing is selected initially; the first nav key lands on "Open
+      // portfolio" (index 1), from which `k`/↑ reaches the AI action.
+      if (view === "welcome") {
+        if (e.key === "j" || e.key === "ArrowDown") {
+          e.preventDefault();
+          setWelcomeIdx((i) => (i < 0 ? 1 : Math.min(i + 1, WELCOME_ACTIONS.length - 1)));
+          return;
+        }
+        if (e.key === "k" || e.key === "ArrowUp") {
+          e.preventDefault();
+          setWelcomeIdx((i) => (i < 0 ? 1 : Math.max(i - 1, 0)));
+          return;
+        }
+        if (e.key === "Enter") {
+          e.preventDefault();
+          runWelcomeAction(welcomeIdx < 0 ? 1 : welcomeIdx); // default: Open portfolio
+          return;
+        }
         return;
       }
 
@@ -665,7 +716,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg, runWelcomeAction, welcomeIdx]);
 
   /* ── AI: execute tool calls returned by the model ── */
   const executeToolCalls = useCallback((calls) => {
@@ -876,6 +927,9 @@ export default function Page() {
                 <span className="treeName">resume.pdf</span>
               </a>
             </div>
+            <button className="sidebarAIBtn" onClick={() => setShowAI(true)}>
+              ✦ Ask AI
+            </button>
             <div className="sidebarHints">
               <kbd>:</kbd> command&ensp;
               <kbd>Ctrl+P</kbd> find<br />
@@ -890,56 +944,31 @@ export default function Page() {
         {view === "welcome" ? (
           <div className="editorPane">
             <div className="welcome">
-              <pre className="welcomeAscii">{`
-   ██████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗
-  ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗████╗  ██║
-  ███████║ ╚████╔╝ ███████║███████║██╔██╗ ██║
-  ██╔══██║  ╚██╔╝  ██╔══██║██╔══██║██║╚██╗██║
-  ██║  ██║   ██║   ██║  ██║██║  ██║██║ ╚████║
-  ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝`}</pre>
-              <div className="welcomeName">
-                Ayaan Hafeez<span className="welcomeNameDot">.</span>
-              </div>
+              <pre className="welcomeAscii">{` █████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗   ██╗  ██╗ █████╗ ███████╗███████╗███████╗███████╗
+██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗████╗  ██║   ██║  ██║██╔══██╗██╔════╝██╔════╝██╔════╝╚══███╔╝
+███████║ ╚████╔╝ ███████║███████║██╔██╗ ██║   ███████║███████║█████╗  █████╗  █████╗    ███╔╝
+██╔══██║  ╚██╔╝  ██╔══██║██╔══██║██║╚██╗██║   ██╔══██║██╔══██║██╔══╝  ██╔══╝  ██╔══╝   ███╔╝
+██║  ██║   ██║   ██║  ██║██║  ██║██║ ╚████║   ██║  ██║██║  ██║██║     ███████╗███████╗███████╗
+╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝╚══════╝╚══════╝`}</pre>
               <div className="welcomeSub">
                 AI Developer @ Elev8AI — LLM pipelines, backends, Android apps, bare-metal systems.
-                <br />
-                Type <span style={{ color: "var(--cyan)" }}>:</span> to enter a command, or pick an action below.
               </div>
               <div className="welcomeActions">
-                <div className="welcomeAction welcomeActionAI" onClick={() => setShowAI(true)}>
-                  <span className="welcomeActionKey">:ai</span>
-                  <span className="welcomeActionLabel">Ask the AI assistant</span>
-                </div>
-                <div className="welcomeAction" onClick={() => enterEditor("about")}>
-                  <span className="welcomeActionKey">Enter</span>
-                  <span className="welcomeActionLabel">Open portfolio</span>
-                </div>
-                <div className="welcomeAction" onClick={() => setShowTelescope(true)}>
-                  <span className="welcomeActionKey">Ctrl+P</span>
-                  <span className="welcomeActionLabel">Find anything</span>
-                </div>
-                <div className="welcomeAction" onClick={() => setShowHelp(true)}>
-                  <span className="welcomeActionKey">:help</span>
-                  <span className="welcomeActionLabel">Show all commands</span>
-                </div>
-                <div className="welcomeAction" onClick={() => openLink(LINKS.github)}>
-                  <span className="welcomeActionKey">:github</span>
-                  <span className="welcomeActionLabel">GitHub profile</span>
-                </div>
-                <div className="welcomeAction" onClick={() => openLink(LINKS.linkedin)}>
-                  <span className="welcomeActionKey">:linkedin</span>
-                  <span className="welcomeActionLabel">LinkedIn profile</span>
-                </div>
-                <div className="welcomeAction" onClick={() => openLink(LINKS.resume)}>
-                  <span className="welcomeActionKey">:resume</span>
-                  <span className="welcomeActionLabel">Download resume</span>
-                </div>
-                <div className="welcomeAction" onClick={() => openLink(LINKS.blog)}>
-                  <span className="welcomeActionKey">:blog</span>
-                  <span className="welcomeActionLabel">Read my blog</span>
-                </div>
+                {WELCOME_ACTIONS.map((action, i) => (
+                  <div
+                    key={action.key}
+                    className={`welcomeAction${action.className ? ` ${action.className}` : ""}${i === welcomeIdx ? " selected" : ""}`}
+                    onClick={() => runWelcomeAction(i)}
+                    onMouseEnter={() => setWelcomeIdx(i)}
+                  >
+                    <span className="welcomeActionKey">{action.key}</span>
+                    <span className="welcomeActionLabel">{action.label}</span>
+                  </div>
+                ))}
               </div>
-              <div className="welcomeVersion">ayaan.dev v1.0 — nvim-inspired portfolio</div>
+              <div className="welcomeVersion">
+                ayaan.dev v1.0 — nvim-inspired portfolio &ensp;·&ensp; type <span style={{ color: "var(--cyan)" }}>:</span> for commands
+              </div>
             </div>
           </div>
         ) : (
