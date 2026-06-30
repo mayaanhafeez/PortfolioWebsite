@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
+/* Self-hosted full glyph set (the Google Fonts subset above drops box-drawing
+   + block glyphs). Used only for the welcome banner so its ASCII art renders
+   identically on every device — including Android, which has none of the
+   system monospace fonts the art previously fell back to. */
+@font-face{
+  font-family: 'JetBrains Mono Full';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root{
   --bg: #1a1b26;
   --bg-dark: #16161e;
@@ -181,7 +192,9 @@ a:hover{ text-decoration: underline; }
 .shell{
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh;       /* fallback for browsers without dvh */
+  height: 100dvh;      /* tracks the visible viewport so the statusline stays
+                          on-screen under mobile browser chrome (Firefox Android) */
   width: 100vw;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -646,7 +659,7 @@ a:hover{ text-decoration: underline; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 100%;
   text-align: center;
   user-select: none;
   animation: fadeIn .4s ease-out;
@@ -658,15 +671,18 @@ a:hover{ text-decoration: underline; }
 }
 
 .welcomeAscii{
-  /* JetBrains Mono's webfont subset lacks box-drawing glyphs, so they fall
-     back to a different-width font and the art skews. Use a complete system
-     monospace where blocks + box-drawing share one cell width. */
-  font-family: 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
+  /* Self-hosted JetBrains Mono carries the box-drawing + block glyphs in one
+     consistent cell width, so the art renders correctly everywhere. System
+     monospaces are kept as a fallback while the webfont loads. */
+  font-family: 'JetBrains Mono Full', 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
   color: var(--blue);
-  font-size: 11px;
+  /* Cap; the auto-fit effect in page.js shrinks this to fit narrow screens. */
+  font-size: 13px;
   line-height: 1;
   margin-bottom: 24px;
   white-space: pre;
+  max-width: 100%;
+  overflow: hidden;
   opacity: .85;
   letter-spacing: 0;
   text-align: left;
@@ -683,8 +699,9 @@ a:hover{ text-decoration: underline; }
   color: var(--comment);
   font-size: 13px;
   margin-bottom: 28px;
-  white-space: nowrap;
+  white-space: normal;
   line-height: 1.6;
+  max-width: 520px;
 }
 
 .welcomeActions{
@@ -1290,7 +1307,6 @@ a:hover{ text-decoration: underline; }
   .statusSeg.hideMobile{ display:none; }
   .telescope{ width:95vw; }
   .helpPopup{ width:95vw; }
-  .welcomeAscii{ font-size:8px; }
   .welcomeName{ font-size:22px; }
   .welcomeActions{ width:100%; }
 }

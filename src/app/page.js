@@ -394,6 +394,7 @@ export default function Page() {
   const [aiLoading, setAiLoading] = useState(false);
 
   const editorRef = useRef(null);
+  const asciiRef = useRef(null);
   const sectionRefs = useRef({});
   const cmdInputRef = useRef(null);
   const teleInputRef = useRef(null);
@@ -556,6 +557,26 @@ export default function Page() {
 
     flashMsg(`E492: Not an editor command: ${cmd}`, "error");
   }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view, theme]);
+
+  /* ── welcome banner: shrink the ASCII name to fit the viewport width ── */
+  useEffect(() => {
+    if (view !== "welcome") return;
+    const fit = () => {
+      const el = asciiRef.current;
+      if (!el) return;
+      el.style.fontSize = ""; // reset to the CSS cap before measuring
+      const base = parseFloat(getComputedStyle(el).fontSize);
+      const parent = el.parentElement;
+      const cs = getComputedStyle(parent);
+      const avail = parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const natural = el.scrollWidth;
+      if (natural > avail) el.style.fontSize = `${(base * avail) / natural}px`;
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts?.ready) document.fonts.ready.then(fit);
+    return () => window.removeEventListener("resize", fit);
+  }, [view]);
 
   /* ── theme: load from localStorage on mount ── */
   useEffect(() => {
@@ -872,8 +893,16 @@ export default function Page() {
     }
   }, [view, enterEditor, scrollTo, openLink]);
 
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+  // Computed after mount only — rendering it during SSR would mismatch the
+  // client's clock and trip a hydration error.
+  const [timeStr, setTimeStr] = useState("");
+  useEffect(() => {
+    const tick = () =>
+      setTimeStr(new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }));
+    tick();
+    const id = setInterval(tick, 30000);
+    return () => clearInterval(id);
+  }, []);
 
   /* ════════════════════════════════════════
      RENDER
@@ -944,7 +973,7 @@ export default function Page() {
         {view === "welcome" ? (
           <div className="editorPane">
             <div className="welcome">
-              <pre className="welcomeAscii">{` █████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗   ██╗  ██╗ █████╗ ███████╗███████╗███████╗███████╗
+              <pre className="welcomeAscii" ref={asciiRef}>{` █████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗   ██╗  ██╗ █████╗ ███████╗███████╗███████╗███████╗
 ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗████╗  ██║   ██║  ██║██╔══██╗██╔════╝██╔════╝██╔════╝╚══███╔╝
 ███████║ ╚████╔╝ ███████║███████║██╔██╗ ██║   ███████║███████║█████╗  █████╗  █████╗    ███╔╝
 ██╔══██║  ╚██╔╝  ██╔══██║██╔══██║██║╚██╗██║   ██╔══██║██╔══██║██╔══╝  ██╔══╝  ██╔══╝   ███╔╝
