@@ -103,7 +103,7 @@ const PROJECTS = [
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
   },
   {
-    title: "ayaan.dev — Portfolio",
+    title: "ayaanhafeez.dev — Portfolio",
     subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
     type: "personal",
     tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
@@ -113,7 +113,7 @@ const PROJECTS = [
       "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
-      { label: "Live", href: "https://ayaan.dev" },
+      { label: "Live", href: "https://ayaanhafeez.dev" },
       { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
     ],
   },
@@ -915,7 +915,7 @@ export default function Page() {
         <span className="titlebarDot r" />
         <span className="titlebarDot y" />
         <span className="titlebarDot g" />
-        <span className="titlebarTitle">ayaan.dev — nvim</span>
+        <span className="titlebarTitle">ayaanhafeez.dev — nvim</span>
       </div>
 
       {/* ── body ── */}
@@ -973,12 +973,14 @@ export default function Page() {
         {view === "welcome" ? (
           <div className="editorPane">
             <div className="welcome">
-              <pre className="welcomeAscii" ref={asciiRef}>{` █████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗   ██╗  ██╗ █████╗ ███████╗███████╗███████╗███████╗
+              <pre className="welcomeAscii" ref={asciiRef}>{`
+ █████╗ ██╗   ██╗ █████╗  █████╗ ███╗   ██╗   ██╗  ██╗ █████╗ ███████╗███████╗███████╗███████╗
 ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗████╗  ██║   ██║  ██║██╔══██╗██╔════╝██╔════╝██╔════╝╚══███╔╝
 ███████║ ╚████╔╝ ███████║███████║██╔██╗ ██║   ███████║███████║█████╗  █████╗  █████╗    ███╔╝
 ██╔══██║  ╚██╔╝  ██╔══██║██╔══██║██║╚██╗██║   ██╔══██║██╔══██║██╔══╝  ██╔══╝  ██╔══╝   ███╔╝
 ██║  ██║   ██║   ██║  ██║██║  ██║██║ ╚████║   ██║  ██║██║  ██║██║     ███████╗███████╗███████╗
-╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝╚══════╝╚══════╝`}</pre>
+╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝╚══════╝╚══════╝
+`}</pre>
               <div className="welcomeSub">
                 AI Developer @ Elev8AI — LLM pipelines, backends, Android apps, bare-metal systems.
               </div>
