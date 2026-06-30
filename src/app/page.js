@@ -210,7 +210,7 @@ const PROJECTS = [
       "CLI tool with configurable ramps (detailed, blocks, classic), chat-mode code-fence output, and gamma/contrast pipeline.",
     ],
     links: [
-      { label: "Live Demo", href: "https://ascii-ayaan.vercel.app/" },
+      { label: "Live Demo", href: "https://ascii.ayaanhafeez.dev" },
       { label: "GitHub", href: "https://github.com/mayaanhafeez/ASCII" },
     ],
   },
