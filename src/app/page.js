@@ -371,6 +371,50 @@ function Pill({ children }) {
   return <span className="pill">{children}</span>;
 }
 
+function ProjectCard({ p, onAskAI }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="projectCard">
+      <div className="projectTop">
+        <h3 className="projectTitle">{p.title}</h3>
+        {p.type && (
+          <span className={`typeBadge ${p.type}`}>
+            {p.type === "professional" ? "pro" : "personal"}
+          </span>
+        )}
+      </div>
+      <p className="projectSub">{p.subtitle}</p>
+      <div className="pillRow">
+        {p.tech.map((t) => <Pill key={t}>{t}</Pill>)}
+      </div>
+      <button
+        className="foldToggle"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+      >
+        {expanded ? "▾ show less" : "▸ show more"}
+      </button>
+      {expanded && (
+        <ul className="projectList">
+          {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
+        </ul>
+      )}
+      {p.wip && <div className="wipNotice">◌ work in progress</div>}
+      {p.nda && <div className="ndaNotice">⚠ source under NDA</div>}
+      <div className="linkRow">
+        {p.links && p.links.map((l) => (
+          <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
+            {l.label} →
+          </a>
+        ))}
+        <button className="askAiBtn" onClick={() => onAskAI(p)}>
+          ⬡ ask AI
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ════════════════════════════════════════
    MAIN PAGE
    ════════════════════════════════════════ */
@@ -1041,35 +1085,7 @@ export default function Page() {
                 <p className="sectionSub">-- professional and personal work</p>
                 <div className="projectGrid">
                   {PROJECTS.map((p) => (
-                    <div className="projectCard" key={p.title}>
-                      <div className="projectTop">
-                        <h3 className="projectTitle">{p.title}</h3>
-                        {p.type && (
-                          <span className={`typeBadge ${p.type}`}>
-                            {p.type === "professional" ? "pro" : "personal"}
-                          </span>
-                        )}
-                      </div>
-                      <p className="projectSub">{p.subtitle}</p>
-                      <div className="pillRow">
-                        {p.tech.map((t) => <Pill key={t}>{t}</Pill>)}
-                      </div>
-                      <ul className="projectList">
-                        {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
-                      </ul>
-                      {p.wip && <div className="wipNotice">◌ work in progress</div>}
-                      {p.nda && <div className="ndaNotice">⚠ source under NDA</div>}
-                      <div className="linkRow">
-                        {p.links && p.links.map((l) => (
-                          <a key={l.href} className="linkBtn" href={l.href} target="_blank" rel="noreferrer">
-                            {l.label} →
-                          </a>
-                        ))}
-                        <button className="askAiBtn" onClick={() => openAIForProject(p)}>
-                          ⬡ ask AI
-                        </button>
-                      </div>
-                    </div>
+                    <ProjectCard key={p.title} p={p} onAskAI={openAIForProject} />
                   ))}
                 </div>
               </div>

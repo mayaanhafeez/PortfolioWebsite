@@ -941,6 +941,19 @@ a:hover{ text-decoration: underline; }
 }
 .projectList li::marker{ color: var(--comment); }
 
+.foldToggle{
+  display: block;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--comment);
+  background: transparent;
+  border: none;
+  padding: 8px 0 0;
+  cursor: pointer;
+  transition: color .15s;
+}
+.foldToggle:hover{ color: var(--cyan); }
+
 .ndaNotice{
   display: inline-flex;
   align-items: center;
