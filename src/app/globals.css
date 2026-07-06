@@ -1076,6 +1076,21 @@ a:hover{ text-decoration: underline; }
   transition: all .2s;
 }
 .skillCard:hover{ border-color: var(--border-highlight); }
+
+/* vim spatial selection (h/j/k/l navigation) — links, buttons and cards */
+.navSel{
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+  scroll-margin: 90px;
+}
+.projectCard.navSel,
+.expCard.navSel,
+.skillCard.navSel{
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 1px var(--cyan), 0 8px 30px rgba(0,0,0,.35);
+}
 .skillGroup{
   font-size:12px;
   font-weight:700;

@@ -323,7 +323,8 @@ const HELP_DATA = [
       { cmd: ":ls", desc: "List all open buffers" },
       { cmd: "gg", desc: "Scroll to top" },
       { cmd: "G", desc: "Scroll to bottom" },
-      { cmd: "j / k", desc: "Scroll down / up" },
+      { cmd: "h j k l", desc: "Move card selection left/down/up/right" },
+      { cmd: "Enter", desc: "Open the selected card's link" },
     ],
   },
   {
@@ -374,7 +375,7 @@ function Pill({ children }) {
 function ProjectCard({ p, onAskAI }) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <div className="projectCard">
+    <div className="projectCard" data-nav data-card-id={`project-${p.title}`}>
       <div className="projectTop">
         <h3 className="projectTitle">{p.title}</h3>
         {p.type && (
@@ -444,6 +445,7 @@ export default function Page() {
   const cmdInputRef = useRef(null);
   const teleInputRef = useRef(null);
   const aiInputRef = useRef(null);
+  const navSelRef = useRef(null); // currently vim-selected DOM element
 
   /* ── helpers ── */
 
@@ -663,6 +665,81 @@ export default function Page() {
     setTimeout(() => teleInputRef.current?.focus(), 0);
   }, []);
 
+  /* ── vim spatial navigation with h/j/k/l ──
+     Navigable targets are all interactive elements (links, buttons) plus the
+     content cards, collected live so it adapts to the responsive layout.
+     Selection is tracked imperatively (navSelRef) via a class, so keyboard
+     focus stays on <body> and command mode / other keys keep working. */
+  const collectNav = useCallback(() => {
+    const nodes = document.querySelectorAll(
+      ".editorPane a[href], .editorPane button, .editorPane [data-nav]"
+    );
+    return Array.from(nodes).filter((el) => el.getClientRects().length > 0 && !el.disabled);
+  }, []);
+
+  const setNavSel = useCallback((el) => {
+    if (navSelRef.current) navSelRef.current.classList.remove("navSel");
+    navSelRef.current = el;
+    if (el) {
+      el.classList.add("navSel");
+      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, []);
+
+  const moveNav = useCallback((dir) => {
+    const els = collectNav();
+    if (!els.length) return;
+
+    const curEl = navSelRef.current && els.includes(navSelRef.current) ? navSelRef.current : null;
+
+    // nothing selected yet → grab the element nearest the top of the viewport
+    if (!curEl) {
+      let pick = els[0];
+      let best = Infinity;
+      for (const el of els) {
+        const r = el.getBoundingClientRect();
+        const d = r.top >= 0 ? r.top : Infinity;
+        if (d < best) { best = d; pick = el; }
+      }
+      setNavSel(pick);
+      return;
+    }
+
+    const cur = curEl.getBoundingClientRect();
+    const cx = cur.left + cur.width / 2;
+    const cy = cur.top + cur.height / 2;
+    const horizontal = dir === "h" || dir === "l";
+
+    let best = null;
+    let bestScore = Infinity;
+    for (const el of els) {
+      if (el === curEl) continue;
+      const r = el.getBoundingClientRect();
+      const dx = r.left + r.width / 2 - cx;
+      const dy = r.top + r.height / 2 - cy;
+      if (dir === "l" && dx <= 5) continue;
+      if (dir === "h" && dx >= -5) continue;
+      if (dir === "j" && dy <= 5) continue;
+      if (dir === "k" && dy >= -5) continue;
+      const primary = horizontal ? Math.abs(dx) : Math.abs(dy);
+      const cross = horizontal ? Math.abs(dy) : Math.abs(dx);
+      const score = primary + cross * 3;
+      if (score < bestScore) { bestScore = score; best = el; }
+    }
+
+    if (best) setNavSel(best);
+  }, [collectNav, setNavSel]);
+
+  /* ── activate the selected element (Enter) ── */
+  const activateNav = useCallback(() => {
+    const el = navSelRef.current;
+    if (!el) return false;
+    if (el.matches("a[href], button")) { el.click(); return true; }
+    const inner = el.querySelector("a[href], button");
+    if (inner) { inner.click(); return true; }
+    return false;
+  }, []);
+
   /* ── dashboard actions (welcome view): run the action at index i ── */
   const runWelcomeAction = useCallback((i) => {
     switch (i) {
@@ -691,6 +768,7 @@ export default function Page() {
         if (showTelescope) { setShowTelescope(false); setTeleQuery(""); return; }
         if (showHelp) { setShowHelp(false); return; }
         if (mode === "command") { exitCommand(); return; }
+        if (navSelRef.current) { setNavSel(null); return; }
         return;
       }
 
@@ -759,10 +837,20 @@ export default function Page() {
         return;
       }
 
-      // j/k scrolling
+      // h/j/k/l — move spatial selection across links, buttons and cards
+      if (view === "editor") {
+        if (e.key === "h" || e.key === "j" || e.key === "k" || e.key === "l") {
+          e.preventDefault();
+          moveNav(e.key);
+          return;
+        }
+        if (e.key === "Enter") {
+          if (activateNav()) { e.preventDefault(); return; }
+        }
+      }
+
+      // gg / G jump
       if (view === "editor" && editorRef.current) {
-        if (e.key === "j") { editorRef.current.scrollBy({ top: 60, behavior: "smooth" }); return; }
-        if (e.key === "k") { editorRef.current.scrollBy({ top: -60, behavior: "smooth" }); return; }
         if (e.key === "g") {
           // wait for second g
           const handler = (e2) => {
@@ -782,7 +870,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg, runWelcomeAction, welcomeIdx]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, setNavSel]);
 
   /* ── AI: execute tool calls returned by the model ── */
   const executeToolCalls = useCallback((calls) => {
@@ -1007,7 +1095,7 @@ export default function Page() {
             <div className="sidebarHints">
               <kbd>:</kbd> command&ensp;
               <kbd>Ctrl+P</kbd> find<br />
-              <kbd>j</kbd><kbd>k</kbd> scroll&ensp;
+              <kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd> cards&ensp;
               <kbd>gg</kbd> top&ensp;
               <kbd>G</kbd> bottom
             </div>
@@ -1095,7 +1183,7 @@ export default function Page() {
                 <h2 className="sectionHeading">experience</h2>
                 <p className="sectionSub">-- what i&apos;ve been doing recently</p>
                 {EXPERIENCE.map((e) => (
-                  <div className="expCard" key={e.role + e.org}>
+                  <div className="expCard" data-nav data-card-id={`exp-${e.role}-${e.org}`} key={e.role + e.org}>
                     <div className="expHead">
                       <div>
                         <div className="expRole">{e.role} <span className="expAt">@</span> {e.org}</div>
@@ -1116,7 +1204,7 @@ export default function Page() {
                 <p className="sectionSub">-- quick scan list</p>
                 <div className="skillsGrid">
                   {Object.entries(SKILLS).map(([group, items]) => (
-                    <div className="skillCard" key={group}>
+                    <div className="skillCard" data-nav data-card-id={`skill-${group}`} key={group}>
                       <div className="skillGroup">{group}</div>
                       <div className="pillRow">
                         {items.map((it) => <Pill key={it}>{it}</Pill>)}
