@@ -240,12 +240,13 @@ const PROJECTS = [
   },
   {
     title: "keyboard_cleaner",
-    subtitle: "Freeze your Mac's keyboard so you can wipe it down",
+    subtitle: "Menu-bar app that freezes your Mac's keyboard so you can wipe it down",
     type: "personal",
-    tech: ["Swift", "CoreGraphics", "CGEventTap", "Bash"],
+    tech: ["Swift", "AppKit", "Cocoa", "CoreGraphics", "CGEventTap", "Bash"],
     bullets: [
-      "Installs a CGEventTap at the session level that returns nil for every key-down/up, modifier change, and NX_SYSDEFINED media event — keyboard goes dead without locking the screen, so a countdown stays visible.",
-      "Emergency unlock: Esc held for 3 continuous seconds re-enables the keyboard; a RunLoop timer ticks 4×/second to redraw the countdown, enforce auto-unlock, and re-enable the tap if macOS ever disables it. Single Swift file, zero dependencies.",
+      "Lives in the menu bar as an .accessory NSApplication (no Dock icon, no window): an NSStatusItem hosts a −/+ duration stepper and Start/End toggle, with a live countdown shown both in the popup and the menu-bar icon. The stepper row sits in an NSVisualEffectView so its glass matches the system menu material.",
+      "Installs a CGEventTap at the session level that returns nil for every key-down/up, modifier change, and NX_SYSDEFINED media event — keyboard goes dead without locking the screen while the mouse and trackpad keep working.",
+      "Emergency unlock: Esc held for 3 continuous seconds re-enables the keyboard; a RunLoop timer ticks 10×/second to redraw the countdown, enforce auto-unlock, and re-enable the tap if macOS ever disables it. Retains a terminal (--cli) mode. Single Swift file, zero dependencies.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/keyboard_cleaner" }],
   },
@@ -291,7 +292,7 @@ const EXPERIENCE = [
 
 const SKILLS = {
   Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "Swift", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "AppKit / Cocoa", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
   Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
