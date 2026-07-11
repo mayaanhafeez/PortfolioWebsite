@@ -100,7 +100,10 @@ const PROJECTS = [
       "From-scratch SSH config parser handles Include globbing/recursion, Match blocks, and wildcard Host entries that naive line-scanners miss; falls back to known_hosts.",
       "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes.",
     ],
-    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" }],
+    links: [
+      { label: "crates.io", href: "https://crates.io/crates/ssht" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" },
+    ],
   },
   {
     title: "ayaanhafeez.dev — Portfolio",
@@ -224,7 +227,10 @@ const PROJECTS = [
       "Optional LLM edit pass sees only the extracted snippet — ~98% token reduction vs. naive rewrite on a 5,000-line file.",
       "CLI + library API; supports Python (exact via ast module) and JS/TS/JSX/TSX (regex heuristic).",
     ],
-    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/surgraft" }],
+    links: [
+      { label: "PyPI", href: "https://pypi.org/project/surgraft/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/surgraft" },
+    ],
   },
   {
     title: "lualings",
@@ -259,7 +265,11 @@ const PROJECTS = [
       "Cross-browser extension (Chrome, Firefox, Zen) that blocks user-defined domains in real time, covers subdomains, and redirects tabs back when focus mode is turned off.",
       "Persistent settings and block list via the storage API across browser restarts.",
     ],
-    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" }],
+    links: [
+      { label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/focus-mode-blocker/bhkiedimpjpeoggbodjedjcopedhdaoo" },
+      { label: "Firefox Add-ons", href: "https://addons.mozilla.org/en-US/firefox/addon/focus-mode-blocker1/" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" },
+    ],
   },
   {
     title: "Tuesday.com — Hackathon App",
