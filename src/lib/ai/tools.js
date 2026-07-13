@@ -60,4 +60,21 @@ export const TOOL_DEFINITIONS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "get_github_activity",
+      description: "Fetch Ayaan's recent public GitHub activity (commits, PRs, issues, new repos). Use when asked what Ayaan has been working on / up to recently, or about his recent commits/GitHub activity.",
+      parameters: {
+        type: "object",
+        properties: {
+          days: {
+            type: "integer",
+            description: "Lookback window in days, default 7, max 30",
+          },
+        },
+        required: [],
+      },
+    },
+  },
 ];

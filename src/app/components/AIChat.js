@@ -52,7 +52,7 @@ export default function AIChat({ messages, loading, onSend, onClose, inputRef, i
           {messages.length === 0 && (
             <div className="aiChatEmpty">
               Ask me about Ayaan&apos;s projects, skills, or experience.<br />
-              Or try: &quot;navigate to projects&quot;, &quot;switch to gruvbox&quot;, &quot;open the ssht github&quot;
+              Or try: &quot;navigate to projects&quot;, &quot;switch to gruvbox&quot;, &quot;open the ssht github&quot;, &quot;what have you been up to lately&quot;
             </div>
           )}
           {messages.map((msg, i) => (

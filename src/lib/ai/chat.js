@@ -1,7 +1,14 @@
 import { TOOL_DEFINITIONS } from "./tools";
+import { getGithubActivity } from "./github";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "llama-3.3-70b-versatile";
+
+// Tools resolved entirely server-side (pure data retrieval, no UI side effect) —
+// unlike navigate_section/set_theme/open_link, which round-trip to the client.
+const SERVER_TOOLS = {
+  get_github_activity: (args) => getGithubActivity(args.days),
+};
 
 async function groqCall(messages, tools, apiKey) {
   const body = {
@@ -99,8 +106,11 @@ export async function planAndStream(messages, apiKey) {
     planData = await groqCall(messages, TOOL_DEFINITIONS, apiKey);
   } catch (err) {
     if (err.toolUseFailed) {
-      console.log("[ai] tool_use_failed — falling back to plain stream");
-      return streamGroqText(messages, apiKey);
+      // Don't let the model free-respond here — with no tool result to ground it,
+      // it tends to hallucinate a plausible-sounding answer (e.g. inventing GitHub
+      // activity). Fail honestly instead.
+      console.log("[ai] tool_use_failed — returning honest error, no plain-stream fallback");
+      return Response.json({ error: "Unable to fetch details from GitHub. Please try again." }, { status: 502 });
     }
     throw err;
   }
@@ -113,6 +123,19 @@ export async function planAndStream(messages, apiKey) {
       args: JSON.parse(tc.function.arguments),
     }));
     console.log("[ai] tool_calls:", JSON.stringify(calls));
+
+    if (calls.every((c) => c.name in SERVER_TOOLS)) {
+      const toolMessages = await Promise.all(
+        calls.map(async (c) => ({
+          role: "tool",
+          tool_call_id: c.id,
+          content: await SERVER_TOOLS[c.name](c.args),
+        }))
+      );
+      console.log("[ai] server tool_calls resolved, streaming final answer");
+      return streamGroqText([...messages, choice.message, ...toolMessages], apiKey);
+    }
+
     return Response.json({ type: "tool_calls", calls });
   }
 

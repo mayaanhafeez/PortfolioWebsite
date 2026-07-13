@@ -49,8 +49,9 @@ constants at the top of `page.js`.
 - **Telescope** (`Ctrl+P`) — fuzzy finder over the site's content
 - **AI assistant** (`:ai` or `:chat`, or "ask AI" on any project card) — chat with an
   LLM that knows the portfolio content and can navigate sections, switch themes,
-  and open links via tool calls. Each "ask AI" button on a project card opens a
-  fresh conversation pre-loaded with a question about that project.
+  open links, and summarize recent public GitHub activity via tool calls. Each
+  "ask AI" button on a project card opens a fresh conversation pre-loaded with a
+  question about that project.
 - **Help** (`:help`) — keybindings reference
 - **Command bar** (`:` or `/`) — vim-style commands dispatched to a handler
 
