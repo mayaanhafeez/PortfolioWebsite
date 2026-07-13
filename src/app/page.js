@@ -267,7 +267,7 @@ const PROJECTS = [
     ],
     links: [
       { label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/focus-mode-blocker/bhkiedimpjpeoggbodjedjcopedhdaoo" },
-      { label: "Firefox Add-ons", href: "https://addons.mozilla.org/en-US/firefox/addon/focus-mode-blocker1/" },
+      { label: "Firefox Add-ons", href: "https://addons.mozilla.org/en-US/firefox/addon/focusnode-website-blocker/" },
       { label: "GitHub", href: "https://github.com/mayaanhafeez/FocusNode" },
     ],
   },
