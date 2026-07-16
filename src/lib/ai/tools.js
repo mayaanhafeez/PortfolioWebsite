@@ -42,6 +42,24 @@ export const TOOL_DEFINITIONS = [
   {
     type: "function",
     function: {
+      name: "set_style",
+      description: "Change the visual style (glass/blur/radius/motion language) of the portfolio, independent of the color theme",
+      parameters: {
+        type: "object",
+        properties: {
+          style_id: {
+            type: "string",
+            enum: ["rice", "neon", "acrylic", "legacy"],
+            description: "The style ID to apply: rice (flat, minimal, no blur — Omarchy-style rice), neon (saturated cyberpunk glass with glowing edges), acrylic (soft frosted visionOS-style liquid glass with pill buttons), legacy (the original flat opaque design with no glass effects at all)",
+          },
+        },
+        required: ["style_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "open_link",
       description: "Open an external link in a new tab",
       parameters: {

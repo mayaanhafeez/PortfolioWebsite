@@ -30,6 +30,16 @@ const THEMES = [
   { id: "tomorrow-night-burns", label: "Tomorrow Night Burns"  },
 ];
 
+// visual language layered on top of THEMES — a theme picks the palette,
+// a style picks how glass/blur/radius/motion is built from it (see the
+// STYLES token blocks in globals.css)
+const STYLES = [
+  { id: "rice",    label: "Omarchy Rice" },
+  { id: "neon",    label: "Neon Glass" },
+  { id: "acrylic", label: "Frosted Acrylic" },
+  { id: "legacy",  label: "Legacy" },
+];
+
 const SECTIONS = [
   { id: "about", label: "about.md", icon: "📄", desc: "About me" },
   { id: "projects", label: "projects.md", icon: "📂", desc: "Featured projects" },
@@ -112,7 +122,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
@@ -340,7 +350,7 @@ const HELP_DATA = [
     cmds: [
       { cmd: "Ctrl+P", desc: "Open Telescope fuzzy finder" },
       { cmd: ":help", desc: "Show this help popup" },
-      { cmd: ":ai  or  :chat", desc: "Open AI assistant — ask about projects, navigate, change theme" },
+      { cmd: ":ai  or  :chat", desc: "Open AI assistant — ask about projects, navigate, change theme/style" },
       { cmd: "Esc", desc: "Close any popup / exit command mode" },
     ],
   },
@@ -360,6 +370,9 @@ const HELP_DATA = [
       { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns)" },
       { cmd: ":theme", desc: "Cycle to next theme" },
       { cmd: "Ctrl+T", desc: "Cycle theme" },
+      { cmd: ":style <name>", desc: "Switch visual style (rice, neon, acrylic, legacy)" },
+      { cmd: ":style", desc: "Cycle to next style" },
+      { cmd: "Ctrl+S", desc: "Cycle style" },
     ],
   },
   {
@@ -442,6 +455,7 @@ export default function Page() {
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [theme, setTheme] = useState("tokyo-night");
+  const [style, setStyle] = useState("rice");
   const [showAI, setShowAI] = useState(false);
   const [aiInitialPrompt, setAiInitialPrompt] = useState(null);
   const [aiMessages, setAiMessages] = useState([]);
@@ -610,8 +624,29 @@ export default function Page() {
       return;
     }
 
+    // style
+    if (cmd === "style") {
+      if (!arg) {
+        const idx = STYLES.findIndex((s) => s.id === style);
+        const next = STYLES[(idx + 1) % STYLES.length];
+        setStyle(next.id);
+        flashMsg(`-- style: ${next.label} --`, "success");
+      } else {
+        const found = STYLES.find(
+          (s) => s.id === arg || s.id.startsWith(arg) || s.label.toLowerCase() === arg
+        );
+        if (found) {
+          setStyle(found.id);
+          flashMsg(`-- style: ${found.label} --`, "success");
+        } else {
+          flashMsg(`E: unknown style "${arg}". available: ${STYLES.map((s) => s.id).join(", ")}`, "error");
+        }
+      }
+      return;
+    }
+
     flashMsg(`E492: Not an editor command: ${cmd}`, "error");
-  }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view, theme]);
+  }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view, theme, style]);
 
   /* ── welcome banner: shrink the ASCII name to fit the viewport width ── */
   useEffect(() => {
@@ -644,6 +679,18 @@ export default function Page() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  /* ── style: load from localStorage on mount ── */
+  useEffect(() => {
+    const saved = localStorage.getItem("style");
+    if (saved && STYLES.some((s) => s.id === saved)) setStyle(saved);
+  }, []);
+
+  /* ── style: sync to <body> and persist ── */
+  useEffect(() => {
+    document.body.dataset.style = style;
+    localStorage.setItem("style", style);
+  }, [style]);
 
   /* ── track scroll ── */
   useEffect(() => {
@@ -800,6 +847,16 @@ export default function Page() {
         return;
       }
 
+      // Ctrl+S — cycle style (prevents the browser save dialog)
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        const idx = STYLES.findIndex((s) => s.id === style);
+        const next = STYLES[(idx + 1) % STYLES.length];
+        setStyle(next.id);
+        flashMsg(`-- style: ${next.label} --`, "success");
+        return;
+      }
+
       // if any overlay is open, let it handle keys
       if (showAI || showTelescope || showHelp) return;
 
@@ -878,7 +935,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, setNavSel]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, setNavSel]);
 
   /* ── AI: execute tool calls returned by the model ── */
   const executeToolCalls = useCallback((calls) => {
@@ -895,6 +952,10 @@ export default function Page() {
         setTheme(call.args.theme_id);
         flashMsg(`-- theme: ${call.args.theme_id} --`, "success");
         result = `Theme changed to ${call.args.theme_id}.`;
+      } else if (call.name === "set_style") {
+        setStyle(call.args.style_id);
+        flashMsg(`-- style: ${call.args.style_id} --`, "success");
+        result = `Style changed to ${call.args.style_id}.`;
       } else if (call.name === "open_link") {
         openLink(call.args.url);
         flashMsg(`-- opening ${call.args.label ?? call.args.url} --`, "success");
@@ -903,7 +964,7 @@ export default function Page() {
       results.push({ tool_call_id: call.id, content: result });
     }
     return results;
-  }, [view, enterEditor, scrollTo, setTheme, openLink, flashMsg]);
+  }, [view, enterEditor, scrollTo, setTheme, setStyle, openLink, flashMsg]);
 
   /* ── AI: consume an SSE stream and append deltas to the last assistant message ── */
   const consumeStream = useCallback(async (response) => {
@@ -1265,6 +1326,7 @@ export default function Page() {
         <div className="statusSpacer" />
         <div className="statusSeg statusRight hideMobile">ayaan.dev</div>
         <div className="statusSeg statusTheme hideMobile">{theme}</div>
+        <div className="statusSeg statusStyle hideMobile">{style}</div>
         <div className="statusSeg statusEncoding hideMobile">utf-8</div>
         <div className="statusSeg statusPos">
           {view === "welcome" ? "~" : `Ln ${SECTIONS.findIndex((s) => s.id === active) + 1}`}
@@ -1301,7 +1363,7 @@ export default function Page() {
               if (e.key === "Tab") {
                 e.preventDefault();
                 const partial = cmdText.toLowerCase();
-                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit", "theme", "colorscheme", "ai", "chat"];
+                const allCmds = ["open", "edit", "ls", "help", "github", "linkedin", "email", "resume", "whoami", "date", "find", "home", "clear", "quit", "theme", "colorscheme", "style", "ai", "chat"];
                 const match = allCmds.find((c) => c.startsWith(partial));
                 if (match) setCmdText(match);
               }

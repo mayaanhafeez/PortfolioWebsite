@@ -5,6 +5,8 @@ const THEMES = [
   "dracula", "one-dark", "solarized", "everforest", "monokai", "tomorrow-night-burns",
 ];
 
+const STYLES = ["rice", "neon", "acrylic", "legacy"];
+
 const PROJECTS = [
   {
     title: "Bare Metal Raspberry Pi OS",
@@ -63,7 +65,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
@@ -283,7 +285,8 @@ RESPONSE STYLE: Be concise and direct. Max 300 words. No markdown headers or bul
 
 TOOLS: Call tools only when the user explicitly requests an action:
 - navigate_section: when the user asks to go to, navigate to, or open a section. Do not call it when merely answering a question that mentions a section.
-- set_theme: only when the user asks to change / switch / set the theme
+- set_theme: only when the user asks to change / switch / set the color theme
+- set_style: only when the user asks to change / switch / set the visual style (glass look, blur, rounded corners) — distinct from the color theme. rice = flat/minimal Omarchy-style rice with no blur (default), neon = saturated cyberpunk glass with glowing edges, acrylic = soft frosted visionOS-style liquid glass with pill buttons, legacy = the original flat opaque design with no glass effects at all
 - open_link: only when the user explicitly asks to open, visit, or go to a URL or external page — NEVER call open_link just because a URL appears in the data you are referencing
 - get_github_activity: call it immediately (do not ask for confirmation first) when the user asks what Ayaan has been working on/up to recently, or about his recent commits/GitHub activity. Public activity only. Once it returns, summarize the actual repos and commit messages it found, by name — never deflect the user to go check GitHub themselves, that defeats the point of calling the tool.
 
@@ -291,8 +294,9 @@ TOOLS: Call tools only when the user explicitly requests an action:
 
 PORTFOLIO INTERFACE
 - Sections: ${SECTIONS.join(", ")}
-- Commands: :open <section>, :theme <name>, :github, :linkedin, :email, :resume, :blog, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme)
+- Commands: :open <section>, :theme <name>, :style <name>, :github, :linkedin, :email, :resume, :blog, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme), Ctrl+S (cycle style)
 - Themes (${THEMES.length} available): ${THEMES.join(", ")}
+- Styles (${STYLES.length} available): ${STYLES.join(", ")}
 
 ---
 
