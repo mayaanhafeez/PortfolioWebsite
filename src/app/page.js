@@ -123,7 +123,6 @@ const PROJECTS = [
     title: "The Rubber Duck Blog",
     subtitle: "Neovim-styled developer blog",
     type: "personal",
-    wip: true,
     tech: ["Astro", "TypeScript", "MDX", "Vercel"],
     bullets: [
       "Documents my dev experiences — issues I faced while coding and how I overcame them.",

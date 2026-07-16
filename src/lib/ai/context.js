@@ -83,7 +83,7 @@ const PROJECTS = [
       { label: "Live", href: "https://the-rubber-duck-blog.vercel.app/" },
       { label: "GitHub", href: "https://github.com/mayaanhafeez/blog_post" },
     ],
-    type: "personal", wip: true,
+    type: "personal",
   },
   {
     title: "EMG Controller",
