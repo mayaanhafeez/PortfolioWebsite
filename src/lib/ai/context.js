@@ -15,7 +15,7 @@ const PROJECTS = [
       "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
-    type: "personal", wip: true,
+    type: "personal",
   },
   {
     title: "Terminal Mystery",

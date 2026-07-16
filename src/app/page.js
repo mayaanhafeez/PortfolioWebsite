@@ -55,7 +55,6 @@ const PROJECTS = [
     title: "Bare Metal Raspberry Pi OS",
     subtitle: "OS kernel from scratch in C and ARM Assembly",
     type: "personal",
-    wip: true,
     tech: ["C", "ARM Assembly", "Raspberry Pi"],
     bullets: [
       "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
