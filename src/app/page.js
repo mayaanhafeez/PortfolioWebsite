@@ -1200,7 +1200,7 @@ export default function Page() {
                 ))}
               </div>
               <div className="welcomeVersion">
-                ayaan.dev v1.0 — nvim-inspired portfolio &ensp;·&ensp; type <span style={{ color: "var(--cyan)" }}>:</span> for commands
+                ayaanhafeez.dev v1.0 — nvim-inspired portfolio &ensp;·&ensp; type <span style={{ color: "var(--cyan)" }}>:</span> for commands
               </div>
             </div>
           </div>
@@ -1324,7 +1324,7 @@ export default function Page() {
           {view === "welcome" ? "dashboard" : (SECTIONS.find((s) => s.id === active)?.label ?? "about.md")}
         </div>
         <div className="statusSpacer" />
-        <div className="statusSeg statusRight hideMobile">ayaan.dev</div>
+        <div className="statusSeg statusRight hideMobile">ayaanhafeez.dev</div>
         <div className="statusSeg statusTheme hideMobile">{theme}</div>
         <div className="statusSeg statusStyle hideMobile">{style}</div>
         <div className="statusSeg statusEncoding hideMobile">utf-8</div>
