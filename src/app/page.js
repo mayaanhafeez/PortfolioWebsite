@@ -468,6 +468,9 @@ export default function Page() {
   const teleInputRef = useRef(null);
   const aiInputRef = useRef(null);
   const navSelRef = useRef(null); // currently vim-selected DOM element
+  const navInsideRef = useRef(null); // card we've "entered" (two-level nav)
+  const focusRingRef = useRef(null); // the gliding selection outline
+  const editorContentRef = useRef(null); // ring's positioning context
 
   /* ── helpers ── */
 
@@ -720,26 +723,62 @@ export default function Page() {
     setTimeout(() => teleInputRef.current?.focus(), 0);
   }, []);
 
-  /* ── vim spatial navigation with h/j/k/l ──
-     Navigable targets are all interactive elements (links, buttons) plus the
-     content cards, collected live so it adapts to the responsive layout.
-     Selection is tracked imperatively (navSelRef) via a class, so keyboard
-     focus stays on <body> and command mode / other keys keep working. */
+  /* ── vim spatial navigation with h/j/k/l (+ arrow keys) ──
+     Two levels: at "card level" you move between whole cards (plus any loose
+     links/buttons that aren't inside a card). Enter zooms *into* the selected
+     card; then h/j/k/l move between that card's own links/buttons (github,
+     show more, ask AI…). Escape zooms back out. Selection is tracked
+     imperatively (navSelRef) via a class, so keyboard focus stays on <body>
+     and command mode / other keys keep working. */
+  const isNavable = (el) => el.getClientRects().length > 0 && !el.disabled;
+
   const collectNav = useCallback(() => {
-    const nodes = document.querySelectorAll(
-      ".editorPane a[href], .editorPane button, .editorPane [data-nav]"
-    );
-    return Array.from(nodes).filter((el) => el.getClientRects().length > 0 && !el.disabled);
+    const inside = navInsideRef.current;
+    if (inside) {
+      // inside a card: only its own interactive children
+      return Array.from(inside.querySelectorAll("a[href], button")).filter(isNavable);
+    }
+    // card level: every card, plus interactive elements not inside a card
+    const cards = Array.from(document.querySelectorAll(".editorPane [data-nav]"));
+    const loose = Array.from(
+      document.querySelectorAll(".editorPane a[href], .editorPane button")
+    ).filter((el) => !el.closest("[data-nav]"));
+    return [...cards, ...loose].filter(isNavable);
+  }, []);
+
+  // move the gliding focus ring over `el` (or hide it when null)
+  const positionRing = useCallback((el) => {
+    const ring = focusRingRef.current;
+    const content = editorContentRef.current;
+    if (!ring || !content) return;
+    if (!el) { ring.classList.remove("on"); return; }
+    // offset relative to the (scrolling) content, so the ring scrolls with it
+    const r = el.getBoundingClientRect();
+    const c = content.getBoundingClientRect();
+    const pad = el.matches("[data-nav]") ? 0 : 3; // hug buttons/links a little
+    const x = r.left - c.left - pad;
+    const y = r.top - c.top - pad;
+    // when the ring is appearing fresh, jump into place (no fly-in from 0,0);
+    // once visible, let CSS transition the move so it glides between targets
+    const wasOn = ring.classList.contains("on");
+    if (!wasOn) ring.style.transition = "none";
+    ring.style.transform = `translate(${x}px, ${y}px)`;
+    ring.style.width = `${r.width + pad * 2}px`;
+    ring.style.height = `${r.height + pad * 2}px`;
+    // match the card's rounded corners, tighter for buttons/links
+    ring.style.borderRadius = el.matches("[data-nav]") ? "var(--radius-card)" : "8px";
+    if (!wasOn) {
+      void ring.offsetWidth; // reflow so the jump isn't animated
+      ring.style.transition = ""; // restore CSS transition for later moves
+    }
+    ring.classList.add("on");
   }, []);
 
   const setNavSel = useCallback((el) => {
-    if (navSelRef.current) navSelRef.current.classList.remove("navSel");
     navSelRef.current = el;
-    if (el) {
-      el.classList.add("navSel");
-      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
-  }, []);
+    if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    positionRing(el);
+  }, [positionRing]);
 
   const moveNav = useCallback((dir) => {
     const els = collectNav();
@@ -765,6 +804,12 @@ export default function Page() {
     const cy = cur.top + cur.height / 2;
     const horizontal = dir === "h" || dir === "l";
 
+    // gap between two 1-D ranges — 0 when they overlap. Using edge-gap (not
+    // center distance) means a wide target below/beside is reachable from any
+    // element whose extent overlaps it, not just the one that's centred on it.
+    const gap = (aMin, aMax, bMin, bMax) =>
+      aMax < bMin ? bMin - aMax : bMax < aMin ? aMin - bMax : 0;
+
     let best = null;
     let bestScore = Infinity;
     for (const el of els) {
@@ -777,23 +822,56 @@ export default function Page() {
       if (dir === "j" && dy <= 5) continue;
       if (dir === "k" && dy >= -5) continue;
       const primary = horizontal ? Math.abs(dx) : Math.abs(dy);
-      const cross = horizontal ? Math.abs(dy) : Math.abs(dx);
-      const score = primary + cross * 3;
+      const cross = horizontal
+        ? gap(cur.top, cur.bottom, r.top, r.bottom)
+        : gap(cur.left, cur.right, r.left, r.right);
+      const score = primary + cross * 2;
       if (score < bestScore) { bestScore = score; best = el; }
     }
 
     if (best) setNavSel(best);
   }, [collectNav, setNavSel]);
 
+  /* ── step "into" a card: the ring glides onto its first link/button ── */
+  const enterCard = useCallback((card) => {
+    navInsideRef.current = card;
+    // pre-select the top-most interactive element inside the card
+    const inner = Array.from(card.querySelectorAll("a[href], button"))
+      .filter(isNavable)
+      .sort((a, b) => {
+        const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        return ra.top - rb.top || ra.left - rb.left;
+      });
+    setNavSel(inner[0] ?? null);
+  }, [setNavSel]);
+
+  /* ── step back "out": the ring glides back to wrap the whole card ── */
+  const exitCard = useCallback(() => {
+    const card = navInsideRef.current;
+    if (!card) return false;
+    navInsideRef.current = null;
+    setNavSel(card);
+    return true;
+  }, [setNavSel]);
+
   /* ── activate the selected element (Enter) ── */
   const activateNav = useCallback(() => {
     const el = navSelRef.current;
     if (!el) return false;
+    // already inside a card → clicking one of its links/buttons
+    if (navInsideRef.current) {
+      if (el.matches("a[href], button")) { el.click(); return true; }
+      return false;
+    }
+    // card level: a card with interactive children → zoom into it
+    if (el.matches("[data-nav]")) {
+      if (el.querySelector("a[href], button")) { enterCard(el); return true; }
+      return false;
+    }
+    // loose link/button → click directly
     if (el.matches("a[href], button")) { el.click(); return true; }
-    const inner = el.querySelector("a[href], button");
-    if (inner) { inner.click(); return true; }
     return false;
-  }, []);
+  }, [enterCard]);
 
   /* ── dashboard actions (welcome view): run the action at index i ── */
   const runWelcomeAction = useCallback((i) => {
@@ -823,6 +901,7 @@ export default function Page() {
         if (showTelescope) { setShowTelescope(false); setTeleQuery(""); return; }
         if (showHelp) { setShowHelp(false); return; }
         if (mode === "command") { exitCommand(); return; }
+        if (navInsideRef.current) { exitCard(); return; }
         if (navSelRef.current) { setNavSel(null); return; }
         return;
       }
@@ -902,11 +981,17 @@ export default function Page() {
         return;
       }
 
-      // h/j/k/l — move spatial selection across links, buttons and cards
+      // h/j/k/l (+ arrow keys) — move spatial selection between cards, or
+      // between a card's own links/buttons once you've entered it
       if (view === "editor") {
-        if (e.key === "h" || e.key === "j" || e.key === "k" || e.key === "l") {
+        const dir =
+          e.key === "h" || e.key === "ArrowLeft" ? "h" :
+          e.key === "l" || e.key === "ArrowRight" ? "l" :
+          e.key === "j" || e.key === "ArrowDown" ? "j" :
+          e.key === "k" || e.key === "ArrowUp" ? "k" : null;
+        if (dir) {
           e.preventDefault();
-          moveNav(e.key);
+          moveNav(dir);
           return;
         }
         if (e.key === "Enter") {
@@ -935,7 +1020,14 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, setNavSel]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel]);
+
+  /* ── keep the focus ring aligned when the layout reflows ── */
+  useEffect(() => {
+    const onResize = () => { if (navSelRef.current) positionRing(navSelRef.current); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [positionRing]);
 
   /* ── AI: execute tool calls returned by the model ── */
   const executeToolCalls = useCallback((calls) => {
@@ -1206,7 +1298,8 @@ export default function Page() {
           </div>
         ) : (
           <div className="editorPane" ref={editorRef} style={{ position: "relative" }}>
-            <div className="editorContent">
+            <div className="editorContent" ref={editorContentRef}>
+              <div className="focusRing" ref={focusRingRef} aria-hidden="true" />
               {/* ── about ── */}
               <div className="sectionBlock" id="about" ref={(el) => { sectionRefs.current.about = el; }}>
                 <div className="heroBlock">

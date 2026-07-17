@@ -721,6 +721,7 @@ a:hover{ text-decoration: underline; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 28px 36px 60px;
+  position: relative; /* positioning context for the focus ring */
 }
 
 /* ══════════════════════════════════════
@@ -1440,19 +1441,35 @@ a:hover{ text-decoration: underline; }
   gap:10px;
 }
 
-/* vim spatial selection (h/j/k/l navigation) — links, buttons and cards */
-.navSel{
-  outline: 2px solid var(--cyan);
-  outline-offset: 3px;
-  border-radius: 6px;
-  scroll-margin: 90px;
+/* keep a selected target clear of the sticky header when it scrolls in */
+[data-nav], .editorPane a[href], .editorPane button{ scroll-margin: 90px; }
+
+/* ── two-level nav: a single focus ring that glides between targets ──
+   Rather than a static outline popping onto each element, one ring is
+   positioned over the current selection and CSS-transitions its geometry, so
+   moving between cards — and "into"/"out of" a card's own buttons — animates
+   smoothly. It lives inside .editorContent so it scrolls with the content. */
+.focusRing{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--cyan), 0 0 16px color-mix(in srgb, var(--cyan) 30%, transparent);
+  transition:
+    transform .28s cubic-bezier(.22, 1, .36, 1),
+    width .28s cubic-bezier(.22, 1, .36, 1),
+    height .28s cubic-bezier(.22, 1, .36, 1),
+    border-radius .28s ease,
+    opacity .18s ease;
 }
-.projectCard.navSel,
-.expCard.navSel,
-.skillCard.navSel{
-  outline: none;
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 1px var(--cyan), var(--glass-shadow-lg), 0 0 24px color-mix(in srgb, var(--cyan) 25%, transparent);
+.focusRing.on{ opacity: 1; }
+@media (prefers-reduced-motion: reduce){
+  .focusRing{ transition: opacity .18s ease; }
 }
 .skillGroup{
   font-size:12px;
