@@ -1197,7 +1197,7 @@ a:hover{ text-decoration: underline; }
   background: var(--glass-2);
   backdrop-filter: var(--glass-blur-card);
   -webkit-backdrop-filter: var(--glass-blur-card);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--glass-border-strong);
   transition: all .15s;
 }
 .pill:hover{

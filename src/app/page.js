@@ -79,9 +79,9 @@ const PROJECTS = [
     wip: true,
     tech: ["Lua", "LÖVE"],
     bullets: [
-      "The mansion is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
+      "The venue is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
       "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
-      "Vertical slice: one murder, four suspects, five rooms, solvable in one sitting.",
+      "Set at an AI startup's Series C launch party: the founder is dead, four suspects, solvable in one sitting.",
     ],
     links: [
       { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
