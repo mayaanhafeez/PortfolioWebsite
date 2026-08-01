@@ -169,9 +169,33 @@
   --red:#fc595f; --magenta:#a63c40; --teal:#df9395;
 }
 
+[data-theme="andromeda"] {
+  --bg:#23262e; --bg-dark:#1b1e24; --bg-float:#2b2f3a; --bg-highlight:#3a3f4b;
+  --bg-sidebar:#1b1e24; --bg-statusline:#1b1e24; --bg-tabline:#1b1e24;
+  --bg-tab-active:#23262e; --bg-tab-inactive:#1b1e24;
+  --border:#333844; --border-highlight:#4a5160;
+  --fg:#e5e5e5; --fg-dark:#c8c8c8; --comment:#6b6f78;
+  --cyan:#00e8c6; --blue:#7cb7ff; --purple:#c74ded;
+  --green:#96e072; --yellow:#ffe66d; --orange:#f39c12;
+  --red:#ee5d43; --magenta:#ff00aa; --teal:#00e8c6;
+}
+
+/* Monochrome by design — the upstream theme is pure grayscale, so every accent
+   var is a shade of gray ordered by luminance rather than by hue. */
+[data-theme="hinterlands"] {
+  --bg:#222222; --bg-dark:#1a1a1a; --bg-float:#2b2b2b; --bg-highlight:#343434;
+  --bg-sidebar:#1a1a1a; --bg-statusline:#1a1a1a; --bg-tabline:#1a1a1a;
+  --bg-tab-active:#222222; --bg-tab-inactive:#1a1a1a;
+  --border:#343434; --border-highlight:#525252;
+  --fg:#ffffff; --fg-dark:#b9b9b9; --comment:#7c7c7c;
+  --cyan:#a6a6a6; --blue:#9a9a9a; --purple:#909090;
+  --green:#b0b0b0; --yellow:#c4c4c4; --orange:#bcbcbc;
+  --red:#c0c0c0; --magenta:#909090; --teal:#a6a6a6;
+}
+
 /* ══════════════════════════════════════
    STYLES — three switchable visual languages, layered on top of the
-   11 color THEMES above. A theme picks the palette; a style picks how
+   13 color THEMES above. A theme picks the palette; a style picks how
    glass/blur/radius/motion is built from that palette. Applied as
    body[data-style="…"], set from React (see STYLES in page.js).
    Every surface below reads these tokens, so no component CSS needs

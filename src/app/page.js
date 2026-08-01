@@ -28,6 +28,8 @@ const THEMES = [
   { id: "everforest",  label: "Everforest"  },
   { id: "monokai",              label: "Monokai"              },
   { id: "tomorrow-night-burns", label: "Tomorrow Night Burns"  },
+  { id: "andromeda",            label: "Andromeda"             },
+  { id: "hinterlands",          label: "Hinterlands"           },
 ];
 
 // visual language layered on top of THEMES — a theme picks the palette,
@@ -122,7 +124,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "13 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
@@ -367,7 +369,7 @@ const HELP_DATA = [
   {
     title: "Display",
     cmds: [
-      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns)" },
+      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns, andromeda, hinterlands)" },
       { cmd: ":theme", desc: "Cycle to next theme" },
       { cmd: "Ctrl+T", desc: "Cycle theme" },
       { cmd: ":style <name>", desc: "Switch visual style (rice, neon, acrylic, legacy)" },

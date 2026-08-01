@@ -30,7 +30,7 @@ UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis token
 Core files:
 
 - `src/app/page.js` — single `"use client"` component: all state, logic, content, rendering.
-- `src/app/globals.css` — all styling and the 11 color themes.
+- `src/app/globals.css` — all styling and the 13 color themes.
 - `src/app/components/AIChat.js` — AI chat modal component.
 - `src/app/api/ai/` — streaming API route that calls Groq with tool-call support.
 
@@ -63,8 +63,9 @@ overlays.
 
 ### Theming
 
-Eleven dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
-Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns),
+Thirteen dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
+Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns,
+Andromeda, Hinterlands),
 defined as `[data-theme="…"]` blocks in `globals.css`. The selected theme is
 persisted to `localStorage` and applied as `data-theme` on the root element.
 

@@ -3,6 +3,7 @@ const SECTIONS = ["about", "projects", "experience", "skills", "contact"];
 const THEMES = [
   "tokyo-night", "catppuccin", "rose-pine", "gruvbox", "nord",
   "dracula", "one-dark", "solarized", "everforest", "monokai", "tomorrow-night-burns",
+  "andromeda", "hinterlands",
 ];
 
 const STYLES = ["rice", "neon", "acrylic", "legacy"];
@@ -65,7 +66,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "11 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "13 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
