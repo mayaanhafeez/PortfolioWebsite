@@ -30,7 +30,7 @@ export const TOOL_DEFINITIONS = [
             enum: [
               "tokyo-night", "catppuccin", "rose-pine", "gruvbox", "nord",
               "dracula", "one-dark", "solarized", "everforest", "monokai",
-              "tomorrow-night-burns", "andromeda", "hinterlands",
+              "tomorrow-night-burns", "andromeda", "hinterlands", "vanta-black",
             ],
             description: "The theme ID to apply",
           },

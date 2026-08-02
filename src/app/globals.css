@@ -193,9 +193,24 @@
   --red:#c0c0c0; --magenta:#909090; --teal:#a6a6a6;
 }
 
+/* Monochrome on a pure-black canvas. Unlike every other theme the chrome sits
+   *above* the editor bg instead of below it — nothing is darker than #000, so
+   sidebar/tabline/statusline lift a few points to keep their seams visible.
+   Accent vars are grays ordered by luminance rather than by hue. */
+[data-theme="vanta-black"] {
+  --bg:#000000; --bg-dark:#000000; --bg-float:#090909; --bg-highlight:#1a1a1a;
+  --bg-sidebar:#070707; --bg-statusline:#070707; --bg-tabline:#070707;
+  --bg-tab-active:#000000; --bg-tab-inactive:#070707;
+  --border:#1a1a1a; --border-highlight:#505050;
+  --fg:#ffffff; --fg-dark:#ececec; --comment:#7a7a7a;
+  --cyan:#b0b0b0; --blue:#8d8d8d; --purple:#9b9b9b;
+  --green:#b6b6b6; --yellow:#cecece; --orange:#b9b9b9;
+  --red:#a4a4a4; --magenta:#9b9b9b; --teal:#b0b0b0;
+}
+
 /* ══════════════════════════════════════
    STYLES — three switchable visual languages, layered on top of the
-   13 color THEMES above. A theme picks the palette; a style picks how
+   14 color THEMES above. A theme picks the palette; a style picks how
    glass/blur/radius/motion is built from that palette. Applied as
    body[data-style="…"], set from React (see STYLES in page.js).
    Every surface below reads these tokens, so no component CSS needs
