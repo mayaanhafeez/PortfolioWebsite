@@ -698,26 +698,6 @@ export default function Page() {
     localStorage.setItem("style", style);
   }, [style]);
 
-  /* ── track scroll ── */
-  useEffect(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    const onScroll = () => {
-      const ids = SECTIONS.map((s) => s.id);
-      let current = ids[0];
-      for (const id of ids) {
-        const el = sectionRefs.current[id];
-        if (el && el.offsetTop - 20 <= editor.scrollTop) current = id;
-      }
-      if (editor.scrollHeight - editor.scrollTop - editor.clientHeight <= 5) {
-        current = ids[ids.length - 1];
-      }
-      setActive(current);
-    };
-    editor.addEventListener("scroll", onScroll, { passive: true });
-    return () => editor.removeEventListener("scroll", onScroll);
-  }, [view]);
-
   /* ── open the telescope finder ── */
   const openTelescope = useCallback(() => {
     setShowTelescope(true);
@@ -777,25 +757,120 @@ export default function Page() {
     ring.classList.add("on");
   }, []);
 
-  const setNavSel = useCallback((el) => {
+  // `scroll` is false for hover-driven selection — the mouse is already there,
+  // so pulling the viewport around under the cursor would just fight the user
+  const setNavSel = useCallback((el, scroll = true) => {
     navSelRef.current = el;
-    if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    if (el && scroll) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
     positionRing(el);
   }, [positionRing]);
 
+  // is `el` still on screen inside the editor pane? Mouse scrolling can carry
+  // the selection out of view, which makes it a bad anchor to move from.
+  const isInView = useCallback((el) => {
+    const editor = editorRef.current;
+    if (!editor || !el) return false;
+    const r = el.getBoundingClientRect();
+    const v = editor.getBoundingClientRect();
+    return r.bottom > v.top + 8 && r.top < v.bottom - 8;
+  }, []);
+
+  /* ── track scroll: highlight the section we're in, and keep the vim
+     selection in sync with mouse/trackpad scrolling ── */
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const onScroll = () => {
+      const ids = SECTIONS.map((s) => s.id);
+      let current = ids[0];
+      for (const id of ids) {
+        const el = sectionRefs.current[id];
+        if (el && el.offsetTop - 20 <= editor.scrollTop) current = id;
+      }
+      if (editor.scrollHeight - editor.scrollTop - editor.clientHeight <= 5) {
+        current = ids[ids.length - 1];
+      }
+      setActive(current);
+
+      // fade the ring out once its element scrolls out of the pane (and back in
+      // if it scrolls return). Purely visual — the selection itself is
+      // revalidated on the next keypress, so this never fights a smooth scroll.
+      const ring = focusRingRef.current;
+      const sel = navSelRef.current;
+      if (!ring || !sel) return;
+      const visible = isInView(sel);
+      if (!visible && ring.classList.contains("on")) ring.classList.remove("on");
+      else if (visible && !ring.classList.contains("on")) positionRing(sel);
+    };
+    editor.addEventListener("scroll", onScroll, { passive: true });
+    return () => editor.removeEventListener("scroll", onScroll);
+  }, [view, isInView, positionRing]);
+
+  /* ── mouse: the ring follows the pointer, so hovering something leaves you
+     exactly where the keyboard would have put you. Mirrors the two-level model:
+     hovering a card selects the card, and once you've entered a card, hovering
+     its own links/buttons selects those; moving off the card drops back out.
+     Uses mousemove (not mouseover) so a keyboard-driven scroll under a still
+     cursor doesn't yank the ring away from where the keyboard just put it. ── */
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    let settle;
+    // cards lift a couple of px on :hover, so the rect we measure on mousemove
+    // is the pre-lift one — re-measure once that transition has landed
+    const hoverTo = (el) => {
+      if (el === navSelRef.current) return;
+      setNavSel(el, false);
+      clearTimeout(settle);
+      settle = setTimeout(() => {
+        if (navSelRef.current === el) positionRing(el);
+      }, 300);
+    };
+    const onMove = (e) => {
+      const inside = navInsideRef.current;
+      if (inside) {
+        const inner = e.target.closest("a[href], button");
+        if (inner && inside.contains(inner) && isNavable(inner)) { hoverTo(inner); return; }
+        if (inside.contains(e.target)) return; // on the card, between its controls
+        navInsideRef.current = null; // moved off it entirely → back to card level
+      }
+      const target = e.target.closest("[data-nav]") ?? e.target.closest("a[href], button");
+      if (!target || !editor.contains(target) || !isNavable(target)) return;
+      hoverTo(target);
+    };
+    editor.addEventListener("mousemove", onMove);
+    return () => {
+      clearTimeout(settle);
+      editor.removeEventListener("mousemove", onMove);
+    };
+  }, [view, setNavSel, positionRing]);
+
   const moveNav = useCallback((dir) => {
+    // if the mouse scrolled the selection off screen, forget it (and any card
+    // we'd entered) — moving from an off-screen anchor is what used to yank the
+    // view back to wherever the keyboard was last left off
+    if (navSelRef.current && !isInView(navSelRef.current)) {
+      navInsideRef.current = null;
+      navSelRef.current = null;
+    }
+
     const els = collectNav();
     if (!els.length) return;
 
     const curEl = navSelRef.current && els.includes(navSelRef.current) ? navSelRef.current : null;
 
-    // nothing selected yet → grab the element nearest the top of the viewport
+    // nothing selected (fresh, or the user scrolled the selection away) → grab
+    // the first element visible in the editor pane, so the ring picks up from
+    // wherever the mouse left us rather than from the top of the document
     if (!curEl) {
+      const v = editorRef.current?.getBoundingClientRect();
+      const top = v ? v.top : 0;
       let pick = els[0];
       let best = Infinity;
       for (const el of els) {
         const r = el.getBoundingClientRect();
-        const d = r.top >= 0 ? r.top : Infinity;
+        // distance below the pane's top edge; things scrolled past it don't count
+        const d = r.top >= top ? r.top - top : (v && r.bottom > top + 8 ? 0 : Infinity);
         if (d < best) { best = d; pick = el; }
       }
       setNavSel(pick);
@@ -833,7 +908,7 @@ export default function Page() {
     }
 
     if (best) setNavSel(best);
-  }, [collectNav, setNavSel]);
+  }, [collectNav, setNavSel, isInView]);
 
   /* ── step "into" a card: the ring glides onto its first link/button ── */
   const enterCard = useCallback((card) => {
@@ -861,6 +936,8 @@ export default function Page() {
   const activateNav = useCallback(() => {
     const el = navSelRef.current;
     if (!el) return false;
+    // scrolled out of view with the mouse → don't fire something off screen
+    if (!isInView(el)) { navInsideRef.current = null; setNavSel(null); return false; }
     // already inside a card → clicking one of its links/buttons
     if (navInsideRef.current) {
       if (el.matches("a[href], button")) { el.click(); return true; }
@@ -874,7 +951,7 @@ export default function Page() {
     // loose link/button → click directly
     if (el.matches("a[href], button")) { el.click(); return true; }
     return false;
-  }, [enterCard]);
+  }, [enterCard, isInView, setNavSel]);
 
   /* ── dashboard actions (welcome view): run the action at index i ── */
   const runWelcomeAction = useCallback((i) => {
