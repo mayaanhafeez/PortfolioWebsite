@@ -96,11 +96,11 @@
   --bg:#2e3440; --bg-dark:#242831; --bg-float:#3b4252; --bg-highlight:#434c5e;
   --bg-sidebar:#242831; --bg-statusline:#242831; --bg-tabline:#242831;
   --bg-tab-active:#2e3440; --bg-tab-inactive:#242831;
-  --border:#434c5e; --border-highlight:#4c566a;
-  --fg:#eceff4; --fg-dark:#e5e9f0; --comment:#4c566a;
-  --cyan:#88c0d0; --blue:#81a1c1; --purple:#b48ead;
+  --border:#434c5e; --border-highlight:#737f96;
+  --fg:#eceff4; --fg-dark:#e5e9f0; --comment:#a5b3c7;
+  --cyan:#88c0d0; --blue:#81a1c1; --purple:#bb98b5;
   --green:#a3be8c; --yellow:#ebcb8b; --orange:#d08770;
-  --red:#bf616a; --magenta:#b48ead; --teal:#8fbcbb;
+  --red:#d08b91; --magenta:#bb98b5; --teal:#8fbcbb;
 }
 
 [data-theme="dracula"] {
@@ -119,10 +119,10 @@
   --bg-sidebar:#21252b; --bg-statusline:#21252b; --bg-tabline:#21252b;
   --bg-tab-active:#282c34; --bg-tab-inactive:#21252b;
   --border:#3e4452; --border-highlight:#528bff;
-  --fg:#abb2bf; --fg-dark:#9da5b4; --comment:#5c6370;
+  --fg:#abb2bf; --fg-dark:#9da5b4; --comment:#959fae;
   --cyan:#56b6c2; --blue:#61afef; --purple:#c678dd;
   --green:#98c379; --yellow:#e5c07b; --orange:#d19a66;
-  --red:#e06c75; --magenta:#ff79c6; --teal:#56b6c2;
+  --red:#e3757e; --magenta:#ff79c6; --teal:#56b6c2;
 }
 
 [data-theme="solarized"] {
@@ -1164,6 +1164,20 @@ a:hover{ text-decoration: underline; }
    ══════════════════════════════════════ */
 
 .heroBlock{ margin-bottom: 32px; }
+
+/* the name + blurb are one navigable card. Deliberately unstyled: the padding
+   only exists so the focus ring has room to breathe around the text, and the
+   matching negative margins cancel it out so nothing actually moves. */
+.heroHead{
+  padding: 10px 12px;
+  margin: -10px -12px 10px;
+  border-radius: var(--radius-card);
+}
+/* the 20px gap below the intro copy belongs *outside* the ring, otherwise the
+   ring's bottom edge is drawn over the CTA buttons. Half of it is the padding
+   above, the other half is .heroHead's own bottom margin. */
+.heroHead .heroSub{ margin-bottom: 0; }
+
 .heroName{
   font-size: 38px;
   font-weight: 800;

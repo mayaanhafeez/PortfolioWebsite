@@ -180,6 +180,18 @@ const PROJECTS = [
     type: "personal",
   },
   {
+    title: "simdlings",
+    subtitle: "Learn SIMD by repairing broken NEON kernels — rustlings for ARM NEON",
+    tech: ["C", "ARM NEON", "Bash"],
+    bullets: [
+      "24 exercises across 6 categories (fundamentals, reductions, masks, shuffles, hazards, kernels): three fix-the-broken-NEON exercises each, plus a challenge you write from scratch that fails unless it beats the scalar reference by a required 1.6×–3× margin.",
+      "Deliberately adversarial harness: every buffer ends flush against a PROT_NONE guard page so a one-byte overread faults at the responsible instruction instead of returning plausible garbage, poisoned canaries in front of each buffer catch negative indices and wrapped size_t subtractions, and every kernel is checked at 20 awkward lengths (0, 1, 3, 5, 7, 17, 33, 1001, ...) so anything that only handles multiples of the vector width fails.",
+      "Compiles both scalar.c and simd.c with -fno-vectorize -fno-slp-vectorize so measured speedups come from the intrinsics you wrote rather than clang autovectorizing the reference (H_AUTOVEC=1 shows what the compiler manages alone). Bash CLI with list/test/bench/watch/hint/solution/reset and a verify pass over all 24 reference solutions; ~4.5k lines of C, no dependencies beyond cc and bash.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/simdlings" }],
+    type: "personal",
+  },
+  {
     title: "lualings",
     subtitle: "Hands-on Lua learning via broken programs — rustlings for Lua",
     tech: ["Lua"],

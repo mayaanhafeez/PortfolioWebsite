@@ -244,6 +244,18 @@ const PROJECTS = [
     ],
   },
   {
+    title: "simdlings",
+    subtitle: "Learn SIMD by repairing broken NEON kernels — rustlings for ARM NEON",
+    type: "personal",
+    tech: ["C", "ARM NEON", "Bash"],
+    bullets: [
+      "24 exercises across 6 categories (fundamentals, reductions, masks, shuffles, hazards, kernels): three fix-the-broken-NEON exercises each, plus a challenge you write from scratch that fails unless it beats the scalar reference by a required 1.6×–3× margin.",
+      "Deliberately adversarial harness: every buffer ends flush against a PROT_NONE guard page so a one-byte overread faults at the responsible instruction instead of returning plausible garbage, poisoned canaries in front of each buffer catch negative indices and wrapped size_t subtractions, and every kernel is checked at 20 awkward lengths (0, 1, 3, 5, 7, 17, 33, 1001, ...) so anything that only handles multiples of the vector width fails.",
+      "Compiles both scalar.c and simd.c with -fno-vectorize -fno-slp-vectorize so measured speedups come from the intrinsics you wrote rather than clang autovectorizing the reference (H_AUTOVEC=1 shows what the compiler manages alone). Bash CLI with list/test/bench/watch/hint/solution/reset and a verify pass over all 24 reference solutions; ~4.5k lines of C, no dependencies beyond cc and bash.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/simdlings" }],
+  },
+  {
     title: "lualings",
     subtitle: "Hands-on Lua learning via broken programs — rustlings for Lua",
     type: "personal",
@@ -474,6 +486,10 @@ export default function Page() {
   const navInsideRef = useRef(null); // card we've "entered" (two-level nav)
   const focusRingRef = useRef(null); // the gliding selection outline
   const editorContentRef = useRef(null); // ring's positioning context
+  const ringObsRef = useRef(null); // ResizeObserver watching the selected element
+  const lastLayoutResizeRef = useRef(0); // when the pane/window last changed size
+  const lastMoveRef = useRef(0); // when the keyboard last moved the selection
+  const progScrollRef = useRef(0); // when we last kicked off our own scroll
 
   /* ── helpers ── */
 
@@ -729,8 +745,12 @@ export default function Page() {
     return [...cards, ...loose].filter(isNavable);
   }, []);
 
-  // move the gliding focus ring over `el` (or hide it when null)
-  const positionRing = useCallback((el) => {
+  /* move the gliding focus ring over `el` (or hide it when null).
+     `animate` decides whether the move glides or snaps: keyboard navigation
+     glides (that's the whole point of a single shared ring), while anything
+     pointer-driven or purely corrective — hover, scroll re-show, a reflow
+     realignment — snaps, because a glide there reads as lag. */
+  const positionRing = useCallback((el, { animate = true } = {}) => {
     const ring = focusRingRef.current;
     const content = editorContentRef.current;
     if (!ring || !content) return;
@@ -741,29 +761,45 @@ export default function Page() {
     const pad = el.matches("[data-nav]") ? 0 : 3; // hug buttons/links a little
     const x = r.left - c.left - pad;
     const y = r.top - c.top - pad;
-    // when the ring is appearing fresh, jump into place (no fly-in from 0,0);
-    // once visible, let CSS transition the move so it glides between targets
-    const wasOn = ring.classList.contains("on");
-    if (!wasOn) ring.style.transition = "none";
+    // a ring that isn't on screen yet always jumps, so it never flies in from 0,0
+    const snap = !animate || !ring.classList.contains("on");
+    if (snap) ring.style.transition = "none";
     ring.style.transform = `translate(${x}px, ${y}px)`;
     ring.style.width = `${r.width + pad * 2}px`;
     ring.style.height = `${r.height + pad * 2}px`;
     // match the card's rounded corners, tighter for buttons/links
     ring.style.borderRadius = el.matches("[data-nav]") ? "var(--radius-card)" : "8px";
-    if (!wasOn) {
+    if (snap) {
       void ring.offsetWidth; // reflow so the jump isn't animated
       ring.style.transition = ""; // restore CSS transition for later moves
     }
     ring.classList.add("on");
   }, []);
 
+  // point the ResizeObserver at the current selection, so the ring re-measures
+  // when that element's own box changes (a project card expanding, say)
+  const observeSel = useCallback((el) => {
+    const obs = ringObsRef.current;
+    if (!obs) return;
+    obs.disconnect();
+    if (el) obs.observe(el);
+  }, []);
+
   // `scroll` is false for hover-driven selection — the mouse is already there,
-  // so pulling the viewport around under the cursor would just fight the user
-  const setNavSel = useCallback((el, scroll = true) => {
+  // so pulling the viewport around under the cursor would just fight the user;
+  // `animate` is false there too, so the ring is simply already under the cursor
+  const setNavSel = useCallback((el, { scroll = true, animate = true, smooth = true } = {}) => {
     navSelRef.current = el;
-    if (el && scroll) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    positionRing(el);
-  }, [positionRing]);
+    observeSel(el);
+    if (el && scroll) {
+      // note when we start our own scroll: while it's still running the
+      // selection can briefly measure as off-screen, which must not be
+      // mistaken for the user having scrolled away from it (see moveNav)
+      progScrollRef.current = performance.now();
+      el.scrollIntoView({ block: "nearest", behavior: smooth ? "smooth" : "auto" });
+    }
+    positionRing(el, { animate });
+  }, [positionRing, observeSel]);
 
   // is `el` still on screen inside the editor pane? Mouse scrolling can carry
   // the selection out of view, which makes it a bad anchor to move from.
@@ -800,7 +836,7 @@ export default function Page() {
       if (!ring || !sel) return;
       const visible = isInView(sel);
       if (!visible && ring.classList.contains("on")) ring.classList.remove("on");
-      else if (visible && !ring.classList.contains("on")) positionRing(sel);
+      else if (visible && !ring.classList.contains("on")) positionRing(sel, { animate: false });
     };
     editor.addEventListener("scroll", onScroll, { passive: true });
     return () => editor.removeEventListener("scroll", onScroll);
@@ -820,10 +856,10 @@ export default function Page() {
     // is the pre-lift one — re-measure once that transition has landed
     const hoverTo = (el) => {
       if (el === navSelRef.current) return;
-      setNavSel(el, false);
+      setNavSel(el, { scroll: false, animate: false });
       clearTimeout(settle);
       settle = setTimeout(() => {
-        if (navSelRef.current === el) positionRing(el);
+        if (navSelRef.current === el) positionRing(el, { animate: false });
       }, 300);
     };
     const onMove = (e) => {
@@ -845,13 +881,26 @@ export default function Page() {
     };
   }, [view, setNavSel, positionRing]);
 
-  const moveNav = useCallback((dir) => {
+  const moveNav = useCallback((dir, repeat = false) => {
+    // held key (or a fast burst of taps): every move would otherwise start a
+    // fresh smooth scroll that cancels the one before it, so the pane crawls
+    // while the ring races ahead of it. Scroll instantly instead — held keys
+    // want to track the selection, not animate to it.
+    const now = performance.now();
+    const rapid = repeat || now - lastMoveRef.current < 140;
+    lastMoveRef.current = now;
+
     // if the mouse scrolled the selection off screen, forget it (and any card
     // we'd entered) — moving from an off-screen anchor is what used to yank the
-    // view back to wherever the keyboard was last left off
-    if (navSelRef.current && !isInView(navSelRef.current)) {
+    // view back to wherever the keyboard was last left off. A smooth scroll we
+    // started ourselves is still in flight for a few hundred ms, and during it
+    // the selection reads as off-screen; resetting then would drop the anchor
+    // mid-run and teleport the ring to whatever is visible.
+    const settling = now - progScrollRef.current < 400;
+    if (!settling && navSelRef.current && !isInView(navSelRef.current)) {
       navInsideRef.current = null;
       navSelRef.current = null;
+      observeSel(null);
     }
 
     const els = collectNav();
@@ -873,7 +922,7 @@ export default function Page() {
         const d = r.top >= top ? r.top - top : (v && r.bottom > top + 8 ? 0 : Infinity);
         if (d < best) { best = d; pick = el; }
       }
-      setNavSel(pick);
+      setNavSel(pick, { smooth: !rapid });
       return;
     }
 
@@ -907,8 +956,8 @@ export default function Page() {
       if (score < bestScore) { bestScore = score; best = el; }
     }
 
-    if (best) setNavSel(best);
-  }, [collectNav, setNavSel, isInView]);
+    if (best) setNavSel(best, { smooth: !rapid });
+  }, [collectNav, setNavSel, isInView, observeSel]);
 
   /* ── step "into" a card: the ring glides onto its first link/button ── */
   const enterCard = useCallback((card) => {
@@ -1022,8 +1071,12 @@ export default function Page() {
       // command mode input handling
       if (mode === "command") return;
 
-      // NORMAL mode keys
-      if (e.target !== document.body && !isOurInput) return;
+      // NORMAL mode keys. Bail only when the user is genuinely typing somewhere
+      // editable: clicking a card's link or button leaves that element DOM-
+      // focused, so it — not <body> — becomes the keydown target, and requiring
+      // `e.target === document.body` here silently killed hjkl/arrow nav until
+      // you clicked empty space again.
+      if (!isOurInput && e.target.isContentEditable) return;
 
       // : — enter command mode
       if (e.key === ":") {
@@ -1071,7 +1124,13 @@ export default function Page() {
           e.key === "k" || e.key === "ArrowUp" ? "k" : null;
         if (dir) {
           e.preventDefault();
-          moveNav(dir);
+          // a click leaves its button/link DOM-focused; hand control back to the
+          // ring so a later Enter goes through activateNav instead of also
+          // firing the browser's native activation on the still-focused element
+          if (document.activeElement && document.activeElement !== document.body) {
+            document.activeElement.blur();
+          }
+          moveNav(dir, e.repeat);
           return;
         }
         if (e.key === "Enter") {
@@ -1102,12 +1161,57 @@ export default function Page() {
     return () => document.removeEventListener("keydown", onKey);
   }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel]);
 
-  /* ── keep the focus ring aligned when the layout reflows ── */
+  /* ── keep the focus ring aligned when the layout reflows ──
+     A window resize is a correction, not a navigation, so the ring snaps. The
+     timestamp lets the per-element observer below tell "the whole page just
+     reflowed" apart from "the selected card changed size on its own". */
   useEffect(() => {
-    const onResize = () => { if (navSelRef.current) positionRing(navSelRef.current); };
+    const onResize = () => {
+      lastLayoutResizeRef.current = performance.now();
+      if (navSelRef.current) positionRing(navSelRef.current, { animate: false });
+    };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [positionRing]);
+
+  /* ── the content pane changing *width* means the column re-laid out (window
+     resize, sidebar, zoom): realign instantly. Height-only changes are left
+     alone — those are a card expanding, which the observer below animates. ── */
+  useEffect(() => {
+    const content = editorContentRef.current;
+    if (view !== "editor" || !content || typeof ResizeObserver === "undefined") return;
+    let lastW = content.getBoundingClientRect().width;
+    const obs = new ResizeObserver(() => {
+      const w = content.getBoundingClientRect().width;
+      if (w === lastW) return;
+      lastW = w;
+      lastLayoutResizeRef.current = performance.now();
+      if (navSelRef.current) positionRing(navSelRef.current, { animate: false });
+    });
+    obs.observe(content);
+    return () => obs.disconnect();
+  }, [view, positionRing]);
+
+  /* ── re-measure the ring whenever the *selected* element's own box changes.
+     Without this the ring keeps its old height when a project card is expanded
+     via "show more", so its bottom edge cuts through the middle of the card.
+     `observeSel` re-points this observer every time the selection moves. ── */
+  useEffect(() => {
+    if (view !== "editor" || typeof ResizeObserver === "undefined") return;
+    const obs = new ResizeObserver(() => {
+      const el = navSelRef.current;
+      if (!el) return;
+      // part of a full-page reflow → snap; a card growing on its own → glide
+      const animate = performance.now() - lastLayoutResizeRef.current > 250;
+      positionRing(el, { animate });
+    });
+    ringObsRef.current = obs;
+    if (navSelRef.current) obs.observe(navSelRef.current);
+    return () => {
+      obs.disconnect();
+      if (ringObsRef.current === obs) ringObsRef.current = null;
+    };
+  }, [view, positionRing]);
 
   /* ── AI: execute tool calls returned by the model ── */
   const executeToolCalls = useCallback((calls) => {
@@ -1383,15 +1487,20 @@ export default function Page() {
               {/* ── about ── */}
               <div className="sectionBlock" id="about" ref={(el) => { sectionRefs.current.about = el; }}>
                 <div className="heroBlock">
-                  <h1 className="heroName">
-                    Ayaan Hafeez<span className="heroDot">.</span><span className="heroCursor" />
-                  </h1>
-                  <p className="heroSub">
-                    Computer Engineering student at the University of Alberta with production experience across
-                    full-stack development, AI/LLM pipelines, and low-level systems programming —
-                    AI Developer @ Elev8AI, shipping NL2SQL chatbots, REST APIs, API scrapers, and Android ML apps;
-                    personal projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
-                  </p>
+                  {/* heading + blurb are one navigable card (the first stop in
+                      the nav order); .heroHead is layout-neutral, it just gives
+                      the focus ring something card-shaped to wrap */}
+                  <div className="heroHead" data-nav data-card-id="hero">
+                    <h1 className="heroName">
+                      Ayaan Hafeez<span className="heroDot">.</span><span className="heroCursor" />
+                    </h1>
+                    <p className="heroSub">
+                      Computer Engineering student at the University of Alberta with production experience across
+                      full-stack development, AI/LLM pipelines, and low-level systems programming —
+                      AI Developer @ Elev8AI, shipping NL2SQL chatbots, REST APIs, API scrapers, and Android ML apps;
+                      personal projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
+                    </p>
+                  </div>
                   <div className="ctaRow">
                     <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
                     <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
