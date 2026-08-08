@@ -58,8 +58,8 @@ constants at the top of `page.js`.
 ### Keybindings
 
 Handled via a `keydown` listener on `window`: `j`/`k` scroll, `gg`/`G` jump,
-`Ctrl+P` Telescope, `Ctrl+T` cycle theme, `:` command mode, `Esc` close
-overlays.
+`Ctrl+P` Telescope, `Ctrl+T` cycle theme, `Ctrl+S` cycle style, `:` command
+mode, `Esc` close overlays.
 
 ### Theming
 
