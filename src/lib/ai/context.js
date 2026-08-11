@@ -60,6 +60,18 @@ const PROJECTS = [
     type: "personal",
   },
   {
+    title: "agent-usage — Coding-Agent Usage TUI",
+    subtitle: "One dashboard for Claude Code, Codex, OpenCode, and Gemini CLI token usage",
+    tech: ["Rust", "ratatui", "crossterm", "rusqlite", "reqwest", "sysinfo"],
+    bullets: [
+      "Detects running agents by process inspection and shows every active one side by side — no config, no provider flag.",
+      "Reads each client's local history in place (Claude Code JSONL, Codex sessions, OpenCode's SQLite DB, Gemini CLI JSON), broken down over 7 days by day and model.",
+      "Pulls session and weekly limits from each provider's official usage endpoint using credentials its client already manages. Read-only — stores nothing, sends no telemetry.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/agent-usage" }],
+    type: "personal",
+  },
+  {
     title: "ayaanhafeez.dev — Portfolio",
     subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
     tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
