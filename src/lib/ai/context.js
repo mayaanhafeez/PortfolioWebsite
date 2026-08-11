@@ -40,6 +40,7 @@ const PROJECTS = [
       "Terminal UI for managing Wi-Fi on macOS — live scan/associate (open, WPA-PSK, WPA-Enterprise PEAP, hidden networks), saved-network management, QR sharing, and an adapter info popup.",
       "Split daemon/client architecture over a Unix socket: a LaunchAgent-managed daemon owns the CoreWLAN interface in a proper Aqua session so scans return real SSIDs instead of redacted strings.",
       "Silent reconnect via macwifi's own login-keychain cache: passwords entered on first connect are stored under the app's stable code-signing identity, so reconnects are promptless. QR-share reads from the System keychain (one admin-auth dialog per share — unavoidable for any third-party app). Ships a self-contained, code-signed .app bundle with Location entitlements.",
+      "Speed testing across four interchangeable backends (Apple networkQuality, Ookla, Netflix fast-cli, custom command) normalized into one schema and streamed as JSONL events, so external front ends — my sketchybar popup, a Swift dial overlay — can follow a run live.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/macwifi" }],
     type: "personal",
