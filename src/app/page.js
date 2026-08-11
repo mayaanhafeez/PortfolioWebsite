@@ -106,11 +106,12 @@ const PROJECTS = [
     title: "ssht — Persistent SSH Sessions",
     subtitle: "Every SSH connection becomes a resumable tmux session",
     type: "personal",
-    tech: ["Rust", "ratatui", "tokio", "rusqlite", "nucleo", "tmux"],
+    tech: ["Rust", "ratatui", "tokio", "rusqlite", "nucleo", "tmux", "mosh"],
     bullets: [
       "Wraps the system ssh binary (not a reimplementation) and runs tmux new-session -A on the remote, so connections survive sleep/network drops and reattach from any machine — ProxyJump, IdentityFile, and hardware keys all keep working.",
       "From-scratch SSH config parser handles Include globbing/recursion, Match blocks, and wildcard Host entries that naive line-scanners miss; falls back to known_hosts.",
       "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes.",
+      "Two modes for high-latency links: --local-echo edits shell lines locally and sends on Enter, dropping back to raw passthrough for full-screen apps, tab completion, and password prompts (Ctrl-] toggles it live); --mosh swaps the transport for Mosh — predictive echo everywhere, sessions that survive IP changes, and mosh-server auto-installed on the remote if missing.",
     ],
     links: [
       { label: "crates.io", href: "https://crates.io/crates/ssht" },
