@@ -260,8 +260,8 @@ const EXPERIENCE = [
 
 const SKILLS = {
   Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "Swift", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
-  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "tokio", "AppKit / Cocoa", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
-  Tools: ["Git", "Docker", "PostgreSQL", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "VS Code", "Android Studio"],
+  Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "crossterm", "tokio", "AppKit / Cocoa", "Core Animation", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
+  Tools: ["Git", "Docker", "PostgreSQL", "SQLite", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "tmux", "mosh", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
