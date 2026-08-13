@@ -20,7 +20,7 @@ No test framework is configured.
 ### Environment variables
 
 ```
-GROQ_API_KEY=        # Groq API key for the AI assistant (llama-3.3-70b-versatile)
+GEMINI_API_KEY=      # Google AI Studio API key for the AI assistant
 UPSTASH_REDIS_REST_URL=    # Upstash Redis URL for rate limiting
 UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis token
 ```
@@ -32,7 +32,7 @@ Core files:
 - `src/app/page.js` — single `"use client"` component: all state, logic, content, rendering.
 - `src/app/globals.css` — all styling and the 14 color themes.
 - `src/app/components/AIChat.js` — AI chat modal component.
-- `src/app/api/ai/` — streaming API route that calls Groq with tool-call support.
+- `src/app/api/ai/` — streaming API route that calls Gemini with tool-call support.
 
 ### Views
 

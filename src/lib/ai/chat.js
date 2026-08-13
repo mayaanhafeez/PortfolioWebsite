@@ -1,8 +1,7 @@
 import { TOOL_DEFINITIONS } from "./tools";
 import { getGithubActivity } from "./github";
 
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama-3.3-70b-versatile";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash";
 
 // Tools resolved entirely server-side (pure data retrieval, no UI side effect) —
 // unlike navigate_section/set_theme/open_link, which round-trip to the client.
@@ -10,39 +9,54 @@ const SERVER_TOOLS = {
   get_github_activity: (args) => getGithubActivity(args.days),
 };
 
-async function groqCall(messages, tools, apiKey) {
+function toGeminiRequest(messages, tools) {
+  const system = messages.find((message) => message.role === "system")?.content;
+  const contents = messages
+    .filter((message) => message.role !== "system")
+    .map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    }));
+
   const body = {
-    model: MODEL,
-    messages,
-    max_tokens: 400,
-    stream: false,
+    systemInstruction: { parts: [{ text: system ?? "" }] },
+    contents,
+    generationConfig: {
+      maxOutputTokens: 400,
+      thinkingConfig: { thinkingLevel: "MINIMAL" },
+    },
   };
   if (tools?.length) {
-    body.tools = tools;
-    body.tool_choice = "auto";
+    body.tools = [{
+      functionDeclarations: tools.map(({ function: tool }) => ({
+        name: tool.name,
+        description: tool.description,
+        parametersJsonSchema: tool.parameters,
+      })),
+    }];
   }
+  return body;
+}
 
-  const res = await fetch(GROQ_URL, {
+async function geminiCall(messages, tools, apiKey) {
+  const res = await fetch(`${GEMINI_URL}:generateContent`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify(toGeminiRequest(messages, tools)),
   });
 
   if (!res.ok) {
     const errText = await res.text();
-    const err = JSON.parse(errText).error ?? {};
-    // model generated a malformed tool call — signal caller to retry without tools
-    if (err.code === "tool_use_failed") throw Object.assign(new Error("tool_use_failed"), { toolUseFailed: true });
     if (res.status === 429) throw Object.assign(new Error("rate_limited"), { rateLimited: true });
-    throw new Error(`Groq error ${res.status}: ${errText}`);
+    throw new Error(`Gemini error ${res.status}: ${errText}`);
   }
   return res.json();
 }
 
-function buildSSEStream(groqStreamRes) {
+function buildSSEStream(geminiStreamRes) {
   return new ReadableStream({
     async start(controller) {
-      const reader = groqStreamRes.body.getReader();
+      const reader = geminiStreamRes.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
 
@@ -59,34 +73,34 @@ function buildSSEStream(groqStreamRes) {
         for (const line of lines) {
           if (!line.startsWith("data: ")) continue;
           const raw = line.slice(6).trim();
-          if (raw === "[DONE]") {
-            send(`data: ${JSON.stringify({ type: "done" })}\n\n`);
-            continue;
-          }
           try {
             const chunk = JSON.parse(raw);
-            const content = chunk.choices?.[0]?.delta?.content;
+            const content = chunk.candidates?.[0]?.content?.parts
+              ?.map((part) => part.text ?? "")
+              .join("");
             if (content) send(`data: ${JSON.stringify({ type: "delta", content })}\n\n`);
           } catch {
             // skip malformed chunks
           }
         }
       }
+      send(`data: ${JSON.stringify({ type: "done" })}\n\n`);
       controller.close();
     },
   });
 }
 
-async function streamGroqText(messages, apiKey) {
-  const res = await fetch(GROQ_URL, {
+async function streamGeminiText(messages, apiKey) {
+  const res = await fetch(`${GEMINI_URL}:streamGenerateContent?alt=sse`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: MODEL, messages, max_tokens: 400, stream: true }),
+    headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify(toGeminiRequest(messages)),
   });
 
   if (!res.ok) {
+    const errText = await res.text();
     if (res.status === 429) throw Object.assign(new Error("rate_limited"), { rateLimited: true });
-    throw new Error(`Groq stream error ${res.status}`);
+    throw new Error(`Gemini stream error ${res.status}: ${errText}`);
   }
 
   return new Response(buildSSEStream(res), {
@@ -101,26 +115,16 @@ export async function planAndStream(messages, apiKey) {
   const userMsg = messages.findLast((m) => m.role === "user")?.content ?? "";
   console.log(`[ai] user: "${userMsg.slice(0, 80)}"`);
 
-  let planData;
-  try {
-    planData = await groqCall(messages, TOOL_DEFINITIONS, apiKey);
-  } catch (err) {
-    if (err.toolUseFailed) {
-      // Don't let the model free-respond here — with no tool result to ground it,
-      // it tends to hallucinate a plausible-sounding answer (e.g. inventing GitHub
-      // activity). Fail honestly instead.
-      console.log("[ai] tool_use_failed — returning honest error, no plain-stream fallback");
-      return Response.json({ error: "Unable to fetch details from GitHub. Please try again." }, { status: 502 });
-    }
-    throw err;
-  }
-  const choice = planData.choices?.[0];
+  const planData = await geminiCall(messages, TOOL_DEFINITIONS, apiKey);
+  const candidate = planData.candidates?.[0];
+  const functionCalls = candidate?.content?.parts?.filter((part) => part.functionCall) ?? [];
 
-  if (choice?.finish_reason === "tool_calls" && choice.message.tool_calls?.length) {
-    const calls = choice.message.tool_calls.map((tc) => ({
-      id: tc.id,
-      name: tc.function.name,
-      args: JSON.parse(tc.function.arguments),
+  if (functionCalls.length) {
+    const calls = functionCalls.map(({ functionCall }, index) => ({
+      id: functionCall.id ?? `call-${index}`,
+      name: functionCall.name,
+      args: functionCall.args ?? {},
+      thoughtSignature: functionCalls[index].thoughtSignature,
     }));
     console.log("[ai] tool_calls:", JSON.stringify(calls));
 
@@ -133,17 +137,54 @@ export async function planAndStream(messages, apiKey) {
         }))
       );
       console.log("[ai] server tool_calls resolved, streaming final answer");
-      return streamGroqText([...messages, choice.message, ...toolMessages], apiKey);
+      return streamWithToolResults(messages, calls, toolMessages, apiKey);
     }
 
     return Response.json({ type: "tool_calls", calls });
   }
 
-  console.log(`[ai] finish_reason: ${choice?.finish_reason} — streaming text`);
-  return streamGroqText(messages, apiKey);
+  console.log(`[ai] finish_reason: ${candidate?.finishReason} — streaming text`);
+  return streamGeminiText(messages, apiKey);
 }
 
 // Phase 2: stream final text after tool results have been appended to messages.
-export async function streamWithToolResults(messages, apiKey) {
-  return streamGroqText(messages, apiKey);
+export async function streamWithToolResults(messages, toolCalls, toolResults, apiKey) {
+  const body = toGeminiRequest(messages);
+  body.contents.push(
+    {
+      role: "model",
+      parts: toolCalls.map((call) => ({
+        functionCall: { id: call.id, name: call.name, args: call.args },
+        ...(call.thoughtSignature ? { thoughtSignature: call.thoughtSignature } : {}),
+      })),
+    },
+    {
+      role: "user",
+      parts: toolResults.map((result) => {
+        const call = toolCalls.find((item) => item.id === result.tool_call_id);
+        if (!call) throw new Error(`Missing tool call for result ${result.tool_call_id}`);
+        return {
+          functionResponse: {
+            id: result.tool_call_id,
+            name: call.name,
+            response: { result: result.content },
+          },
+        };
+      }),
+    }
+  );
+
+  const res = await fetch(`${GEMINI_URL}:streamGenerateContent?alt=sse`, {
+    method: "POST",
+    headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    if (res.status === 429) throw Object.assign(new Error("rate_limited"), { rateLimited: true });
+    throw new Error(`Gemini stream error ${res.status}: ${errText}`);
+  }
+  return new Response(buildSSEStream(res), {
+    headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+  });
 }
