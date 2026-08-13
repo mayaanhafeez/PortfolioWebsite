@@ -31,6 +31,7 @@ const THEMES = [
   { id: "andromeda",            label: "Andromeda"             },
   { id: "hinterlands",          label: "Hinterlands"           },
   { id: "vanta-black",          label: "Vanta Black"           },
+  { id: "retro-82",             label: "Retro '82"             },
 ];
 
 // visual language layered on top of THEMES — a theme picks the palette,
@@ -139,7 +140,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "14 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands, Vanta Black) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "15 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands, Vanta Black, Retro '82) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
