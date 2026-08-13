@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import AIChat from "./components/AIChat";
+import ToastStack from "./components/Toast";
 
 /* ════════════════════════════════════════
    DATA
@@ -15,6 +16,40 @@ const LINKS = {
   resume: "/resume.pdf",
   blog: "https://the-rubber-duck-blog.vercel.app/",
 };
+
+// Friendly names for the hosts we link out to — used by the "opened link"
+// toast; anything unlisted falls back to its bare hostname.
+const LINK_HOSTS = {
+  "github.com": "GitHub",
+  "linkedin.com": "LinkedIn",
+  "crates.io": "crates.io",
+  "pypi.org": "PyPI",
+  "addons.mozilla.org": "Firefox Add-ons",
+  "chromewebstore.google.com": "the Chrome Web Store",
+  "the-rubber-duck-blog.vercel.app": "the blog",
+  "ascii.ayaanhafeez.dev": "the ASCII art tool",
+};
+
+/* Turn an outgoing href into toast copy: { title, detail }. `label` (when the
+   caller knows one, e.g. the AI's own description of the link) wins over the
+   host lookup. */
+function describeLink(href, label) {
+  if (href.startsWith("mailto:")) {
+    return { title: "Opening email client", detail: href.slice(7) };
+  }
+  if (label) return { title: `Opened ${label}`, detail: href.replace(/^https?:\/\//, "") };
+  if (href.endsWith(".pdf")) return { title: "Opened resume", detail: href.replace(/^\//, "") };
+  try {
+    const url = new URL(href, typeof window === "undefined" ? "https://ayaanhafeez.dev" : window.location.origin);
+    const host = url.hostname.replace(/^www\./, "");
+    return {
+      title: `Opened ${LINK_HOSTS[host] ?? host}`,
+      detail: (host + url.pathname).replace(/\/$/, ""),
+    };
+  } catch {
+    return { title: "Opened link", detail: href };
+  }
+}
 
 const THEMES = [
   { id: "tokyo-night", label: "Tokyo Night" },
@@ -490,6 +525,7 @@ export default function Page() {
   const [aiInitialPrompt, setAiInitialPrompt] = useState(null);
   const [aiMessages, setAiMessages] = useState([]);
   const [aiLoading, setAiLoading] = useState(false);
+  const [toasts, setToasts] = useState([]); // { id, type, title, detail?, leaving? }
 
   const editorRef = useRef(null);
   const asciiRef = useRef(null);
@@ -505,8 +541,25 @@ export default function Page() {
   const lastLayoutResizeRef = useRef(0); // when the pane/window last changed size
   const lastMoveRef = useRef(0); // when the keyboard last moved the selection
   const progScrollRef = useRef(0); // when we last kicked off our own scroll
+  const toastIdRef = useRef(0); // monotonic toast key
 
   /* ── helpers ── */
+
+  /* ── toast notifications ──
+     The cmdbar message line stays vim-authentic (short, lowercase, E-codes);
+     toasts are the human-readable version of the same event, shown top-right.
+     `type` picks the icon and accent (see ICONS in components/Toast.js). */
+  const dismissToast = useCallback((id) => {
+    // mark first so the exit animation can play, then drop it
+    setToasts((list) => list.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
+    setTimeout(() => setToasts((list) => list.filter((t) => t.id !== id)), 200);
+  }, []);
+
+  const notify = useCallback((type, title, detail = null) => {
+    const id = ++toastIdRef.current;
+    setToasts((list) => [...list.slice(-3), { id, type, title, detail }]); // keep at most 4
+    setTimeout(() => dismissToast(id), 3400);
+  }, [dismissToast]);
 
   const scrollTo = useCallback((id) => {
     const el = sectionRefs.current[id];
@@ -516,9 +569,34 @@ export default function Page() {
     }
   }, []);
 
-  const openLink = useCallback((href) => {
+  // programmatic link opens (commands, telescope, dashboard actions, AI tools).
+  // Anchors clicked directly in the page are covered by the delegated listener
+  // below instead, so nothing double-notifies.
+  const openLink = useCallback((href, label, fromAI = false) => {
     window.open(href, "_blank", "noopener");
-  }, []);
+    const { title, detail } = describeLink(href, label);
+    notify(fromAI ? "ai" : "link", title, fromAI ? "requested by the AI assistant" : detail);
+  }, [notify]);
+
+  /* ── notify on any outbound anchor click ──
+     Sidebar links, CTA buttons and project-card links are plain <a> tags spread
+     across the tree (some inside ProjectCard), so one delegated listener beats
+     threading an onClick through all of them. Only outbound targets count:
+     new-tab links, mailto:, and the resume PDF. */
+  useEffect(() => {
+    const onClick = (e) => {
+      const a = e.target.closest?.("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (!href) return;
+      const outbound = a.target === "_blank" || href.startsWith("mailto:") || href.endsWith(".pdf");
+      if (!outbound) return;
+      const { title, detail } = describeLink(href);
+      notify("link", title, detail);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [notify]);
 
   const openAIForProject = useCallback((project) => {
     setAiMessages([]);
@@ -571,8 +649,10 @@ export default function Page() {
         if (view !== "editor") enterEditor(sec.id);
         else scrollTo(sec.id);
         flashMsg(`-- opened ${sec.label} --`, "success");
+        notify("section", `Opened ${sec.label}`, sec.desc);
       } else {
         flashMsg(`E484: Can't open file "${arg}"`, "error");
+        notify("error", `Can't open "${arg}"`, "no such file — try :ls");
       }
       return;
     }
@@ -600,6 +680,7 @@ export default function Page() {
     // quit easter egg
     if (cmd === "q" || cmd === "quit" || cmd === "q!" || cmd === "wq" || cmd === "wq!" || cmd === "x") {
       flashMsg("E162: Can't quit vim. This is your life now.", "error");
+      notify("error", "E162: Can't quit vim", "This is your life now.");
       return;
     }
 
@@ -631,12 +712,14 @@ export default function Page() {
     if (cmd === "home" || cmd === "welcome" || cmd === "dashboard") {
       setView("welcome");
       flashMsg("-- back to dashboard --", "info");
+      notify("view", "Back to dashboard", "press Enter to reopen the portfolio");
       return;
     }
 
-    // clear
+    // clear — wipes the message line and any toasts still on screen
     if (cmd === "clear" || cmd === "cls") {
       setCmdMsg(null);
+      setToasts([]);
       return;
     }
 
@@ -647,6 +730,7 @@ export default function Page() {
         const next = THEMES[(idx + 1) % THEMES.length];
         setTheme(next.id);
         flashMsg(`-- theme: ${next.label} --`, "success");
+        notify("theme", `Theme changed to ${next.label}`, `${THEMES.length} themes — Ctrl+T to cycle`);
       } else {
         const found = THEMES.find(
           (t) => t.id === arg || t.id.startsWith(arg) || t.label.toLowerCase() === arg
@@ -654,8 +738,10 @@ export default function Page() {
         if (found) {
           setTheme(found.id);
           flashMsg(`-- theme: ${found.label} --`, "success");
+          notify("theme", `Theme changed to ${found.label}`, `${THEMES.length} themes — Ctrl+T to cycle`);
         } else {
           flashMsg(`E: unknown theme "${arg}". available: ${THEMES.map((t) => t.id).join(", ")}`, "error");
+          notify("error", `Unknown theme "${arg}"`, `try: ${THEMES.slice(0, 4).map((t) => t.id).join(", ")}…`);
         }
       }
       return;
@@ -668,6 +754,7 @@ export default function Page() {
         const next = STYLES[(idx + 1) % STYLES.length];
         setStyle(next.id);
         flashMsg(`-- style: ${next.label} --`, "success");
+        notify("style", `Style changed to ${next.label}`, "Ctrl+S to cycle styles");
       } else {
         const found = STYLES.find(
           (s) => s.id === arg || s.id.startsWith(arg) || s.label.toLowerCase() === arg
@@ -675,15 +762,18 @@ export default function Page() {
         if (found) {
           setStyle(found.id);
           flashMsg(`-- style: ${found.label} --`, "success");
+          notify("style", `Style changed to ${found.label}`, "Ctrl+S to cycle styles");
         } else {
           flashMsg(`E: unknown style "${arg}". available: ${STYLES.map((s) => s.id).join(", ")}`, "error");
+          notify("error", `Unknown style "${arg}"`, `try: ${STYLES.map((s) => s.id).join(", ")}`);
         }
       }
       return;
     }
 
     flashMsg(`E492: Not an editor command: ${cmd}`, "error");
-  }, [exitCommand, scrollTo, flashMsg, openLink, enterEditor, view, theme, style]);
+    notify("error", `Not an editor command: ${cmd}`, "type :help for the full list");
+  }, [exitCommand, scrollTo, flashMsg, notify, openLink, enterEditor, view, theme, style]);
 
   /* ── welcome banner: shrink the ASCII name to fit the viewport width ── */
   useEffect(() => {
@@ -1021,7 +1111,7 @@ export default function Page() {
   const runWelcomeAction = useCallback((i) => {
     switch (i) {
       case 0: setShowAI(true); break;
-      case 1: enterEditor("about"); break;
+      case 1: enterEditor("about"); notify("view", "Opened portfolio", "about.md"); break;
       case 2: openTelescope(); break;
       case 3: setShowHelp(true); break;
       case 4: openLink(LINKS.github); break;
@@ -1029,7 +1119,7 @@ export default function Page() {
       case 6: openLink(LINKS.resume); break;
       case 7: openLink(LINKS.blog); break;
     }
-  }, [enterEditor, openLink, openTelescope]);
+  }, [enterEditor, openLink, openTelescope, notify]);
 
   /* ── global keyboard shortcuts ── */
   useEffect(() => {
@@ -1067,6 +1157,7 @@ export default function Page() {
         const next = THEMES[(idx + 1) % THEMES.length];
         setTheme(next.id);
         flashMsg(`-- theme: ${next.label} --`, "success");
+        notify("theme", `Theme changed to ${next.label}`, `${THEMES.length} themes — Ctrl+T to cycle`);
         return;
       }
 
@@ -1077,6 +1168,7 @@ export default function Page() {
         const next = STYLES[(idx + 1) % STYLES.length];
         setStyle(next.id);
         flashMsg(`-- style: ${next.label} --`, "success");
+        notify("style", `Style changed to ${next.label}`, "Ctrl+S to cycle styles");
         return;
       }
 
@@ -1174,7 +1266,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, notify, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel]);
 
   /* ── keep the focus ring aligned when the layout reflows ──
      A window resize is a correction, not a navigation, so the ring snaps. The
@@ -1238,24 +1330,31 @@ export default function Page() {
         else scrollTo(call.args.section_id);
         setShowAI(false);
         flashMsg(`-- navigated to ${call.args.section_id} --`, "success");
+        const sec = SECTIONS.find((s) => s.id === call.args.section_id);
+        notify("ai", `Opened ${sec?.label ?? call.args.section_id}`, "requested by the AI assistant");
         result = `Navigated to the ${call.args.section_id} section.`;
       } else if (call.name === "set_theme") {
         setTheme(call.args.theme_id);
         flashMsg(`-- theme: ${call.args.theme_id} --`, "success");
+        const t = THEMES.find((x) => x.id === call.args.theme_id);
+        notify("ai", `Theme changed to ${t?.label ?? call.args.theme_id}`, "requested by the AI assistant");
         result = `Theme changed to ${call.args.theme_id}.`;
       } else if (call.name === "set_style") {
         setStyle(call.args.style_id);
         flashMsg(`-- style: ${call.args.style_id} --`, "success");
+        const s = STYLES.find((x) => x.id === call.args.style_id);
+        notify("ai", `Style changed to ${s?.label ?? call.args.style_id}`, "requested by the AI assistant");
         result = `Style changed to ${call.args.style_id}.`;
       } else if (call.name === "open_link") {
-        openLink(call.args.url);
+        // openLink raises the toast itself, flagged as AI-initiated
+        openLink(call.args.url, call.args.label, true);
         flashMsg(`-- opening ${call.args.label ?? call.args.url} --`, "success");
         result = `Opened ${call.args.label ?? call.args.url}.`;
       }
       results.push({ tool_call_id: call.id, content: result });
     }
     return results;
-  }, [view, enterEditor, scrollTo, setTheme, setStyle, openLink, flashMsg]);
+  }, [view, enterEditor, scrollTo, setTheme, setStyle, openLink, flashMsg, notify]);
 
   /* ── AI: consume an SSE stream and append deltas to the last assistant message ── */
   const consumeStream = useCallback(async (response) => {
@@ -1375,16 +1474,19 @@ export default function Page() {
     if (item.type === "section") {
       if (view !== "editor") enterEditor(item.id);
       else scrollTo(item.id);
+      notify("section", `Opened ${item.label}`, item.desc);
     } else if (item.type === "link") {
       if (item.href.startsWith("mailto:")) {
         window.location.href = item.href;
+        const { title, detail } = describeLink(item.href);
+        notify("link", title, detail);
       } else {
         openLink(item.href);
       }
     } else if (item.id === "help") {
       setShowHelp(true);
     }
-  }, [view, enterEditor, scrollTo, openLink]);
+  }, [view, enterEditor, scrollTo, openLink, notify]);
 
   // Computed after mount only — rendering it during SSR would mismatch the
   // client's clock and trip a hydration error.
@@ -1403,6 +1505,9 @@ export default function Page() {
 
   return (
     <div className="shell">
+      {/* ── toast notifications (top-right) ── */}
+      <ToastStack toasts={toasts} onDismiss={dismissToast} />
+
       {/* ── titlebar ── */}
       <div className="titlebar">
         <span className="titlebarDot r" />
