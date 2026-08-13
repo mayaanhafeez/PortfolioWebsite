@@ -30,7 +30,7 @@ UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis token
 Core files:
 
 - `src/app/page.js` — single `"use client"` component: all state, logic, content, rendering.
-- `src/app/globals.css` — all styling and the 14 color themes.
+- `src/app/globals.css` — all styling and the 15 color themes.
 - `src/app/components/AIChat.js` — AI chat modal component.
 - `src/app/api/ai/` — streaming API route that calls Gemini with tool-call support.
 
@@ -63,9 +63,9 @@ mode, `Esc` close overlays.
 
 ### Theming
 
-Fourteen dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
+Fifteen dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
 Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns,
-Andromeda, Hinterlands, Vanta Black),
+Andromeda, Hinterlands, Vanta Black, Retro '82),
 defined as `[data-theme="…"]` blocks in `globals.css`. The selected theme is
 persisted to `localStorage` and applied as `data-theme` on the root element.
 

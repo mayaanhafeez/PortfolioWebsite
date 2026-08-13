@@ -208,9 +208,20 @@
   --red:#a4a4a4; --magenta:#9b9b9b; --teal:#b0b0b0;
 }
 
+[data-theme="retro-82"] {
+  --bg:#05182e; --bg-dark:#031222; --bg-float:#0a2540; --bg-highlight:#134e5a;
+  --bg-sidebar:#031222; --bg-statusline:#020c17; --bg-tabline:#031222;
+  --bg-tab-active:#05182e; --bg-tab-inactive:#031222;
+  --border:#134e5a; --border-highlight:#2a6b78;
+  --fg:#f6dcac; --fg-dark:#a7c9c6; --comment:#3f8f8a;
+  --cyan:#8cbfb8; --blue:#3f8f8a; --purple:#3f8f8a;
+  --green:#028391; --yellow:#e97b3c; --orange:#faa968;
+  --red:#f85525; --magenta:#3f8f8a; --teal:#8cbfb8;
+}
+
 /* ══════════════════════════════════════
-   STYLES — three switchable visual languages, layered on top of the
-   14 color THEMES above. A theme picks the palette; a style picks how
+   STYLES — four switchable visual languages, layered on top of the
+   15 color THEMES above. A theme picks the palette; a style picks how
    glass/blur/radius/motion is built from that palette. Applied as
    body[data-style="…"], set from React (see STYLES in page.js).
    Every surface below reads these tokens, so no component CSS needs
@@ -258,7 +269,7 @@
   --radius-sm: 4px;
   --radius-btn: 8px;
 
-  --body-pad: 10px;
+  --body-pad: 0px;
 
   --mesh-bg: var(--bg-dark);
   --mesh-blur: 0px;
@@ -319,7 +330,7 @@ body[data-style="neon"]{
   --radius-sm: 6px;
   --radius-btn: 8px;
 
-  --body-pad: 16px;
+  --body-pad: 0px;
 
   --mesh-bg:
     radial-gradient(ellipse 65% 55% at 90% 4%, color-mix(in srgb, var(--cyan) 26%, transparent), transparent 58%),
@@ -385,7 +396,7 @@ body[data-style="acrylic"]{
   --radius-sm: 14px;
   --radius-btn: 999px;
 
-  --body-pad: 28px;
+  --body-pad: 0px;
 
   --mesh-bg:
     radial-gradient(ellipse 80% 70% at 80% 10%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 65%),
@@ -558,12 +569,9 @@ a:hover{ text-decoration: underline; }
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: var(--radius-shell);
-  border: 1px solid var(--glass-border-strong);
-  box-shadow: var(--glass-shadow-lg);
-}
-@media (max-width: 768px){
-  .shell{ border-radius: min(var(--radius-shell), 18px); }
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
 }
 
 /* ── titlebar ── */
