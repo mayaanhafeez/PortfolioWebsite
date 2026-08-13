@@ -21,7 +21,7 @@ export const TOOL_DEFINITIONS = [
     type: "function",
     function: {
       name: "set_theme",
-      description: "Change the color theme of the portfolio",
+      description: "Change the color theme of the portfolio. This can be called alongside other tools when the user requests multiple actions.",
       parameters: {
         type: "object",
         properties: {
@@ -43,7 +43,7 @@ export const TOOL_DEFINITIONS = [
     type: "function",
     function: {
       name: "set_style",
-      description: "Change the visual style (glass/blur/radius/motion language) of the portfolio, independent of the color theme",
+      description: "Change the visual style (glass/blur/radius/motion language) of the portfolio, independent of the color theme. This can be called alongside other tools when the user requests multiple actions.",
       parameters: {
         type: "object",
         properties: {
