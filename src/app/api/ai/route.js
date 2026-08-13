@@ -37,7 +37,7 @@ export async function POST(request) {
     return Response.json({ error: "history must be an array." }, { status: 400 });
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return Response.json({ error: "AI assistant is currently unavailable." }, { status: 503 });
   }
@@ -49,25 +49,11 @@ export async function POST(request) {
     console.log(`[route] tool_followup tools=${JSON.stringify(toolCalls.map(t => t.name))}`);
     const systemMessage = { role: "system", content: buildSystemPrompt() };
     const trimmedHistory = trimToWindow(history, 20);
-    const messages = [
-      systemMessage,
-      ...trimmedHistory,
-      { role: "user", content: message },
-      { role: "assistant", tool_calls: toolCalls.map((tc) => ({
-        id: tc.id,
-        type: "function",
-        function: { name: tc.name, arguments: JSON.stringify(tc.args) },
-      })) },
-      ...toolResults.map((r) => ({
-        role: "tool",
-        tool_call_id: r.tool_call_id,
-        content: r.content,
-      })),
-    ];
+    const messages = [systemMessage, ...trimmedHistory, { role: "user", content: message }];
     try {
-      return await streamWithToolResults(messages, apiKey);
+      return await streamWithToolResults(messages, toolCalls, toolResults, apiKey);
     } catch (err) {
-      if (err.rateLimited) return Response.json({ error: "Too many requests — Groq free tier limit hit. Wait a few seconds and try again." }, { status: 429 });
+      if (err.rateLimited) return Response.json({ error: "Too many requests — Gemini free tier limit hit. Wait a few seconds and try again." }, { status: 429 });
       throw err;
     }
   }
@@ -93,7 +79,7 @@ export async function POST(request) {
   try {
     return await planAndStream(messages, apiKey);
   } catch (err) {
-    if (err.rateLimited) return Response.json({ error: "Too many requests — Groq free tier limit hit. Wait a few seconds and try again." }, { status: 429 });
+    if (err.rateLimited) return Response.json({ error: "Too many requests — Gemini free tier limit hit. Wait a few seconds and try again." }, { status: 429 });
     throw err;
   }
 }

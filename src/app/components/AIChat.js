@@ -43,7 +43,7 @@ export default function AIChat({ messages, loading, onSend, onClose, inputRef, i
             <span className="aiChatTitleIcon">⬡</span> ai.nvim
           </span>
           <div className="aiChatMeta">
-            <span className="aiChatModel">llama-3.3-70b</span>
+            <span className="aiChatModel">gemini-3.5-flash</span>
             <span className="aiChatClose" onClick={onClose}>✕</span>
           </div>
         </div>
