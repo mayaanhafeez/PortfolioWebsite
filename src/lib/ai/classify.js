@@ -14,27 +14,33 @@ Reply NO only if the message is clearly unrelated — e.g. asking for news, weat
 When in doubt, reply YES.`;
 
 export async function classifyIntent(message, apiKey) {
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        { role: "system", content: CLASSIFY_SYSTEM },
-        { role: "user", content: message },
-      ],
-      max_tokens: 5,
-      temperature: 0,
-      stream: false,
-    }),
-  });
+  const res = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
+    {
+      method: "POST",
+      headers: {
+        "x-goog-api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: CLASSIFY_SYSTEM }] },
+        contents: [{ role: "user", parts: [{ text: message }] }],
+        generationConfig: {
+          maxOutputTokens: 5,
+          temperature: 0,
+          thinkingConfig: { thinkingLevel: "MINIMAL" },
+        },
+      }),
+    }
+  );
 
   if (!res.ok) return true; // fail open — don't block on classification errors
 
   const data = await res.json();
-  const reply = data.choices?.[0]?.message?.content?.trim().toUpperCase() ?? "";
+  const reply = data.candidates?.[0]?.content?.parts
+    ?.map((part) => part.text ?? "")
+    .join("")
+    .trim()
+    .toUpperCase() ?? "";
   return reply.startsWith("YES");
 }

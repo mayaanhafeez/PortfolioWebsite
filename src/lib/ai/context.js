@@ -76,10 +76,10 @@ const PROJECTS = [
   {
     title: "ayaanhafeez.dev — Portfolio",
     subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
-    tech: ["Next.js", "React", "JavaScript", "Groq API", "Upstash Redis", "CSS"],
+    tech: ["Next.js", "React", "JavaScript", "Gemini API", "Upstash Redis", "CSS"],
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
-      "Agentic AI assistant (llama-3.3-70b via Groq) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
+      "Agentic AI assistant (Gemini 3.5 Flash) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
       "15 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands, Vanta Black, Retro '82) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
@@ -275,7 +275,7 @@ const EXPERIENCE = [
 const SKILLS = {
   Languages: ["Python", "Kotlin", "Java", "C/C++", "Rust", "Swift", "JavaScript", "TypeScript", "Lua", "SQL", "Bash", "ARM/MIPS", "VHDL"],
   Frameworks: ["FastAPI", "Next.js", "Node.js", "React", "Jetpack Compose", "Vite", "Express", "Flask", "LangChain", "ratatui", "crossterm", "tokio", "AppKit / Cocoa", "Core Animation", "SQLAlchemy", "scikit-learn", "NumPy", "pandas", "scipy", "Tailwind CSS"],
-  Tools: ["Git", "Docker", "PostgreSQL", "SQLite", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Groq API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "tmux", "mosh", "VS Code", "Android Studio"],
+  Tools: ["Git", "Docker", "PostgreSQL", "SQLite", "Redis", "MongoDB", "ChromaDB", "Selenium", "Ollama", "Gemini API", "OpenAI API", "Anthropic API", "AWS", "Stripe", "tmux", "mosh", "VS Code", "Android Studio"],
   "ML / Vision": ["ML Kit", "CameraX", "AWS Rekognition", "docTR", "InsightFace", "OpenCV"],
   Hardware: ["FPGA (Zybo)", "Arduino", "ARM Cortex-M4", "Raspberry Pi", "Analog Discovery", "BioAMP EXG"],
 };
