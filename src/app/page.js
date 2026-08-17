@@ -1044,6 +1044,13 @@ export default function Page() {
 
     let best = null;
     let bestScore = Infinity;
+    // h/l only: the best candidate that actually shares a row with the current
+    // one (cross gap 0). It wins outright, because the score alone lets a
+    // near-aligned element on the line above beat the real neighbour — a link
+    // 9px off-centre one row up costs 2×32px of vertical gap, still less than
+    // a same-row button 94px away.
+    let bestInRow = null;
+    let bestInRowScore = Infinity;
     for (const el of els) {
       if (el === curEl) continue;
       const r = el.getBoundingClientRect();
@@ -1058,10 +1065,15 @@ export default function Page() {
         ? gap(cur.top, cur.bottom, r.top, r.bottom)
         : gap(cur.left, cur.right, r.left, r.right);
       const score = primary + cross * 2;
+      if (horizontal && cross === 0 && score < bestInRowScore) {
+        bestInRowScore = score;
+        bestInRow = el;
+      }
       if (score < bestScore) { bestScore = score; best = el; }
     }
 
-    if (best) setNavSel(best, { smooth: !rapid });
+    const pick = bestInRow ?? best;
+    if (pick) setNavSel(pick, { smooth: !rapid });
   }, [collectNav, setNavSel, isInView, observeSel]);
 
   /* ── step "into" a card: the ring glides onto its first link/button ── */
