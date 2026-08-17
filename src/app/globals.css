@@ -721,7 +721,9 @@ a:hover{ text-decoration: underline; }
 }
 .sidebarHints kbd{
   display: inline-block;
-  padding: 1px 5px;
+  /* see .pill: at 10px the ascent/descent split flips, so the extra pixel
+     goes on the bottom to bring the cap band back to center */
+  padding: 1px 5px 2px;
   border-radius: 3px;
   background: var(--glass-2);
   border: 1px solid var(--glass-border);
@@ -733,7 +735,9 @@ a:hover{ text-decoration: underline; }
 /* ── sidebar AI button ── */
 .sidebarAIBtn{
   margin: 8px 10px;
-  padding: 7px 12px;
+  /* see .pill */
+  line-height: 14px;
+  padding: 8px 12px 7px;
   background: var(--glass-1);
   backdrop-filter: var(--glass-blur-card);
   -webkit-backdrop-filter: var(--glass-blur-card);
@@ -843,7 +847,9 @@ a:hover{ text-decoration: underline; }
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 12px;
+  /* see .pill: 1px of top padding drops the centered line by half a pixel,
+     which is what the 11px ascent/descent split is off by */
+  padding: 1px 12px 0;
   height: 100%;
   white-space: nowrap;
 }
@@ -1134,7 +1140,9 @@ a:hover{ text-decoration: underline; }
 .welcomeActionKey{
   font-size: 11px;
   color: var(--blue);
-  padding: 2px 8px;
+  /* see .pill: odd line-height + 1px extra top padding centers the cap band */
+  line-height: 17px;
+  padding: 3px 8px 2px;
   border-radius: 4px;
   background: var(--glass-dark);
   border: 1px solid var(--glass-border);
@@ -1219,7 +1227,11 @@ a:hover{ text-decoration: underline; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  /* see .pill: even line-height (12px font ⇒ 11px ascent + 3px descent) keeps
+     the baseline on a whole pixel, and the extra 1px of top padding centers
+     the cap band instead of letting it ride high */
+  line-height: 20px;
+  padding: 8px 14px 7px;
   border-radius: var(--radius-btn);
   border: 1px solid var(--glass-border);
   background: var(--glass-2);
@@ -1252,7 +1264,11 @@ a:hover{ text-decoration: underline; }
   font-family: var(--font);
   font-size: 11px;
   font-weight: 500;
-  padding: 3px 10px;
+  /* odd line-height keeps the baseline on a whole pixel; the extra 1px of
+     top padding offsets JetBrains Mono's asymmetric ascent/descent so the
+     cap band sits centered instead of riding high */
+  line-height: 17px;
+  padding: 4px 10px 3px;
   border-radius: var(--radius-btn);
   color: var(--fg-dark);
   background: var(--glass-2);
@@ -1351,7 +1367,9 @@ a:hover{ text-decoration: underline; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8px;
-  padding: 2px 7px;
+  /* see .sidebarHints kbd for the 10px padding split */
+  line-height: 16px;
+  padding: 2px 7px 3px;
   border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -1395,7 +1413,9 @@ a:hover{ text-decoration: underline; }
   gap: 4px;
   font-size: 10px;
   color: var(--yellow);
-  padding: 3px 8px;
+  /* see .sidebarHints kbd for the 10px padding split */
+  line-height: 16px;
+  padding: 3px 8px 4px;
   border-radius: 4px;
   background: color-mix(in srgb, var(--yellow) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--yellow) 25%, transparent);
@@ -1408,7 +1428,9 @@ a:hover{ text-decoration: underline; }
   gap: 4px;
   font-size: 10px;
   color: var(--cyan);
-  padding: 3px 8px;
+  /* see .sidebarHints kbd for the 10px padding split */
+  line-height: 16px;
+  padding: 3px 8px 4px;
   border-radius: 4px;
   background: color-mix(in srgb, var(--cyan) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
@@ -1431,7 +1453,9 @@ a:hover{ text-decoration: underline; }
   background: var(--glass-1);
   border: 1px solid var(--glass-border-strong);
   color: var(--comment);
-  padding: 3px 9px;
+  /* see .pill */
+  line-height: 13px;
+  padding: 4px 9px 3px;
   border-radius: var(--radius-btn);
   font-size: 11px;
   font-family: var(--font);
