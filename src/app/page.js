@@ -1245,20 +1245,39 @@ export default function Page() {
         }
       }
 
-      // gg / G jump
+      // gg / G jump — the ring rides along and lands on the first/last element,
+      // the way vim's cursor lands on the first/last line. Scrolling alone would
+      // strand the selection off screen, where the scroll handler fades it out
+      // and the next j/k has to guess a new anchor.
       if (view === "editor" && editorRef.current) {
+        const jumpTo = (edge) => {
+          const editor = editorRef.current;
+          // our own smooth scroll is in flight for a while: mark it so moveNav
+          // doesn't read the not-yet-arrived selection as "scrolled away"
+          progScrollRef.current = performance.now();
+          editor.scrollTo({ top: edge === "top" ? 0 : editor.scrollHeight, behavior: "smooth" });
+          navInsideRef.current = null; // jumping away leaves any card we were in
+          const els = collectNav().sort((a, b) => {
+            const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+            return ra.top - rb.top || ra.left - rb.left;
+          });
+          const el = edge === "top" ? els[0] : els[els.length - 1];
+          // scroll: false — the jump above already goes further than
+          // scrollIntoView would, and a second animation would fight it
+          if (el) setNavSel(el, { scroll: false });
+        };
         if (e.key === "g") {
           // wait for second g
           const handler = (e2) => {
             document.removeEventListener("keydown", handler);
-            if (e2.key === "g") editorRef.current.scrollTo({ top: 0, behavior: "smooth" });
+            if (e2.key === "g") jumpTo("top");
           };
           document.addEventListener("keydown", handler);
           setTimeout(() => document.removeEventListener("keydown", handler), 500);
           return;
         }
         if (e.key === "G" && e.shiftKey) {
-          editorRef.current.scrollTo({ top: editorRef.current.scrollHeight, behavior: "smooth" });
+          jumpTo("bottom");
           return;
         }
       }
@@ -1266,7 +1285,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, notify, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, notify, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel, collectNav]);
 
   /* ── keep the focus ring aligned when the layout reflows ──
      A window resize is a correction, not a navigation, so the ring snaps. The
