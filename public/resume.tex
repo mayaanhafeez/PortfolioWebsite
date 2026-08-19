@@ -1,0 +1,161 @@
+%-------------------------
+% Resume in LaTeX
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[letterpaper,margin=0.5in]{geometry}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{multicol}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\footskip}{4.08003pt}
+
+% Section formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure PDF is machine readable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, label=\textbullet, itemsep=0pt, topsep=2pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Ayaan Hafeez} \\ \vspace{1pt}
+    \small (587) 938-1534 $|$ \href{mailto:mhafeez1@ualberta.ca}{\underline{mhafeez1@ualberta.ca}} $|$
+    \href{https://linkedin.com/in/ayaanhafeez}{\underline{linkedin.com/in/ayaanhafeez}} $|$
+    \href{https://github.com/mayaanhafeez}{\underline{github.com/mayaanhafeez}} $|$
+    \href{https://ayaanhafeez.dev}{\underline{ayaanhafeez.dev}} $|$
+    \href{https://the-rubber-duck-blog.vercel.app/}{\underline{blog}}
+\end{center}
+
+%-----------SUMMARY-----------
+\section{Summary}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     Computer Engineering student with production experience spanning AI systems, full-stack development, quality assurance, and requirements engineering. Shipped LLM pipelines, NL2SQL chatbots, and REST APIs at Elev8AI while working directly with customers to define project requirements and translate business workflows into technical designs.
+    }}
+ \end{itemize}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Alberta}{Edmonton, AB}
+      {BSc in Computer Engineering Co-op Software Option}{May 2028}
+      \resumeItemListStart
+        \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Organization \& Assembly, Software Requirements, Digital Logic, Signals \& Systems, Database Management, Operating Systems, Software Testing \& Maintenance}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages:}{ Python, Java, C/C++, Rust, Swift, JavaScript/TypeScript, Kotlin, Lua, SQL, Bash, ARM/MIPS, VHDL} \\
+     \textbf{Frameworks:}{ FastAPI, Next.js, React, LangChain, ratatui, tokio, AppKit/Cocoa, SQLAlchemy, scikit-learn, NumPy, pandas} \\
+     \textbf{Tools:}{ Git, Docker, PostgreSQL, SQLite, Redis, ChromaDB, Selenium, Ollama, Gemini/OpenAI/Anthropic APIs, AWS, Stripe, tmux, mosh} \\
+     \textbf{Hardware / Vision:}{ OpenCV, ML Kit, AWS Rekognition, FPGA, Arduino, Raspberry Pi, ARM Cortex-M4}
+    }}
+ \end{itemize}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {AI Developer}{May 2025 -- Present}
+      {Elev8AI}{Remote}
+      \resumeItemListStart
+        \resumeItem{Architected an NL2SQL network-monitoring chatbot using LangChain, Ollama, ChromaDB, and PostgreSQL with RAG retrieval and session-aware context management, achieving 85\% answer accuracy on internal benchmarks}
+        \resumeItem{Led customer requirements discussions for AI and ERP projects, translating business processes into scoped requirements, workflows, data models, and implementation plans}
+        \resumeItem{Designed ERP modules and performed functional QA across end-to-end business scenarios, validating workflows with customers before delivery}
+        \resumeItem{Built a full-stack social media platform with a FastAPI backend, PostgreSQL/Redis, RBAC and JWT authentication, Stripe subscriptions, ML identity verification, and a React/TypeScript frontend deployed through Docker and nginx}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+    \resumeProjectHeading
+          {\textbf{Bare Metal Raspberry Pi OS} $|$ \emph{C, ARM Assembly, Raspberry Pi}}{Apr -- Jul 2026}
+          \resumeItemListStart
+            \resumeItem{Built a bare-metal OS kernel for Raspberry Pi 3 in C and ARM Assembly across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory, with zero external library or OS dependencies}
+            \resumeItem{Implemented a preemptive process scheduler and fork-based process isolation using ARM exception levels and a per-process page table, supporting concurrent execution across all 4 CPU cores}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/vorssaint/vorssaint-utils/pull/624}{\textbf{Vorssaint -- Open-Source Contribution}} $|$ \emph{Swift, Core Graphics, macOS}}{Aug 2026}
+          \resumeItemListStart
+            \resumeItem{Fixed a display-recovery bug in a 5.5K-star macOS utility with 115K+ GitHub release downloads that could leave laptops without a usable screen after disconnecting an external monitor}
+            \resumeItem{Implemented topology-aware recovery that excludes virtual displays, restores stranded physical displays, and adds regression tests for headless configurations; merged in PR \#624}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/mayaanhafeez/macwifi}{\textbf{macwifi -- Wi-Fi TUI for macOS}} $|$ \emph{Rust, ratatui, tokio, CoreWLAN}}{Jun -- Jul 2026}
+          \resumeItemListStart
+            \resumeItem{Built a clean-room macOS port of Impala in Rust with WPA-Enterprise and hidden-network support; designed a Unix-socket daemon/client architecture integrating CoreWLAN, Keychain, LaunchAgent, and code signing}
+            \resumeItem{Exposed Wi-Fi operations and speed tests through a CLI with streamed JSONL events, enabling custom connectivity frontends including a SketchyBar Wi-Fi popup}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/mayaanhafeez/ssht}{\textbf{ssht -- Persistent SSH Sessions}} $|$ \emph{Rust, ratatui, tokio, SQLite, tmux, mosh}}{Jun -- Aug 2026}
+          \resumeItemListStart
+            \resumeItem{Built a Rust SSH workflow for resumable tmux sessions with recursive config parsing, concurrent remote probes, SQLite history, fuzzy search, and Mosh/local-echo modes}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/mayaanhafeez/TerminalMystery}{\textbf{Terminal Mystery -- Terminal-Based Murder Mystery}} $|$ \emph{Lua, LÖVE}}{May -- Sep 2026}
+          \resumeItemListStart
+            \resumeItem{Built a narrative puzzle game around a virtual filesystem where players investigate rooms, inspect evidence, and correlate clues using progressively unlocked terminal commands such as cd, cat, and grep}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
