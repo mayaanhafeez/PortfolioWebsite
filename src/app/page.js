@@ -1646,10 +1646,17 @@ export default function Page() {
                       Ayaan Hafeez<span className="heroDot">.</span><span className="heroCursor" />
                     </h1>
                     <p className="heroSub">
-                      Computer Engineering student at the University of Alberta with production experience across
-                      full-stack development, AI/LLM pipelines, and low-level systems programming —
-                      AI Developer @ Elev8AI, shipping NL2SQL chatbots, REST APIs, API scrapers, and Android ML apps;
-                      personal projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
+                      Computer Engineering student at the University of Alberta with production experience spanning
+                      AI systems, full-stack development, quality assurance, and requirements engineering —
+                      AI Developer @ Elev8AI, shipping LLM pipelines, NL2SQL chatbots, and REST APIs while working
+                      directly with customers to translate business workflows into technical designs; personal
+                      projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
+                    </p>
+                    <p className="heroSub heroOss">
+                      <span className="heroOssLabel">Open source contributions:</span> Vorssaint — fixed a
+                      display-recovery bug in a 5.5K-star macOS utility (115K+ release downloads) that could strand
+                      a laptop without a usable screen after unplugging an external monitor; merged in{" "}
+                      <a href="https://github.com/vorssaint/vorssaint-utils/pull/624" target="_blank" rel="noreferrer">PR #624</a>.
                     </p>
                   </div>
                   <div className="ctaRow">
@@ -1661,7 +1668,7 @@ export default function Page() {
                   <div className="pillRow">
                     <Pill>AI / RAG / NL2SQL</Pill>
                     <Pill>FastAPI + PostgreSQL</Pill>
-                    <Pill>Kotlin + Compose</Pill>
+                    <Pill>Requirements + QA</Pill>
                     <Pill>React + Node</Pill>
                     <Pill>Bare Metal OS / ARM</Pill>
                     <Pill>Embedded + FPGA</Pill>

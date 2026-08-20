@@ -1221,6 +1221,11 @@ a:hover{ text-decoration: underline; }
   margin-bottom: 20px;
 }
 
+/* second line under the intro blurb: same type as .heroSub, but .heroHead
+   zeroes that rule's bottom margin, so the gap has to come from the top */
+.heroOss{ margin-top: 12px; }
+.heroOssLabel{ color: var(--fg); font-weight: 600; }
+
 .ctaRow{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
 
 .btn{
