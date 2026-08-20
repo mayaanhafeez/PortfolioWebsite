@@ -550,6 +550,7 @@ export default function Page() {
   const lastLayoutResizeRef = useRef(0); // when the pane/window last changed size
   const lastMoveRef = useRef(0); // when the keyboard last moved the selection
   const progScrollRef = useRef(0); // when we last kicked off our own scroll
+  const hoverLockRef = useRef(0); // deadline: while now < this, a scroll we started owns the ring
   const toastIdRef = useRef(0); // monotonic toast key
 
   /* ── helpers ── */
@@ -573,6 +574,7 @@ export default function Page() {
   const scrollTo = useCallback((id) => {
     const el = sectionRefs.current[id];
     if (el && editorRef.current) {
+      hoverLockRef.current = performance.now() + 900; // a section jump is a long smooth scroll
       editorRef.current.scrollTo({ top: el.offsetTop - 12, behavior: "smooth" });
       setActive(id);
     }
@@ -911,6 +913,7 @@ export default function Page() {
       // selection can briefly measure as off-screen, which must not be
       // mistaken for the user having scrolled away from it (see moveNav)
       progScrollRef.current = performance.now();
+      hoverLockRef.current = performance.now() + 400;
       el.scrollIntoView({ block: "nearest", behavior: smooth ? "smooth" : "auto" });
     }
     positionRing(el, { animate });
@@ -962,7 +965,9 @@ export default function Page() {
      hovering a card selects the card, and once you've entered a card, hovering
      its own links/buttons selects those; moving off the card drops back out.
      Uses mousemove (not mouseover) so a keyboard-driven scroll under a still
-     cursor doesn't yank the ring away from where the keyboard just put it. ── */
+     cursor doesn't yank the ring away from where the keyboard just put it —
+     mouse-driven scrolling re-resolves from the last pointer position instead
+     (see onScroll below). ── */
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
@@ -977,6 +982,19 @@ export default function Page() {
         if (navSelRef.current === el) positionRing(el, { animate: false });
       }, 300);
     };
+    // what should be selected if the cursor is over `el`?
+    const hoverFrom = (el) => {
+      const inside = navInsideRef.current;
+      if (inside) {
+        const inner = el.closest("a[href], button");
+        if (inner && inside.contains(inner) && isNavable(inner)) { hoverTo(inner); return; }
+        if (inside.contains(el)) return; // on the card, between its controls
+        navInsideRef.current = null; // moved off it entirely → back to card level
+      }
+      const target = el.closest("[data-nav]") ?? el.closest("a[href], button");
+      if (!target || !editor.contains(target) || !isNavable(target)) return;
+      hoverTo(target);
+    };
     const onMove = (e) => {
       /* WebKit dispatches mousemove when content scrolls under a *stationary*
          cursor — the element beneath the pointer changed, so it synthesises a
@@ -988,25 +1006,59 @@ export default function Page() {
       if (pt && pt.x === e.clientX && pt.y === e.clientY) return;
       pointerRef.current = { x: e.clientX, y: e.clientY };
       inputModeRef.current = "mouse";
-
-      const inside = navInsideRef.current;
-      if (inside) {
-        const inner = e.target.closest("a[href], button");
-        if (inner && inside.contains(inner) && isNavable(inner)) { hoverTo(inner); return; }
-        if (inside.contains(e.target)) return; // on the card, between its controls
-        navInsideRef.current = null; // moved off it entirely → back to card level
-      }
-      const target = e.target.closest("[data-nav]") ?? e.target.closest("a[href], button");
-      if (!target || !editor.contains(target) || !isNavable(target)) return;
-      hoverTo(target);
+      hoverFrom(e.target);
     };
     const onLeave = () => { pointerRef.current = null; };
+    // the cursor leaving the window stops counting as hovering anything
+    const onWinBlur = () => { pointerRef.current = null; };
+    /* wheel/trackpad scrolling slides a different card under a stationary
+       cursor without firing a real mousemove, so re-resolve from the last
+       known pointer position.
+
+       This only applies while the pointer is the thing driving. Once a key is
+       pressed the keyboard owns the selection and keeps it until the cursor is
+       genuinely moved again — otherwise the scrolling that keyboard navigation
+       itself causes would feed straight back in and drag the ring to the
+       cursor, which is the same takeover Safari's synthetic mousemove caused.
+
+       hoverLockRef is the narrower guard for the pointer-driven case: a scroll
+       *we* started (:open, telescope, a card scrolled into view) shouldn't
+       re-point the ring at whatever slid under the cursor. It holds a deadline
+       rather than a timestamp, and scroll events deliberately don't extend it,
+       so continuous scrolling can't hold it open.
+
+       The hit-test is coalesced into a rAF and skipped when the pane didn't
+       actually move, so it costs at most one per frame. */
+    let raf = 0;
+    let lastTop = -1;
+    const resolveHover = () => {
+      raf = 0;
+      const pt = pointerRef.current;
+      if (!pt) return;
+      const el = document.elementFromPoint(pt.x, pt.y);
+      if (el && editor.contains(el)) hoverFrom(el);
+    };
+    const onScroll = () => {
+      if (inputModeRef.current !== "mouse") return;
+      if (performance.now() < hoverLockRef.current) return;
+      if (!pointerRef.current) return;
+      const top = editor.scrollTop;
+      if (top === lastTop) return; // a scroll event that didn't move anything
+      lastTop = top;
+      if (!raf) raf = requestAnimationFrame(resolveHover);
+    };
+
     editor.addEventListener("mousemove", onMove);
     editor.addEventListener("mouseleave", onLeave);
+    editor.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("blur", onWinBlur);
     return () => {
       clearTimeout(settle);
+      if (raf) cancelAnimationFrame(raf);
       editor.removeEventListener("mousemove", onMove);
       editor.removeEventListener("mouseleave", onLeave);
+      editor.removeEventListener("scroll", onScroll);
+      window.removeEventListener("blur", onWinBlur);
     };
   }, [view, setNavSel, positionRing]);
 
@@ -1294,6 +1346,7 @@ export default function Page() {
           // our own smooth scroll is in flight for a while: mark it so moveNav
           // doesn't read the not-yet-arrived selection as "scrolled away"
           progScrollRef.current = performance.now();
+          hoverLockRef.current = performance.now() + 900; // gg/G can scroll the whole page
           editor.scrollTo({ top: edge === "top" ? 0 : editor.scrollHeight, behavior: "smooth" });
           navInsideRef.current = null; // jumping away leaves any card we were in
           const els = collectNav().sort((a, b) => {
