@@ -331,7 +331,9 @@ PORTFOLIO INTERFACE
 ---
 
 ABOUT AYAAN
-3rd-year Computer Engineering student at University of Alberta. AI Developer at Elev8AI (May 2025 – present). Interests: systems programming, AI/ML, TUI tools, embedded systems.
+3rd-year Computer Engineering student at University of Alberta with production experience spanning AI systems, full-stack development, quality assurance, and requirements engineering. AI Developer at Elev8AI (May 2025 – present), shipping LLM pipelines, NL2SQL chatbots, and REST APIs while working directly with customers to translate business workflows into technical designs. Interests: systems programming, AI/ML, TUI tools, embedded systems.
+
+Open source contributions: Vorssaint — fixed a display-recovery bug in a 5.5K-star macOS utility (115K+ release downloads) that could strand a laptop without a usable screen after unplugging an external monitor; merged in PR #624 (https://github.com/vorssaint/vorssaint-utils/pull/624).
 
 Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | X: ${LINKS.x} | Resume: ${LINKS.resume} | Blog: ${LINKS.blog}
 
