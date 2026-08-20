@@ -542,6 +542,8 @@ export default function Page() {
   const aiInputRef = useRef(null);
   const navSelRef = useRef(null); // currently vim-selected DOM element
   const navInsideRef = useRef(null); // card we've "entered" (two-level nav)
+  const pointerRef = useRef(null); // last position the cursor was actually *moved* to
+  const inputModeRef = useRef("mouse"); // which device last genuinely drove the selection
   const focusRingRef = useRef(null); // the gliding selection outline
   const editorContentRef = useRef(null); // ring's positioning context
   const ringObsRef = useRef(null); // ResizeObserver watching the selected element
@@ -976,6 +978,17 @@ export default function Page() {
       }, 300);
     };
     const onMove = (e) => {
+      /* WebKit dispatches mousemove when content scrolls under a *stationary*
+         cursor — the element beneath the pointer changed, so it synthesises a
+         move. Keyboard navigation scrolls this pane, so on Safari every j/k
+         press produced a mousemove and the ring jumped to wherever the cursor
+         happened to rest. A move whose coordinates match the previous one is
+         the scroll, not the user, so it is not treated as pointer input. */
+      const pt = pointerRef.current;
+      if (pt && pt.x === e.clientX && pt.y === e.clientY) return;
+      pointerRef.current = { x: e.clientX, y: e.clientY };
+      inputModeRef.current = "mouse";
+
       const inside = navInsideRef.current;
       if (inside) {
         const inner = e.target.closest("a[href], button");
@@ -987,10 +1000,13 @@ export default function Page() {
       if (!target || !editor.contains(target) || !isNavable(target)) return;
       hoverTo(target);
     };
+    const onLeave = () => { pointerRef.current = null; };
     editor.addEventListener("mousemove", onMove);
+    editor.addEventListener("mouseleave", onLeave);
     return () => {
       clearTimeout(settle);
       editor.removeEventListener("mousemove", onMove);
+      editor.removeEventListener("mouseleave", onLeave);
     };
   }, [view, setNavSel, positionRing]);
 
@@ -1145,6 +1161,8 @@ export default function Page() {
   /* ── global keyboard shortcuts ── */
   useEffect(() => {
     const onKey = (e) => {
+      // the keyboard is driving until the pointer is genuinely moved again
+      inputModeRef.current = "keyboard";
       // don't intercept if user is in an input that isn't ours
       const tag = e.target.tagName;
       const isOurInput = e.target === cmdInputRef.current || e.target === teleInputRef.current || e.target === aiInputRef.current;
