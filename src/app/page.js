@@ -69,6 +69,7 @@ const THEMES = [
   { id: "hinterlands",          label: "Hinterlands"           },
   { id: "vanta-black",          label: "Vanta Black"           },
   { id: "retro-82",             label: "Retro '82"             },
+  { id: "drive",                label: "Drive"                 },
 ];
 
 // visual language layered on top of THEMES — a theme picks the palette,
@@ -178,7 +179,7 @@ const PROJECTS = [
     bullets: [
       "Single-page app styled as a Neovim editor: sidebar file tree, tabline, statusline, Telescope fuzzy finder (Ctrl+P), and full vim keybindings (j/k scroll, gg/G jump, : command mode).",
       "Agentic AI assistant (Gemini 3.5 Flash) with tool calls for navigating sections, switching themes, and opening links — responds to natural language like 'go to projects' or 'switch to gruvbox'. Streaming SSE responses.",
-      "15 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands, Vanta Black, Retro '82) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
+      "16 color themes (Tokyo Night, Catppuccin, Rosé Pine, Gruvbox, Nord, Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns, Andromeda, Hinterlands, Vanta Black, Retro '82, Drive) × 4 visual styles (Omarchy Rice, Neon Glass, Frosted Acrylic, Legacy), all persisted to localStorage; per-project 'Ask AI' buttons open a pre-prompted chat about that project.",
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
@@ -438,7 +439,7 @@ const HELP_DATA = [
   {
     title: "Display",
     cmds: [
-      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns, andromeda, hinterlands, vanta-black)" },
+      { cmd: ":theme <name>", desc: "Switch color scheme (tokyo-night, catppuccin, rose-pine, gruvbox, nord, dracula, one-dark, solarized, everforest, monokai, tomorrow-night-burns, andromeda, hinterlands, vanta-black, retro-82, drive)" },
       { cmd: ":theme", desc: "Cycle to next theme" },
       { cmd: "Ctrl+T", desc: "Cycle theme" },
       { cmd: ":style <name>", desc: "Switch visual style (rice, neon, acrylic, legacy)" },

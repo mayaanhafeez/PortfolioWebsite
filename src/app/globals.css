@@ -219,9 +219,25 @@
   --red:#f85525; --magenta:#3f8f8a; --teal:#8cbfb8;
 }
 
+/* Aether-generated Omarchy theme: soft sage and khaki on a deep forest ground.
+   Ported from the palette in ~/set-theme. The palette has no purple, so
+   --purple borrows its dusty-rose magenta; --teal follows --cyan the way the
+   other single-hue themes do. --blue is the palette's own accent (the colour
+   its window borders use), which puts it on the focus ring and the CTAs. */
+[data-theme="drive"] {
+  --bg:#10190f; --bg-dark:#0c130b; --bg-float:#1a231a; --bg-highlight:#283027;
+  --bg-sidebar:#0c130b; --bg-statusline:#0c130b; --bg-tabline:#0c130b;
+  --bg-tab-active:#10190f; --bg-tab-inactive:#0c130b;
+  --border:#283027; --border-highlight:#616560;
+  --fg:#cdd1b4; --fg-dark:#9a9d87; --comment:#616560;
+  --cyan:#9cd0aa; --blue:#8dbc94; --purple:#d2a8a8;
+  --green:#a5ca9c; --yellow:#c8cd94; --orange:#d1b18b;
+  --red:#c9a376; --magenta:#d2a8a8; --teal:#9cd0aa;
+}
+
 /* ══════════════════════════════════════
    STYLES — four switchable visual languages, layered on top of the
-   15 color THEMES above. A theme picks the palette; a style picks how
+   16 color THEMES above. A theme picks the palette; a style picks how
    glass/blur/radius/motion is built from that palette. Applied as
    body[data-style="…"], set from React (see STYLES in page.js).
    Every surface below reads these tokens, so no component CSS needs
