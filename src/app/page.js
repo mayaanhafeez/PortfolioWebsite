@@ -112,21 +112,6 @@ const PROJECTS = [
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
   },
   {
-    title: "Terminal Mystery",
-    subtitle: "Murder-mystery game played through a fake terminal",
-    type: "personal",
-    wip: true,
-    tech: ["Lua", "LÖVE"],
-    bullets: [
-      "The venue is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
-      "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
-      "Set at an AI startup's Series C launch party: the founder is dead, four suspects, solvable in one sitting.",
-    ],
-    links: [
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
-    ],
-  },
-  {
     title: "macwifi — Wi-Fi TUI for macOS",
     subtitle: "Clean-room macOS port of impala (Linux/iwd)",
     type: "personal",
@@ -153,6 +138,21 @@ const PROJECTS = [
     links: [
       { label: "crates.io", href: "https://crates.io/crates/ssht" },
       { label: "GitHub", href: "https://github.com/mayaanhafeez/ssht" },
+    ],
+  },
+  {
+    title: "Terminal Mystery",
+    subtitle: "Murder-mystery game played through a fake terminal",
+    type: "personal",
+    wip: true,
+    tech: ["Lua", "LÖVE"],
+    bullets: [
+      "The venue is a virtual filesystem — rooms are directories, evidence is files — solved by walking around, reading clues, and using grep.",
+      "Commands unlock progressively as you investigate; grep -r is the core mechanic for correlating evidence across rooms.",
+      "Set at an AI startup's Series C launch party: the founder is dead, four suspects, solvable in one sitting.",
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/TerminalMystery" },
     ],
   },
   {
