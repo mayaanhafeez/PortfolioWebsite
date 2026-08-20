@@ -13,6 +13,7 @@ const LINKS = {
   personalEmail: "m.ayaan.hafeez@gmail.com",
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
+  x: "https://x.com/mayaanhafeez",
   resume: "/resume.pdf",
   blog: "https://the-rubber-duck-blog.vercel.app/",
 };
@@ -22,6 +23,7 @@ const LINKS = {
 const LINK_HOSTS = {
   "github.com": "GitHub",
   "linkedin.com": "LinkedIn",
+  "x.com": "X",
   "crates.io": "crates.io",
   "pypi.org": "PyPI",
   "addons.mozilla.org": "Firefox Add-ons",
@@ -95,6 +97,7 @@ const WELCOME_ACTIONS = [
   { key: ":help", label: "Show all commands" },
   { key: ":github", label: "GitHub profile" },
   { key: ":linkedin", label: "LinkedIn profile" },
+  { key: ":x", label: "X profile" },
   { key: ":resume", label: "Download resume" },
   { key: ":blog", label: "Read my blog" },
 ];
@@ -387,6 +390,7 @@ const TELESCOPE_ITEMS = [
   ...SECTIONS.map((s) => ({ type: "section", id: s.id, icon: s.icon, label: s.label, desc: s.desc })),
   { type: "link", id: "github", icon: "🔗", label: "github", desc: "Open GitHub profile", href: LINKS.github },
   { type: "link", id: "linkedin", icon: "🔗", label: "linkedin", desc: "Open LinkedIn profile", href: LINKS.linkedin },
+  { type: "link", id: "x", icon: "🔗", label: "x", desc: "Open X profile", href: LINKS.x },
   { type: "link", id: "email", icon: "✉️", label: "email", desc: `Mail ${LINKS.email}`, href: `mailto:${LINKS.email}` },
   { type: "link", id: "resume", icon: "📎", label: "resume.pdf", desc: "Download resume", href: LINKS.resume },
   { type: "link", id: "blog", icon: "📝", label: "blog", desc: "Open The Rubber Duck Blog", href: LINKS.blog },
@@ -424,6 +428,7 @@ const HELP_DATA = [
     cmds: [
       { cmd: ":github", desc: "Open GitHub profile" },
       { cmd: ":linkedin", desc: "Open LinkedIn profile" },
+      { cmd: ":x  or  :twitter", desc: "Open X profile" },
       { cmd: ":email", desc: "Compose email" },
       { cmd: ":resume", desc: "Open resume PDF" },
       { cmd: ":blog", desc: "Open The Rubber Duck Blog" },
@@ -673,6 +678,7 @@ export default function Page() {
     // links
     if (cmd === "github" || cmd === "gh") { openLink(LINKS.github); flashMsg("Opening GitHub...", "success"); return; }
     if (cmd === "linkedin" || cmd === "li") { openLink(LINKS.linkedin); flashMsg("Opening LinkedIn...", "success"); return; }
+    if (cmd === "x" || cmd === "twitter") { openLink(LINKS.x); flashMsg("Opening X...", "success"); return; }
     if (cmd === "email" || cmd === "mail") { openLink(`mailto:${LINKS.email}`); flashMsg("Opening email...", "success"); return; }
     if (cmd === "resume" || cmd === "cv") { openLink(LINKS.resume); flashMsg("Opening resume...", "success"); return; }
     if (cmd === "blog") { openLink(LINKS.blog); flashMsg("Opening blog...", "success"); return; }
@@ -1128,8 +1134,9 @@ export default function Page() {
       case 3: setShowHelp(true); break;
       case 4: openLink(LINKS.github); break;
       case 5: openLink(LINKS.linkedin); break;
-      case 6: openLink(LINKS.resume); break;
-      case 7: openLink(LINKS.blog); break;
+      case 6: openLink(LINKS.x); break;
+      case 7: openLink(LINKS.resume); break;
+      case 8: openLink(LINKS.blog); break;
     }
   }, [enterEditor, openLink, openTelescope, notify]);
 
@@ -1580,9 +1587,17 @@ export default function Page() {
                 <span className="treeIcon">🔗</span>
                 <span className="treeName">linkedin</span>
               </a>
+              <a href={LINKS.x} target="_blank" rel="noreferrer" className="treeItem" style={{ textDecoration: "none" }}>
+                <span className="treeIcon">🔗</span>
+                <span className="treeName">x</span>
+              </a>
               <a href={LINKS.resume} className="treeItem" style={{ textDecoration: "none" }}>
                 <span className="treeIcon">📎</span>
                 <span className="treeName">resume.pdf</span>
+              </a>
+              <a href={LINKS.blog} target="_blank" rel="noreferrer" className="treeItem" style={{ textDecoration: "none" }}>
+                <span className="treeIcon">📝</span>
+                <span className="treeName">blog</span>
               </a>
             </div>
             <button className="sidebarAIBtn" onClick={() => setShowAI(true)}>
@@ -1734,6 +1749,8 @@ export default function Page() {
                     <span className="termLine" style={{ marginTop: 8 }}><span className="prompt">$</span> <span style={{ color: "var(--fg-dark)" }}>cat links.txt</span></span>
                     <span className="termLine"><a href={LINKS.github} target="_blank" rel="noreferrer">github.com/mayaanhafeez</a></span>
                     <span className="termLine"><a href={LINKS.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/ayaanhafeez</a></span>
+                    <span className="termLine"><a href={LINKS.x} target="_blank" rel="noreferrer">x.com/mayaanhafeez</a></span>
+                    <span className="termLine"><a href={LINKS.blog} target="_blank" rel="noreferrer">the-rubber-duck-blog.vercel.app</a></span>
                   </div>
                 </div>
                 <div style={{ marginTop: 12 }}>
@@ -1741,6 +1758,8 @@ export default function Page() {
                     <a className="btn" href={`mailto:${LINKS.email}`}>~/email</a>
                     <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
                     <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+                    <a className="btn ghost" href={LINKS.x} target="_blank" rel="noreferrer">~/x</a>
+                    <a className="btn ghost" href={LINKS.blog} target="_blank" rel="noreferrer">~/blog</a>
                   </div>
                 </div>
               </div>
