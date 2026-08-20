@@ -1670,8 +1670,10 @@ export default function Page() {
                   <div className="ctaRow">
                     <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
                     <a className="btn" href={LINKS.linkedin} target="_blank" rel="noreferrer">~/linkedin</a>
+                    <a className="btn" href={LINKS.x} target="_blank" rel="noreferrer">~/x</a>
                     <a className="btn ghost" href={`mailto:${LINKS.email}`}>~/email</a>
                     <a className="btn ghost" href={LINKS.resume}>~/resume.pdf</a>
+                    <a className="btn ghost" href={LINKS.blog} target="_blank" rel="noreferrer">~/blog</a>
                   </div>
                   <div className="pillRow">
                     <Pill>AI / RAG / NL2SQL</Pill>
