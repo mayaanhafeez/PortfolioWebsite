@@ -513,6 +513,13 @@ body::before{
   filter: blur(var(--mesh-blur));
   animation: var(--mesh-anim);
   pointer-events: none;
+  /* neon and acrylic blur this full-viewport layer by 70-130px and then run
+     meshBreathe on it forever. Without a layer of its own the browser redoes
+     that blur on every frame of the animation. Promoting it rasterises the
+     blur once and leaves only opacity varying, which the compositor animates
+     by itself. Hint only — nothing about how it draws changes. */
+  will-change: opacity;
+  transform: translateZ(0);
 }
 @keyframes meshBreathe{
   0%,100%{ opacity: .75; }
@@ -1565,6 +1572,14 @@ a:hover{ text-decoration: underline; }
   z-index: 20;
   opacity: 0;
   border-radius: 8px;
+  /* The width/height transition below is a real layout on every frame.
+     Containment keeps that layout from escaping this element, and the
+     promotion hint gives the transform half its own layer. `paint` is
+     deliberately absent — it would clip the box-shadow that draws the ring.
+     The ring is an empty, explicitly-sized leaf, so `size` containment
+     changes nothing about how it renders. */
+  contain: layout size style;
+  will-change: transform;
   box-shadow: 0 0 0 2px var(--cyan), 0 0 16px color-mix(in srgb, var(--cyan) 30%, transparent);
   transition:
     transform .28s cubic-bezier(.22, 1, .36, 1),
