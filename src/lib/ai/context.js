@@ -264,8 +264,9 @@ const EXPERIENCE = [
     time: "May 2025 – Present",
     bullets: [
       "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, session-aware context management, and CSV/graph artifact generation; 85% answer accuracy.",
-      "Multi-turn LangChain SQL agents and prompt pipelines for an AI trip-planning platform using GPT-4, enabling structured itinerary generation across database-backed and general-knowledge destinations.",
-      "Full-stack social media platform: FastAPI backend with RBAC, JWT auth, Stripe payments, and AWS Textract/Rekognition ML identity verification; React + TypeScript frontend served via nginx in Docker.",
+      "Led customer requirements discussions for AI and ERP projects, translating business processes into scoped requirements, workflows, data models, and implementation plans.",
+      "Designed ERP modules and performed functional QA across end-to-end business scenarios, validating workflows with customers before delivery.",
+      "Full-stack social media platform: FastAPI backend with PostgreSQL/Redis, RBAC, JWT auth, Stripe subscriptions, and AWS Textract/Rekognition ML identity verification; React + TypeScript frontend deployed through Docker and nginx.",
       "API documentation scraper (Selenium + OpenAI) crawling docs sites, GitHub repos, and PDFs into typed OpenAPI schemas — extracted 100+ endpoints, cutting developer hours by 90%.",
       "Android face-recognition attendance system in Kotlin + Jetpack Compose with CameraX and Google ML Kit — real-time face detection, head-pose estimation, and frame-level deduplication.",
     ],
