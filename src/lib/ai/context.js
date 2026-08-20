@@ -284,6 +284,7 @@ const SKILLS = {
 const LINKS = {
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
+  x: "https://x.com/mayaanhafeez",
   email: "mhafeez1@ualberta.ca",
   resume: "/resume.pdf",
   blog: "https://the-rubber-duck-blog.vercel.app/",
@@ -323,7 +324,7 @@ TOOLS: Call tools only when the user explicitly requests an action:
 
 PORTFOLIO INTERFACE
 - Sections: ${SECTIONS.join(", ")}
-- Commands: :open <section>, :theme <name>, :style <name>, :github, :linkedin, :email, :resume, :blog, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme), Ctrl+S (cycle style)
+- Commands: :open <section>, :theme <name>, :style <name>, :github, :linkedin, :x, :email, :resume, :blog, :help, Ctrl+P (fuzzy finder), Ctrl+T (cycle theme), Ctrl+S (cycle style)
 - Themes (${THEMES.length} available): ${THEMES.join(", ")}
 - Styles (${STYLES.length} available): ${STYLES.join(", ")}
 
@@ -332,7 +333,7 @@ PORTFOLIO INTERFACE
 ABOUT AYAAN
 3rd-year Computer Engineering student at University of Alberta. AI Developer at Elev8AI (May 2025 – present). Interests: systems programming, AI/ML, TUI tools, embedded systems.
 
-Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | Resume: ${LINKS.resume} | Blog: ${LINKS.blog}
+Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | X: ${LINKS.x} | Resume: ${LINKS.resume} | Blog: ${LINKS.blog}
 
 ---
 
