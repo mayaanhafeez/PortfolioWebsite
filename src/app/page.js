@@ -393,7 +393,7 @@ const TELESCOPE_ITEMS = [
   { type: "link", id: "x", icon: "🔗", label: "x", desc: "Open X profile", href: LINKS.x },
   { type: "link", id: "email", icon: "✉️", label: "email", desc: `Mail ${LINKS.email}`, href: `mailto:${LINKS.email}` },
   { type: "link", id: "resume", icon: "📎", label: "resume.pdf", desc: "Download resume", href: LINKS.resume },
-  { type: "link", id: "blog", icon: "📝", label: "blog", desc: "Open The Rubber Duck Blog", href: LINKS.blog },
+  { type: "link", id: "blog", icon: "🐤", label: "blog", desc: "Open The Rubber Duck Blog", href: LINKS.blog },
   { type: "action", id: "help", icon: "❓", label: ":help", desc: "Show all commands" },
 ];
 
@@ -1596,7 +1596,7 @@ export default function Page() {
                 <span className="treeName">resume.pdf</span>
               </a>
               <a href={LINKS.blog} target="_blank" rel="noreferrer" className="treeItem" style={{ textDecoration: "none" }}>
-                <span className="treeIcon">📝</span>
+                <span className="treeIcon">🐤</span>
                 <span className="treeName">blog</span>
               </a>
             </div>
