@@ -89,6 +89,18 @@ const PROJECTS = [
     type: "personal",
   },
   {
+    title: "agent-sudo-mac",
+    subtitle: "Touch ID sudo for coding agents on macOS — no tty required",
+    tech: ["Shell", "PAM", "sudo", "AppleScript", "Claude Code hooks"],
+    bullets: [
+      "Lets a coding agent run sudo on macOS, where a command with no controlling terminal otherwise dies instead of prompting. Ports the behavior Omarchy gets from polkit on Linux.",
+      "An asudo wrapper chains the two auth paths macOS won't combine on its own: cached credential, then Touch ID, then a GUI password dialog.",
+      "Installs as a tty-aware sudo shim on PATH, a Claude Code PreToolUse hook, or both — interactive shells keep the stock sudo.",
+    ],
+    links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/agent-sudo-mac" }],
+    type: "personal",
+  },
+  {
     title: "ayaanhafeez.dev — Portfolio",
     subtitle: "This site — Neovim-themed portfolio with an agentic AI assistant",
     tech: ["Next.js", "React", "JavaScript", "Gemini API", "Upstash Redis", "CSS"],
@@ -99,7 +111,7 @@ const PROJECTS = [
     ],
     links: [
       { label: "Live", href: "https://ayaanhafeez.dev" },
-      { label: "GitHub", href: "https://github.com/mayaanhafeez/portfolio" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/PortfolioWebsite" },
     ],
     type: "personal",
   },
