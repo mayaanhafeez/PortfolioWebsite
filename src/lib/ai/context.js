@@ -62,6 +62,21 @@ const PROJECTS = [
     type: "personal", wip: true,
   },
   {
+    title: "Kitsune — macOS Launcher",
+    subtitle: "Lua-configurable command launcher for macOS",
+    tech: ["Swift", "AppKit", "Lua 5.4", "Carbon", "Unix Sockets"],
+    bullets: [
+      "Press Option-Space to open a fast command panel for launching apps, browsing files, searching the web, running shell commands, and controlling macOS without leaving the keyboard.",
+      "Build custom nested menus and search providers in Lua, assign extra global shortcuts to any command, and change colors, spacing, fonts, and panel placement with a theme file that reloads as soon as it is saved.",
+      "Includes optional Vim navigation, clipboard history, per-result actions such as Reveal in Finder and Copy Path, launch at login, and a kitsunectl CLI for opening menus or running commands from scripts.",
+    ],
+    links: [
+      { label: "Live", href: "https://kitsune.ayaanhafeez.dev" },
+      { label: "GitHub", href: "https://github.com/mayaanhafeez/app_launcher" },
+    ],
+    type: "personal",
+  },
+  {
     title: "agent-usage — Coding-Agent Usage TUI",
     subtitle: "One dashboard for Claude Code, Codex, OpenCode, and Gemini CLI token usage",
     tech: ["Rust", "ratatui", "crossterm", "rusqlite", "reqwest", "sysinfo"],
