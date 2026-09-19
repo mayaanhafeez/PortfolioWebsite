@@ -1247,7 +1247,9 @@ a:hover{ text-decoration: underline; }
 /* second line under the intro blurb: same type as .heroSub, but .heroHead
    zeroes that rule's bottom margin, so the gap has to come from the top */
 .heroOss{ margin-top: 12px; }
-.heroOssLabel{ color: var(--fg); font-weight: 600; }
+.heroOssLabel{ display: block; color: var(--fg); font-weight: 600; margin-bottom: 4px; }
+.heroOss p{ margin: 0; }
+.heroOssProject{ color: var(--cyan); font-weight: 700; }
 
 .ctaRow{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
 

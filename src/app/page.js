@@ -136,8 +136,9 @@ const PROJECTS = [
     bullets: [
       "Wraps the system ssh binary (not a reimplementation) and runs tmux new-session -A on the remote, so connections survive sleep/network drops and reattach from any machine — ProxyJump, IdentityFile, and hardware keys all keep working.",
       "From-scratch SSH config parser handles Include globbing/recursion, Match blocks, and wildcard Host entries that naive line-scanners miss; falls back to known_hosts.",
-      "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes.",
+      "ratatui + nucleo fuzzy picker stays instant on long host lists; tokio fires live tmux-session probes concurrently in the background so opening never blocks on a slow host. SQLite stores last-connected times, counts, and notes, including attached tmux clients.",
       "Two modes for high-latency links: --local-echo edits shell lines locally and sends on Enter, dropping back to raw passthrough for full-screen apps, tab completion, and password prompts (Ctrl-] toggles it live); --mosh swaps the transport for Mosh — predictive echo everywhere, sessions that survive IP changes, and mosh-server auto-installed on the remote if missing.",
+      "Encrypted passphrase-protected vault stores optional host credentials and overrides locally; ships as a static binary with Homebrew, crates.io, Nix, Debian, Fedora, and Arch install paths.",
     ],
     links: [
       { label: "crates.io", href: "https://crates.io/crates/ssht" },
@@ -1767,12 +1768,19 @@ export default function Page() {
                       directly with customers to translate business workflows into technical designs; personal
                       projects span a bare-metal OS kernel, an EMG input device, and open-source developer tooling.
                     </p>
-                    <p className="heroSub heroOss">
-                      <span className="heroOssLabel">Open source contributions:</span> Vorssaint — fixed a
-                      display-recovery bug in a 5.5K-star macOS utility (115K+ release downloads) that could strand
-                      a laptop without a usable screen after unplugging an external monitor; merged in{" "}
-                      <a href="https://github.com/vorssaint/vorssaint-utils/pull/624" target="_blank" rel="noreferrer">PR #624</a>.
-                    </p>
+                    <div className="heroSub heroOss">
+                      <span className="heroOssLabel">Open source contributions:</span>
+                      <p><strong className="heroOssProject">Vorssaint</strong> — fixed a display-recovery bug in a
+                        5.5K-star macOS utility (115K+ release downloads) that could strand a laptop without a usable
+                        screen after unplugging an external monitor; merged in{" "}
+                        <a href="https://github.com/vorssaint/vorssaint-utils/pull/624" target="_blank" rel="noreferrer">PR #624</a>.
+                      </p>
+                      <p><strong className="heroOssProject">Hyprspace</strong> — an AeroSpace fork for advanced macOS
+                        window management; added smart single-window gaps, centered floating-window resizing, and
+                        centered default floating layouts; merged in{" "}
+                        <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035" target="_blank" rel="noreferrer">PR #4</a>.
+                      </p>
+                    </div>
                   </div>
                   <div className="ctaRow">
                     <a className="btn" href={LINKS.github} target="_blank" rel="noreferrer">~/github</a>
