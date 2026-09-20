@@ -363,7 +363,7 @@ ABOUT AYAAN
 
 Open source contributions:
 - Vorssaint — fixed a display-recovery bug in a 5.5K-star macOS utility (115K+ release downloads) that could strand a laptop without a usable screen after unplugging an external monitor; merged in PR #624 (https://github.com/vorssaint/vorssaint-utils/pull/624).
-- Hyprspace — an AeroSpace fork for advanced macOS window management; added smart single-window gaps, centered floating-window resizing, and centered default floating layouts; merged in PR #4 (https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035).
+- Hyprspace — an AeroSpace fork for advanced macOS window management; added smart single-window gaps, centered floating-window resizing, and centered default floating layouts in PR #4 (https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035); added configurable modifier-dragging for managed windows, with temporary floating and intelligent retiling at the drop target, in PR #5 (https://github.com/PeachlifeAB/hyprspace-core/pull/5).
 
 Contact: ${LINKS.email} | GitHub: ${LINKS.github} | LinkedIn: ${LINKS.linkedin} | X: ${LINKS.x} | Resume: ${LINKS.resume} | Blog: ${LINKS.blog}
 

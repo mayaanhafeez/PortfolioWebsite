@@ -1777,8 +1777,11 @@ export default function Page() {
                       </p>
                       <p><strong className="heroOssProject">Hyprspace</strong> — an AeroSpace fork for advanced macOS
                         window management; added smart single-window gaps, centered floating-window resizing, and
-                        centered default floating layouts; merged in{" "}
-                        <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035" target="_blank" rel="noreferrer">PR #4</a>.
+                        centered default floating layouts in{" "}
+                        <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035" target="_blank" rel="noreferrer">PR #4</a>;
+                        added configurable modifier-dragging for managed windows, with temporary floating and
+                        intelligent retiling at the drop target, in{" "}
+                        <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/5" target="_blank" rel="noreferrer">PR #5</a>.
                       </p>
                     </div>
                   </div>
