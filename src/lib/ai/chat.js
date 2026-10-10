@@ -1,7 +1,7 @@
 import { TOOL_DEFINITIONS } from "./tools";
 import { getGithubActivity } from "./github";
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash";
 
 // Tools resolved entirely server-side (pure data retrieval, no UI side effect) —
 // unlike navigate_section/set_theme/open_link, which round-trip to the client.
