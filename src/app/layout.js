@@ -10,7 +10,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // browser extensions (e.g. page-zoom ones adding style="zoom: 1") edit
+    // <html> before React hydrates; this only silences mismatches on its own attributes
+    <html lang="en" suppressHydrationWarning>
       <body>
         {children}
       </body>

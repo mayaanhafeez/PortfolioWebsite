@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
 import AIChat from "./components/AIChat";
 import ToastStack from "./components/Toast";
 
@@ -537,6 +537,23 @@ function ProjectCard({ p, onAskAI }) {
   );
 }
 
+/* ── a theme/style choice that starts from localStorage ──
+   The saved value is read through useSyncExternalStore, so hydration renders
+   the default (the server has no storage) and then switches, without a
+   setState call inside an effect. An explicit pick overrides the saved one,
+   and only a pick is persisted — writing the hydration-time default would
+   clobber the saved value before it is read. */
+const noSubscribe = () => () => {};
+function useSavedChoice(key, options, fallback) {
+  const [picked, setPicked] = useState(null);
+  const saved = useSyncExternalStore(noSubscribe, () => localStorage.getItem(key), () => null);
+  useEffect(() => {
+    if (picked) localStorage.setItem(key, picked);
+  }, [key, picked]);
+  const initial = options.some((o) => o.id === saved) ? saved : fallback;
+  return [picked ?? initial, setPicked];
+}
+
 /* ════════════════════════════════════════
    MAIN PAGE
    ════════════════════════════════════════ */
@@ -554,8 +571,8 @@ export default function Page() {
   const [showHelp, setShowHelp] = useState(false);
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
-  const [theme, setTheme] = useState("tokyo-night");
-  const [style, setStyle] = useState("rice");
+  const [theme, setTheme] = useSavedChoice("theme", THEMES, "tokyo-night");
+  const [style, setStyle] = useSavedChoice("style", STYLES, "rice");
   const [showAI, setShowAI] = useState(false);
   const [aiInitialPrompt, setAiInitialPrompt] = useState(null);
   const [aiMessages, setAiMessages] = useState([]);
@@ -813,7 +830,7 @@ export default function Page() {
 
     flashMsg(`E492: Not an editor command: ${cmd}`, "error");
     notify("error", `Not an editor command: ${cmd}`, "type :help for the full list");
-  }, [exitCommand, scrollTo, flashMsg, notify, openLink, enterEditor, view, theme, style]);
+  }, [exitCommand, scrollTo, flashMsg, notify, openLink, enterEditor, view, theme, style, setTheme, setStyle]);
 
   /* ── welcome banner: shrink the ASCII name to fit the viewport width ── */
   useEffect(() => {
@@ -835,28 +852,14 @@ export default function Page() {
     return () => window.removeEventListener("resize", fit);
   }, [view]);
 
-  /* ── theme: load from localStorage on mount ── */
-  useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved && THEMES.some((t) => t.id === saved)) setTheme(saved);
-  }, []);
-
-  /* ── theme: sync to <html> and persist ── */
+  /* ── theme: sync to <html> ── */
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  /* ── style: load from localStorage on mount ── */
-  useEffect(() => {
-    const saved = localStorage.getItem("style");
-    if (saved && STYLES.some((s) => s.id === saved)) setStyle(saved);
-  }, []);
-
-  /* ── style: sync to <body> and persist ── */
+  /* ── style: sync to <body> ── */
   useEffect(() => {
     document.body.dataset.style = style;
-    localStorage.setItem("style", style);
   }, [style]);
 
   /* ── open the telescope finder ── */
@@ -1405,7 +1408,7 @@ export default function Page() {
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, flashMsg, notify, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel, collectNav]);
+  }, [mode, view, showAI, showTelescope, showHelp, enterCommand, exitCommand, enterEditor, theme, style, setTheme, setStyle, flashMsg, notify, runWelcomeAction, welcomeIdx, moveNav, activateNav, exitCard, setNavSel, collectNav]);
 
   /* ── keep the focus ring aligned when the layout reflows ──
      A window resize is a correction, not a navigation, so the ring snaps. The

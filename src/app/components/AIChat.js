@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useEffectEvent, useRef } from "react";
 
 export default function AIChat({ messages, loading, onSend, onClose, inputRef, initialPrompt }) {
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
   const sentRef = useRef(false);
 
-  useEffect(() => {
+  const onOpen = useEffectEvent(() => {
     if (initialPrompt) {
       if (!sentRef.current) {
         sentRef.current = true;
@@ -16,6 +16,10 @@ export default function AIChat({ messages, loading, onSend, onClose, inputRef, i
     } else {
       inputRef?.current?.focus();
     }
+  });
+
+  useEffect(() => {
+    onOpen();
   }, []);
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function AIChat({ messages, loading, onSend, onClose, inputRef, i
 
   useEffect(() => {
     if (!loading) inputRef?.current?.focus();
-  }, [loading]);
+  }, [loading, inputRef]);
 
   function handleKeyDown(e) {
     if (e.key === "Escape") { onClose(); return; }
