@@ -1783,6 +1783,12 @@ export default function Page() {
                         intelligent retiling at the drop target, in{" "}
                         <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/5" target="_blank" rel="noreferrer">PR #5</a>.
                       </p>
+                      <p><strong className="heroOssProject">Omarchy</strong> — DHH&apos;s Arch + Hyprland Linux distro
+                        (44K+ stars, hundreds of thousands of ISO downloads); fixed a lopsided keyboard/hover highlight
+                        on the network panel&apos;s header actions and made the shell&apos;s shared square action button
+                        pixel-snap its icon dead-centre at fractional display scales; merged in{" "}
+                        <a href="https://github.com/omacom/omarchy/pull/8787" target="_blank" rel="noreferrer">PR #8787</a>.
+                      </p>
                     </div>
                   </div>
                   <div className="ctaRow">
