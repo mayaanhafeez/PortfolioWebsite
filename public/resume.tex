@@ -11,6 +11,7 @@
 \usepackage{verbatim}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Ayaan Hafeez -- Resume}, pdfauthor={Ayaan Hafeez}}
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
 \usepackage{tabularx}
@@ -80,82 +81,81 @@
     \href{https://the-rubber-duck-blog.vercel.app/}{\underline{blog}}
 \end{center}
 
-%-----------SUMMARY-----------
-\section{Summary}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-     Computer Engineering student with production experience spanning AI systems, full-stack development, quality assurance, and requirements engineering. Shipped LLM pipelines, NL2SQL chatbots, and REST APIs at Elev8AI while working directly with customers to define project requirements and translate business workflows into technical designs.
-    }}
- \end{itemize}
-
 %-----------EDUCATION-----------
 \section{Education}
   \resumeSubHeadingListStart
     \resumeSubheading
       {University of Alberta}{Edmonton, AB}
-      {BSc in Computer Engineering Co-op Software Option}{May 2028}
+      {BSc in Computer Engineering, Co-op, Software Option}{Expected May 2028}
       \resumeItemListStart
-        \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Organization \& Assembly, Software Requirements, Digital Logic, Signals \& Systems, Database Management, Operating Systems, Software Testing \& Maintenance}
+        \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Organization \& Assembly, Software Requirements, Digital Logic, Signals \& Systems, Operating Systems (in progress), Database Management (in progress), Software Testing \& Maintenance (in progress)}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
-
-%-----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-     \textbf{Languages:}{ Python, Java, C/C++, Rust, Swift, JavaScript/TypeScript, Kotlin, Lua, SQL, Bash, ARM/MIPS, VHDL} \\
-     \textbf{Frameworks:}{ FastAPI, Next.js, React, LangChain, ratatui, tokio, AppKit/Cocoa, SQLAlchemy, scikit-learn, NumPy, pandas} \\
-     \textbf{Tools:}{ Git, Docker, PostgreSQL, SQLite, Redis, ChromaDB, Selenium, Ollama, Gemini/OpenAI/Anthropic APIs, AWS, Stripe, tmux, mosh} \\
-     \textbf{Hardware / Vision:}{ OpenCV, ML Kit, AWS Rekognition, FPGA, Arduino, Raspberry Pi, ARM Cortex-M4}
-    }}
- \end{itemize}
 
 %-----------EXPERIENCE-----------
 \section{Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {AI Developer}{May 2025 -- Present}
-      {Elev8AI}{Remote}
+      {AI Developer (3 co-op terms, then part-time)}{Summer 2025, Winter 2026, Summer 2026 (co-op)}
+      {Elev8AI -- Remote}{Sep 2026 -- Present (part-time)}
       \resumeItemListStart
-        \resumeItem{Architected an NL2SQL network-monitoring chatbot using LangChain, Ollama, ChromaDB, and PostgreSQL with RAG retrieval and session-aware context management, achieving 85\% answer accuracy on internal benchmarks}
-        \resumeItem{Led customer requirements discussions for AI and ERP projects, translating business processes into scoped requirements, workflows, data models, and implementation plans}
-        \resumeItem{Designed ERP modules and performed functional QA across end-to-end business scenarios, validating workflows with customers before delivery}
-        \resumeItem{Built a full-stack social media platform with a FastAPI backend, PostgreSQL/Redis, RBAC and JWT authentication, Stripe subscriptions, ML identity verification, and a React/TypeScript frontend deployed through Docker and nginx}
+        \resumeItem{Built an NL2SQL network-monitoring chatbot with LangChain, Ollama, ChromaDB, and PostgreSQL, using RAG retrieval and session-aware context management; reached 85\% answer accuracy on internal benchmarks}
+        \resumeItem{Took part in customer requirements meetings for AI and ERP projects, turning business processes into scoped requirements, workflows, and data models}
+        \resumeItem{Designed ERP modules and ran functional QA across end-to-end business scenarios, validating workflows with customers before delivery}
+        \resumeItem{Built a full-stack social media platform: FastAPI backend with PostgreSQL/Redis, RBAC and JWT auth, Stripe subscriptions, ML identity verification, and a React/TypeScript frontend deployed with Docker and nginx}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
+
+%-----------OPEN SOURCE-----------
+\section{Open Source}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\href{https://github.com/omacom/omarchy/pull/8787}{\textbf{Omarchy -- PR \#8787 (merged)}} $|$ \emph{Arch + Hyprland Linux distro, 45K stars}}{Oct 2026}
+          \resumeItemListStart
+            \resumeItem{Fixed a lopsided keyboard/hover highlight on the network panel's header actions and made the shared square action button pixel-snap its icon at fractional display scales}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/vorssaint/vorssaint-utils/pull/624}{\textbf{Vorssaint -- PR \#624 (merged)}} $|$ \emph{Swift, Core Graphics; macOS utility, 29K stars}}{Aug 2026}
+          \resumeItemListStart
+            \resumeItem{Fixed a display-recovery bug that could leave a laptop with no usable screen after unplugging an external monitor: recovery now ignores virtual displays and switches stranded physical displays back on, with regression tests for headless setups}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Hyprspace} -- \href{https://github.com/PeachlifeAB/hyprspace-core/pull/4}{\underline{PR \#4}}, \href{https://github.com/PeachlifeAB/hyprspace-core/pull/5}{\underline{PR \#5}} (merged) $|$ \emph{Swift; AeroSpace fork for macOS window management}}{Sep 2026}
+          \resumeItemListStart
+            \resumeItem{Added smart single-window gaps, floating-window resize and centering keys, and modifier-drag to move windows with retiling on drop}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
 
 %-----------PROJECTS-----------
 \section{Projects}
     \resumeSubHeadingListStart
     \resumeProjectHeading
-          {\textbf{Bare Metal Raspberry Pi OS} $|$ \emph{C, ARM Assembly, Raspberry Pi}}{Apr -- Jul 2026}
+          {\href{https://github.com/mayaanhafeez/raspberry-pi-os}{\textbf{Bare-Metal Raspberry Pi 3 Kernel}} $|$ \emph{C, ARMv8 Assembly, QEMU}}{May -- Jul 2026}
           \resumeItemListStart
-            \resumeItem{Built a bare-metal OS kernel for Raspberry Pi 3 in C and ARM Assembly across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory, with zero external library or OS dependencies}
-            \resumeItem{Implemented a preemptive process scheduler and fork-based process isolation using ARM exception levels and a per-process page table, supporting concurrent execution across all 4 CPU cores}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\href{https://github.com/vorssaint/vorssaint-utils/pull/624}{\textbf{Vorssaint -- Open-Source Contribution}} $|$ \emph{Swift, Core Graphics, macOS}}{Aug 2026}
-          \resumeItemListStart
-            \resumeItem{Fixed a display-recovery bug in a 5.5K-star macOS utility with 115K+ GitHub release downloads that could leave laptops without a usable screen after disconnecting an external monitor}
-            \resumeItem{Implemented topology-aware recovery that excludes virtual displays, restores stranded physical displays, and adds regression tests for headless configurations; merged in PR \#624}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\href{https://github.com/mayaanhafeez/macwifi}{\textbf{macwifi -- Wi-Fi TUI for macOS}} $|$ \emph{Rust, ratatui, tokio, CoreWLAN}}{Jun -- Jul 2026}
-          \resumeItemListStart
-            \resumeItem{Built a clean-room macOS port of Impala in Rust with WPA-Enterprise and hidden-network support; designed a Unix-socket daemon/client architecture integrating CoreWLAN, Keychain, LaunchAgent, and code signing}
-            \resumeItem{Exposed Wi-Fi operations and speed tests through a CLI with streamed JSONL events, enabling custom connectivity frontends including a SketchyBar Wi-Fi popup}
+            \resumeItem{Following Sergey Matyukevich's raspberry-pi-os lesson series, implemented a single-core AArch64 kernel with no libc: boot and BSS setup, EL3/EL2 to EL1 transitions, exception vectors and timer IRQs, a mini UART driver, and a round-robin preemptive scheduler with context switching}
+            \resumeItem{Added EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process virtual memory: each task gets its own page tables and fork copies the parent's user pages; tested under QEMU}
           \resumeItemListEnd
       \resumeProjectHeading
           {\href{https://github.com/mayaanhafeez/ssht}{\textbf{ssht -- Persistent SSH Sessions}} $|$ \emph{Rust, ratatui, tokio, SQLite, tmux, mosh}}{Jun -- Aug 2026}
           \resumeItemListStart
-            \resumeItem{Built a Rust SSH workflow for resumable tmux sessions with recursive config parsing, concurrent remote probes, SQLite history, fuzzy search, and Mosh/local-echo modes}
+            \resumeItem{Built a Rust TUI that reattaches tmux sessions over SSH from any machine, with recursive \texttt{\textasciitilde/.ssh/config} parsing, concurrent remote probes, SQLite history, and fuzzy search; published on crates.io and Homebrew}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\href{https://github.com/mayaanhafeez/TerminalMystery}{\textbf{Terminal Mystery -- Terminal-Based Murder Mystery}} $|$ \emph{Lua, LÖVE}}{May -- Sep 2026}
+          {\href{https://github.com/mayaanhafeez/macwifi}{\textbf{macwifi -- Wi-Fi TUI for macOS}} $|$ \emph{Rust, ratatui, tokio, CoreWLAN}}{Jun -- Sep 2026}
           \resumeItemListStart
-            \resumeItem{Built a narrative puzzle game around a virtual filesystem where players investigate rooms, inspect evidence, and correlate clues using progressively unlocked terminal commands such as cd, cat, and grep}
+            \resumeItem{Built a clean-room macOS port of the Linux Wi-Fi TUI impala, with WPA-Enterprise and hidden-network support, using a Unix-socket daemon/client design over CoreWLAN, Keychain, and a LaunchAgent}
+            \resumeItem{Exposed Wi-Fi operations and speed tests through a CLI that streams JSONL events, which drives a custom SketchyBar Wi-Fi popup}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages:}{ Python, C, Rust, TypeScript} \\
+     \textbf{Tools:}{ Git, Docker, PostgreSQL, FastAPI, React, Linux}
+    }}
+ \end{itemize}
 
 %-------------------------------------------
 \end{document}
