@@ -1128,6 +1128,15 @@ a:hover{ text-decoration: underline; }
   max-width: 520px;
 }
 
+/* pulled up into .welcomeSub's bottom margin so the sub, links and actions read as one block */
+.welcomeLinks{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: -12px 0 24px;
+}
+
 .welcomeActions{
   display: flex;
   flex-direction: column;

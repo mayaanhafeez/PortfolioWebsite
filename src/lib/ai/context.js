@@ -14,8 +14,8 @@ const PROJECTS = [
     subtitle: "OS kernel from scratch in C and ARM Assembly",
     tech: ["C", "ARM Assembly", "Raspberry Pi"],
     bullets: [
-      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
-      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
+      "Following Sergey Matyukevich's raspberry-pi-os lesson series, implemented a single-core AArch64 kernel with no libc: boot and BSS setup, EL3/EL2 to EL1 transitions, exception vectors and timer IRQs, a mini UART driver, and a round-robin preemptive scheduler with context switching.",
+      "Added EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process virtual memory: each task gets its own page tables and fork copies the parent's user pages; tested under QEMU.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
     type: "personal",
@@ -289,7 +289,7 @@ const EXPERIENCE = [
   {
     role: "AI Developer",
     org: "Elev8AI",
-    time: "May 2025 – Present",
+    time: "Summer 2025, Winter 2026, Summer 2026 (co-op); part-time Sep 2026 – Present",
     bullets: [
       "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, session-aware context management, and CSV/graph artifact generation; 85% answer accuracy.",
       "Led customer requirements discussions for AI and ERP projects, translating business processes into scoped requirements, workflows, data models, and implementation plans.",
@@ -314,7 +314,7 @@ const LINKS = {
   linkedin: "https://linkedin.com/in/ayaanhafeez",
   x: "https://x.com/mayaanhafeez",
   email: "mhafeez1@ualberta.ca",
-  resume: "/resume.pdf",
+  resume: "/Ayaan_Hafeez_Resume.pdf",
   blog: "https://the-rubber-duck-blog.vercel.app/",
 };
 
@@ -359,10 +359,10 @@ PORTFOLIO INTERFACE
 ---
 
 ABOUT AYAAN
-3rd-year Computer Engineering student at University of Alberta with production experience spanning AI systems, full-stack development, quality assurance, and requirements engineering. AI Developer at Elev8AI (May 2025 – present), shipping LLM pipelines, NL2SQL chatbots, and REST APIs while working directly with customers to translate business workflows into technical designs. Interests: systems programming, AI/ML, TUI tools, embedded systems.
+4th-year Computer Engineering (Software Option) student at University of Alberta with production experience spanning AI systems, full-stack development, quality assurance, and requirements engineering. AI Developer at Elev8AI (co-op Summer 2025, Winter 2026, Summer 2026; part-time since Sep 2026), shipping LLM pipelines, NL2SQL chatbots, and REST APIs while working directly with customers to translate business workflows into technical designs. Interests: systems programming, AI/ML, TUI tools, embedded systems.
 
 Open source contributions:
-- Vorssaint — fixed a display-recovery bug in a 5.5K-star macOS utility (115K+ release downloads) that could strand a laptop without a usable screen after unplugging an external monitor; merged in PR #624 (https://github.com/vorssaint/vorssaint-utils/pull/624).
+- Vorssaint — fixed a display-recovery bug in a 29K-star macOS utility (840K+ release downloads) that could strand a laptop without a usable screen after unplugging an external monitor; merged in PR #624 (https://github.com/vorssaint/vorssaint-utils/pull/624).
 - Hyprspace — an AeroSpace fork for advanced macOS window management; added smart single-window gaps, centered floating-window resizing, and centered default floating layouts in PR #4 (https://github.com/PeachlifeAB/hyprspace-core/pull/4#issuecomment-5743462035); added configurable modifier-dragging for managed windows, with temporary floating and intelligent retiling at the drop target, in PR #5 (https://github.com/PeachlifeAB/hyprspace-core/pull/5).
 - Omarchy — DHH's Arch + Hyprland Linux distro (44K+ stars, hundreds of thousands of ISO downloads); fixed a lopsided keyboard/hover highlight on the network panel's header actions and made the shell's shared square action button pixel-snap its icon dead-centre at fractional display scales; merged in PR #8787 (https://github.com/omacom/omarchy/pull/8787).
 

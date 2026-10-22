@@ -14,7 +14,7 @@ const LINKS = {
   github: "https://github.com/mayaanhafeez",
   linkedin: "https://linkedin.com/in/ayaanhafeez",
   x: "https://x.com/mayaanhafeez",
-  resume: "/resume.pdf",
+  resume: "/Ayaan_Hafeez_Resume.pdf",
   blog: "https://the-rubber-duck-blog.vercel.app/",
 };
 
@@ -110,8 +110,8 @@ const PROJECTS = [
     type: "personal",
     tech: ["C", "ARM Assembly", "Raspberry Pi"],
     bullets: [
-      "Built a bare-metal OS kernel across 6 subsystems: bootloader, UART/GPIO drivers, interrupt controller, preemptive scheduler, system calls, and MMU-backed virtual memory — zero external dependencies.",
-      "Implemented preemptive process scheduler and fork-based process isolation using ARM exception levels and per-process page tables, supporting concurrent execution across all 4 CPU cores.",
+      "Following Sergey Matyukevich's raspberry-pi-os lesson series, implemented a single-core AArch64 kernel with no libc: boot and BSS setup, EL3/EL2 to EL1 transitions, exception vectors and timer IRQs, a mini UART driver, and a round-robin preemptive scheduler with context switching.",
+      "Added EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process virtual memory: each task gets its own page tables and fork copies the parent's user pages; tested under QEMU.",
     ],
     links: [{ label: "GitHub", href: "https://github.com/mayaanhafeez/raspberry-pi-os" }],
   },
@@ -393,7 +393,7 @@ const EXPERIENCE = [
   {
     role: "AI Developer",
     org: "Elev8AI",
-    time: "May 2025 – Present",
+    time: "Summer 2025, Winter 2026, Summer 2026 (co-op); part-time Sep 2026 – Present",
     location: "Remote",
     bullets: [
       "NL2SQL network-monitoring chatbot (LangChain, Ollama, ChromaDB, PostgreSQL) with intent classification, RAG retrieval, session-aware context management, and CSV/graph artifact generation; 85% answer accuracy.",
@@ -743,7 +743,7 @@ export default function Page() {
 
     // whoami
     if (cmd === "whoami") {
-      flashMsg("ayaan — 3rd-year CompE student, AI Developer @ Elev8AI", "info");
+      flashMsg("ayaan — 4th-year CompE student, AI Developer @ Elev8AI", "info");
       return;
     }
 
@@ -1732,6 +1732,13 @@ export default function Page() {
               <div className="welcomeSub">
                 AI Developer @ Elev8AI — LLM pipelines, backends, Android apps, bare-metal systems.
               </div>
+              {/* plain links so nobody needs a keybinding to reach the essentials */}
+              <nav className="welcomeLinks" aria-label="Contact and resume">
+                <a className="btn" href={LINKS.resume} target="_blank" rel="noreferrer">Resume</a>
+                <a className="btn ghost" href={LINKS.github} target="_blank" rel="noreferrer">GitHub</a>
+                <a className="btn ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+                <a className="btn ghost" href={`mailto:${LINKS.email}`}>Email</a>
+              </nav>
               <div className="welcomeActions">
                 {WELCOME_ACTIONS.map((action, i) => (
                   <div
@@ -1774,7 +1781,7 @@ export default function Page() {
                     <div className="heroSub heroOss">
                       <span className="heroOssLabel">Open source contributions:</span>
                       <p><strong className="heroOssProject">Vorssaint</strong> — fixed a display-recovery bug in a
-                        5.5K-star macOS utility (115K+ release downloads) that could strand a laptop without a usable
+                        29K-star macOS utility (840K+ release downloads) that could strand a laptop without a usable
                         screen after unplugging an external monitor; merged in{" "}
                         <a href="https://github.com/vorssaint/vorssaint-utils/pull/624" target="_blank" rel="noreferrer">PR #624</a>.
                       </p>
