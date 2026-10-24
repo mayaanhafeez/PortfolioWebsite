@@ -16,23 +16,25 @@ or systems programming** roles, spending under a minute on the page.
 - Canonical / og:url: `https://www.ayaanhafeez.dev/`
 - og:image: `https://www.ayaanhafeez.dev/opengraph-image` (1200×630)
 
-## Links (must be visible on the first screen, as normal links)
+## Links (must be visible on the first screen, as normal links: resume, GitHub, LinkedIn, blog)
 
 - Resume: https://www.ayaanhafeez.dev/Ayaan_Hafeez_Resume.pdf
 - GitHub: https://github.com/mayaanhafeez
 - LinkedIn: https://www.linkedin.com/in/ayaanhafeez
 - Email: mhafeez1@ualberta.ca (mailto:)
 - Personal email: m.ayaan.hafeez@gmail.com (mailto:)
-- Secondary (footer only): Blog https://the-rubber-duck-blog.vercel.app/
+- Blog: https://the-rubber-duck-blog.vercel.app/ (also in the footer)
+- The two emails live in the contact section, not the first-screen links.
 
 ## Hero
 
 - Name: **Ayaan Hafeez**
-- One-line pitch: **I build backend services, AI systems, and low-level software.**
-- Supporting line: 4th-year Computer Engineering (Software Option) at the University of
-  Alberta. Three co-op terms as an AI Developer at Elev8AI. Looking for 2027 internships
-  in backend, AI infrastructure, and systems.
-- Location: Edmonton, AB
+- One-line pitch, shown as the first of five short bullets in the hero:
+  - Backend services, AI systems, and low-level software
+  - 4th-year Computer Engineering (Software Option), University of Alberta
+  - 3 co-op terms as an AI Developer at Elev8AI
+  - Looking for 2027 internships
+  - Edmonton, AB
 
 ---
 
@@ -190,4 +192,4 @@ and a proof element.
 ## Contact (closing section)
 
 - Short line: "The fastest way to reach me is email."
-- mhafeez1@ualberta.ca · m.ayaan.hafeez@gmail.com · GitHub · LinkedIn · Resume (PDF)
+- mhafeez1@ualberta.ca · m.ayaan.hafeez@gmail.com · LinkedIn
