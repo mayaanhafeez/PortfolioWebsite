@@ -45,6 +45,21 @@
   <!-- the tube switching on: decorative, CSS-only, gone after ~1s -->
   <div class="power" aria-hidden="true"><div class="half top"></div><div class="half bottom"></div><div class="hotline"></div></div>
 
+  <!-- tmux-style window list; the current section is marked by script.js when it runs -->
+  <nav class="tabs" aria-label="Sections">
+    <span class="session" aria-hidden="true">ayaan</span>
+    <ol>
+      <li><a href="#top"><span class="n" aria-hidden="true">0:</span>home</a></li>
+      <li><a href="#experience"><span class="n" aria-hidden="true">1:</span>experience</a></li>
+      <li><a href="#open-source"><span class="n" aria-hidden="true">2:</span>open-source</a></li>
+      <li><a href="#projects"><span class="n" aria-hidden="true">3:</span>projects</a></li>
+      <li><a href="#more"><span class="n" aria-hidden="true">4:</span>more</a></li>
+      <li><a href="#skills"><span class="n" aria-hidden="true">5:</span>skills</a></li>
+      <li><a href="#education"><span class="n" aria-hidden="true">6:</span>education</a></li>
+      <li><a href="#contact"><span class="n" aria-hidden="true">7:</span>contact</a></li>
+    </ol>
+  </nav>
+
   <div class="screen">
     <header class="hero" id="top">
       <svg class="banner" viewBox="0 0 282 110" aria-hidden="true" focusable="false" shape-rendering="crispEdges"><g fill="currentColor"><rect x="6" y="0" width="30" height="10"/><rect x="48" y="0" width="12" height="10"/><rect x="84" y="0" width="12" height="10"/><rect x="108" y="0" width="30" height="10"/><rect x="156" y="0" width="30" height="10"/><rect x="198" y="0" width="18" height="10"/><rect x="240" y="0" width="12" height="10"/><rect x="0" y="10" width="12" height="10"/><rect x="30" y="10" width="12" height="10"/><rect x="54" y="10" width="12" height="10"/><rect x="78" y="10" width="12" height="10"/><rect x="102" y="10" width="12" height="10"/><rect x="132" y="10" width="12" height="10"/><rect x="150" y="10" width="12" height="10"/><rect x="180" y="10" width="12" height="10"/><rect x="198" y="10" width="24" height="10"/><rect x="240" y="10" width="12" height="10"/><rect x="0" y="20" width="42" height="10"/><rect x="60" y="20" width="24" height="10"/><rect x="102" y="20" width="42" height="10"/><rect x="150" y="20" width="42" height="10"/><rect x="198" y="20" width="12" height="10"/><rect x="216" y="20" width="12" height="10"/><rect x="240" y="20" width="12" height="10"/><rect x="0" y="30" width="12" height="10"/><rect x="30" y="30" width="12" height="10"/><rect x="66" y="30" width="12" height="10"/><rect x="102" y="30" width="12" height="10"/><rect x="132" y="30" width="12" height="10"/><rect x="150" y="30" width="12" height="10"/><rect x="180" y="30" width="12" height="10"/><rect x="198" y="30" width="12" height="10"/><rect x="222" y="30" width="12" height="10"/><rect x="240" y="30" width="12" height="10"/><rect x="0" y="40" width="12" height="10"/><rect x="30" y="40" width="12" height="10"/><rect x="66" y="40" width="12" height="10"/><rect x="102" y="40" width="12" height="10"/><rect x="132" y="40" width="12" height="10"/><rect x="150" y="40" width="12" height="10"/><rect x="180" y="40" width="12" height="10"/><rect x="198" y="40" width="12" height="10"/><rect x="228" y="40" width="24" height="10"/><rect x="0" y="60" width="12" height="10"/><rect x="30" y="60" width="12" height="10"/><rect x="54" y="60" width="30" height="10"/><rect x="96" y="60" width="42" height="10"/><rect x="144" y="60" width="42" height="10"/><rect x="192" y="60" width="42" height="10"/><rect x="240" y="60" width="42" height="10"/><rect x="0" y="70" width="12" height="10"/><rect x="30" y="70" width="12" height="10"/><rect x="48" y="70" width="12" height="10"/><rect x="78" y="70" width="12" height="10"/><rect x="96" y="70" width="12" height="10"/><rect x="144" y="70" width="12" height="10"/><rect x="192" y="70" width="12" height="10"/><rect x="258" y="70" width="18" height="10"/><rect x="0" y="80" width="42" height="10"/><rect x="48" y="80" width="42" height="10"/><rect x="96" y="80" width="30" height="10"/><rect x="144" y="80" width="30" height="10"/><rect x="192" y="80" width="30" height="10"/><rect x="252" y="80" width="18" height="10"/><rect x="0" y="90" width="12" height="10"/><rect x="30" y="90" width="12" height="10"/><rect x="48" y="90" width="12" height="10"/><rect x="78" y="90" width="12" height="10"/><rect x="96" y="90" width="12" height="10"/><rect x="144" y="90" width="12" height="10"/><rect x="192" y="90" width="12" height="10"/><rect x="246" y="90" width="18" height="10"/><rect x="0" y="100" width="12" height="10"/><rect x="30" y="100" width="12" height="10"/><rect x="48" y="100" width="12" height="10"/><rect x="78" y="100" width="12" height="10"/><rect x="96" y="100" width="12" height="10"/><rect x="144" y="100" width="42" height="10"/><rect x="192" y="100" width="42" height="10"/><rect x="240" y="100" width="42" height="10"/></g></svg>
@@ -65,16 +80,6 @@
         <p class="status">STATUS: OPEN TO 2027 INTERNSHIPS</p>
       </div>
     </header>
-
-    <nav class="toc" aria-label="Sections">
-      <a href="#experience">experience</a>
-      <a href="#open-source">open-source</a>
-      <a href="#projects">projects</a>
-      <a href="#more">more</a>
-      <a href="#skills">skills</a>
-      <a href="#education">education</a>
-      <a href="#contact">contact</a>
-    </nav>
 
     <main id="main">
       <section id="experience">

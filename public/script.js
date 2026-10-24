@@ -39,3 +39,23 @@
 
   bar.querySelector(".hint").textContent = "type : for commands";
 })();
+
+// Mark the section in view on the tab bar, the way tmux marks the active window.
+(() => {
+  const bar = document.querySelector(".tabs");
+  if (!bar || !("IntersectionObserver" in window)) return;
+  const links = new Map([...bar.querySelectorAll("a")].map((a) => [a.hash.slice(1), a]));
+  const mark = (id) => {
+    links.forEach((a, key) => (key === id ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+    const a = links.get(id);
+    // keep the active tab visible when the bar is scrolled sideways on a phone
+    if (a && (a.offsetLeft < bar.scrollLeft || a.offsetLeft + a.offsetWidth > bar.scrollLeft + bar.clientWidth)) {
+      bar.scrollLeft = a.offsetLeft - 16;
+    }
+  };
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.isIntersecting && mark(e.target.id)),
+    { rootMargin: "-45% 0px -50% 0px" } // the section crossing the middle of the screen
+  );
+  links.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+})();

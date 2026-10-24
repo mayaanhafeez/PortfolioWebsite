@@ -16,6 +16,7 @@
   --rose: #eb6f92;
 
   --pad: clamp(16px, 4.5vw, 48px);
+  --bar: 44px;  /* top tab bar height, also its tap-target height */
   --col: 800px; /* the banner fills it, so the hero and every section share one centred column */
   --glow: 0 0 8px rgba(156, 207, 216, 0.22); /* faint phosphor, only on a few hero lines */
 
@@ -24,7 +25,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--bar) + 16px); }
 
 body {
   margin: 0;
@@ -60,7 +61,7 @@ a:hover { color: var(--user); background: var(--outline); }
 
 /* ------------------------------------------------------------------ hero */
 
-.hero { min-height: calc(100svh - 44px); display: flex; flex-direction: column; justify-content: center; gap: 28px; padding-block: 8px 24px; }
+.hero { min-height: calc(100svh - var(--bar) - 44px); display: flex; flex-direction: column; justify-content: center; gap: 28px; padding-block: 8px 24px; }
 
 .banner {
   /* drawn as rects (see index.html) so it never depends on a font having U+2588 */
@@ -94,12 +95,35 @@ a:hover { color: var(--user); background: var(--outline); }
 
 /* --------------------------------------------------------------- sections */
 
-.toc { display: flex; flex-wrap: wrap; gap: 0 16px; padding: 10px 0; border-block: 1px solid var(--outline); font-size: 0.9rem; }
-.toc a { display: inline-flex; align-items: center; min-height: 44px; }
+/* ------------------------------------------------- tmux-style top tab bar */
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: stretch;
+  height: var(--bar);
+  padding: 0 var(--pad);
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* on phones the bar scrolls sideways instead of wrapping */
+}
+.tabs::-webkit-scrollbar { display: none; }
+.session { display: flex; align-items: center; padding: 0 1.2ch; margin-right: 1ch; background: var(--foam); color: var(--base); font-weight: 700; }
+.tabs ol { display: flex; margin: 0; padding: 0; list-style: none; }
+.tabs a { display: flex; align-items: center; height: 100%; padding: 0 1ch; color: #adb3d1; text-decoration: none; }
+.tabs a:hover { color: var(--user); background: var(--outline); }
+.tabs .n { color: var(--prompt); }
+.tabs a[aria-current="true"] { color: var(--gold); }
+.tabs a[aria-current="true"]::after { content: "*"; }
 
 section { padding-top: 56px; }
 
-h2 { font-size: 1.05rem; color: var(--user); margin: 0 0 20px; font-weight: 700; }
+h2 { font-size: 1.5rem; line-height: 1.35; color: var(--user); margin: 0 0 24px; font-weight: 700; text-shadow: var(--glow); overflow-wrap: anywhere; }
 h2 .prompt { font-weight: 400; }
 
 h3 { font-size: 1rem; color: var(--user); margin: 0; }
@@ -212,6 +236,12 @@ strong { color: var(--user); }
 
 @media (max-width: 640px) {
   body { font-size: 15px; }
+  h2 { font-size: 1.25rem; }
+  /* the tab bar costs 44px, so the hero packs tighter to keep the links on the first screen */
+  .hero { gap: 16px; padding-block: 4px 12px; }
+  .name { margin-bottom: 4px !important; }
+  .console .out { margin-bottom: 4px; }
+  .links { margin: 0 0 4px; }
   .name { font-size: 1.3rem; }
   .pitch { font-size: 1.05rem; }
   .prompt-host { display: none; }
