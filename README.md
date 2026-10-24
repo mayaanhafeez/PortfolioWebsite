@@ -36,12 +36,13 @@ python3 -m http.server 4100 -d public   # then open http://127.0.0.1:4100/
 The vignette, glass glare and rolling band (each is a gradient), and the barrel warp (it
 would distort a long scrolling page).
 
-## Before this replaces `main`
+## Deploying
 
-v1 (the Neovim Next.js site) is tagged `v1`. Before merging this branch into `main`:
+v1 (the Neovim Next.js site) is tagged `v1`. The Vercel project is set up as Next.js, so
+`vercel.json` switches it to a static site: no install or build step, serve `public/`. It also
+redirects `/opengraph-image` (v1's generated preview image) to `public/og.png`, so links shared
+under v1 keep a preview. `vercel build` passes locally with it and fails without it.
 
-- Keep `/resume.pdf` and `/Ayaan_Hafeez_Resume.pdf` working; past applications link to them.
-- Bring back a link-preview image at `/opengraph-image` (v1 generated it in Next.js), or point
-  `og:image` somewhere that exists.
-- Vercel's project is set up for Next.js; a static `public/` site needs its framework preset and
-  output directory changed (or the site ported back into Next.js).
+`/resume.pdf` and `/Ayaan_Hafeez_Resume.pdf` must keep working; past applications link to them.
+
+Plan: push `v2` for a Vercel preview URL, check it, then merge into `main`.
