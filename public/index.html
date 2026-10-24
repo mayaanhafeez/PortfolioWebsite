@@ -67,16 +67,24 @@
       <div class="console">
         <p class="line"><span class="prompt" aria-hidden="true">$ </span><span class="cmd">whoami</span></p>
         <h1 class="name">Ayaan Hafeez</h1>
-        <p class="line"><span class="prompt" aria-hidden="true">$ </span><span class="cmd">cat pitch.txt</span></p>
-        <p class="pitch">I build backend services, AI systems, and low-level software.</p>
-        <p class="out">4th-year Computer Engineering (Software Option) at the University of Alberta. Three co-op terms as an AI Developer at Elev8AI. Looking for 2027 internships in backend, AI infrastructure, and systems. Edmonton, AB.</p>
-        <p class="line"><span class="prompt" aria-hidden="true">$ </span><span class="cmd">ls links/</span></p>
-        <nav class="links" aria-label="Resume and contact">
-          <a href="https://www.ayaanhafeez.dev/Ayaan_Hafeez_Resume.pdf">resume.pdf</a>
-          <a href="https://github.com/mayaanhafeez">github</a>
-          <a href="https://www.linkedin.com/in/ayaanhafeez">linkedin</a>
-          <a href="mailto:mhafeez1@ualberta.ca">email</a>
-        </nav>
+        <div class="panes">
+          <div class="pane pane-pitch">
+            <p class="pane-title" aria-hidden="true">pitch.txt</p>
+            <p class="line"><span class="prompt" aria-hidden="true">$ </span><span class="cmd">cat pitch.txt</span></p>
+            <p class="pitch">I build backend services, AI systems, and low-level software.</p>
+            <p class="out">4th-year Computer Engineering (Software Option) at the University of Alberta. Three co-op terms as an AI Developer at Elev8AI. Looking for 2027 internships in backend, AI infrastructure, and systems. Edmonton, AB.</p>
+          </div>
+          <div class="pane pane-links">
+            <p class="pane-title" aria-hidden="true">links</p>
+            <p class="line"><span class="prompt" aria-hidden="true">$ </span><span class="cmd">ls links/</span></p>
+            <nav class="links" aria-label="Resume and contact">
+              <a href="https://www.ayaanhafeez.dev/Ayaan_Hafeez_Resume.pdf">resume.pdf</a>
+              <a href="https://github.com/mayaanhafeez">github</a>
+              <a href="https://www.linkedin.com/in/ayaanhafeez">linkedin</a>
+              <a href="mailto:mhafeez1@ualberta.ca">email</a>
+            </nav>
+          </div>
+        </div>
         <p class="status">STATUS: OPEN TO 2027 INTERNSHIPS</p>
       </div>
     </header>
@@ -84,7 +92,7 @@
     <main id="main">
       <section id="experience">
         <h2><span class="prompt" aria-hidden="true">$ cat ~/</span>experience</h2>
-        <article class="job">
+        <article class="job card">
           <h3>AI Developer <span class="at">@ Elev8AI</span> <span class="dim">(Remote)</span></h3>
           <p class="when">Co-op Summer 2025, Winter 2026, Summer 2026 · Part-time <time datetime="2026-09">Sep 2026</time> – Present</p>
           <ul class="bullets">
@@ -100,17 +108,17 @@
       <section id="open-source">
         <h2><span class="prompt" aria-hidden="true">$ git log --author=ayaan --merged ~/</span>open-source</h2>
         <ul class="oss">
-          <li>
+          <li class="card">
             <h3>Omarchy <span class="dim">Arch + Hyprland Linux distribution · 45K GitHub stars</span></h3>
             <p>Fixed a lopsided keyboard/hover highlight on the network panel's header actions and made the shared square action button pixel-snap its icon at fractional display scales.</p>
             <p class="pr"><a href="https://github.com/omacom/omarchy/pull/8787">PR #8787</a> merged <time datetime="2026-10">Oct 2026</time></p>
           </li>
-          <li>
+          <li class="card">
             <h3>Vorssaint <span class="dim">macOS menu bar toolkit · 29K GitHub stars · Swift</span></h3>
             <p>Fixed a bug that could leave a laptop with no usable screen after unplugging an external monitor: recovery now ignores virtual displays and switches stranded physical displays back on, with regression tests for headless setups.</p>
             <p class="pr"><a href="https://github.com/vorssaint/vorssaint-utils/pull/624">PR #624</a> merged <time datetime="2026-08">Aug 2026</time></p>
           </li>
-          <li>
+          <li class="card">
             <h3>Hyprspace <span class="dim">AeroSpace fork for macOS window management · Swift</span></h3>
             <p>Added smart single-window gaps and floating-window resize/centre keys (PR #4), and modifier-drag to move windows with retiling on drop (PR #5).</p>
             <p class="pr"><a href="https://github.com/PeachlifeAB/hyprspace-core/pull/4">PR #4</a> · <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/5">PR #5</a> both merged <time datetime="2026-09">Sep 2026</time></p>
@@ -121,7 +129,7 @@
       <section id="projects">
         <h2><span class="prompt" aria-hidden="true">$ ls ~/</span>projects</h2>
 
-        <article class="project">
+        <article class="project card">
           <h3>ssht <span class="dim">persistent SSH sessions</span></h3>
           <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-08">Aug 2026</time></p>
           <dl>
@@ -134,7 +142,7 @@
 $ cargo install ssht</code></pre>
         </article>
 
-        <article class="project">
+        <article class="project card">
           <h3>Bare-metal Raspberry Pi 3 kernel</h3>
           <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
           <dl>
@@ -152,7 +160,7 @@ user process
           </figure>
         </article>
 
-        <article class="project">
+        <article class="project card">
           <h3>macwifi <span class="dim">Wi-Fi manager for the macOS terminal</span></h3>
           <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-09">Sep 2026</time></p>
           <dl>
@@ -167,7 +175,7 @@ user process
           <pre class="proof"><code>$ brew install mayaanhafeez/tap/macwifi</code></pre>
         </article>
 
-        <article class="project">
+        <article class="project card">
           <h3>surgraft <span class="dim">token-efficient code moves for LLM tools</span></h3>
           <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
           <dl>
@@ -187,7 +195,7 @@ user process
           </table>
         </article>
 
-        <article class="project">
+        <article class="project card">
           <h3>simdlings <span class="dim">learn ARM NEON SIMD by fixing broken kernels</span></h3>
           <dl>
             <dt>what</dt><dd>A rustlings-style course in C: 24 exercises where you repair broken NEON vector code, then write kernels that must beat the scalar version by 1.6×–3×.</dd>
