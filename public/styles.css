@@ -92,9 +92,12 @@ a:hover { color: var(--user); background: var(--outline); }
 /* btop/lazygit-style panes: a bordered box with its title sitting in the top border */
 .panes { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; margin: 8px 0 16px; } /* panes share a height, like tmux */
 .pane { position: relative; border: 1px solid var(--outline); padding: 20px 18px 16px; }
-.pane-title { position: absolute; top: -0.75em; left: 12px; padding: 0 6px; background: var(--base); color: var(--foam); font-size: 0.8rem; line-height: 1.5; }
+.pane-title { position: absolute; top: -0.75em; left: 12px; margin: 0; padding: 0 6px; background: var(--base); color: var(--foam); font-size: 0.8rem; line-height: 1.5; }
 .pane .pitch { margin: 6px 0 8px; }
 .pane-links .links { flex-direction: column; gap: 0; margin: 4px 0 0; }
+/* first and last lines sit on the pane's own padding, not on top of default <p> margins */
+.pane > .pane-title + * { margin-top: 0; }
+.pane > :last-child { margin-bottom: 0; }
 
 .links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0 10px; }
 .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; margin-left: -4px; }
