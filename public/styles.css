@@ -16,7 +16,7 @@
   --rose: #eb6f92;
 
   --pad: clamp(16px, 4.5vw, 48px);
-  --col: 880px;
+  --col: 800px; /* the banner fills it, so the hero and every section share one centred column */
   --glow: 0 0 8px rgba(156, 207, 216, 0.22); /* faint phosphor, only on a few hero lines */
 
   color-scheme: dark;
@@ -66,7 +66,6 @@ a:hover { color: var(--user); background: var(--outline); }
   /* drawn as rects (see index.html) so it never depends on a font having U+2588 */
   display: block;
   width: 100%;
-  max-width: 640px;
   height: auto;
   color: var(--foam);
   animation: banner-glow 4.5s ease-in-out infinite;
