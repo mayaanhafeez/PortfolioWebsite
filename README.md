@@ -21,6 +21,8 @@ python3 -m http.server 4100 -d public   # then open http://127.0.0.1:4100/
   `aria-hidden` SVG next to the name as visually hidden real text, an `h2` per section, an `article` + `h3` per project.
 - **First screen.** Name, pitch, and Resume / GitHub / LinkedIn / Email are visible without
   scrolling at 1280×800, 390×844 and 360×740. No keyboard shortcut is ever required.
+- **One card style.** Every boxed block uses the same `.card` (raised surface, 1px border).
+  `$` command lines never go inside a card; they sit above it like a heading.
 - **Section order:** hero → experience → open source → featured projects → more projects →
   skills → education → contact.
 - **Honest content.** Only what `CONTENT.md` states: no invented metrics, users, or dates.
