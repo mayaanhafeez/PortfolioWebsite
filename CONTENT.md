@@ -22,6 +22,7 @@ or systems programming** roles, spending under a minute on the page.
 - GitHub: https://github.com/mayaanhafeez
 - LinkedIn: https://www.linkedin.com/in/ayaanhafeez
 - Email: mhafeez1@ualberta.ca (mailto:)
+- Personal email: m.ayaan.hafeez@gmail.com (mailto:)
 - Secondary (footer only): Blog https://the-rubber-duck-blog.vercel.app/
 
 ## Hero
@@ -189,4 +190,4 @@ and a proof element.
 ## Contact (closing section)
 
 - Short line: "The fastest way to reach me is email."
-- mhafeez1@ualberta.ca · GitHub · LinkedIn · Resume (PDF)
+- mhafeez1@ualberta.ca · m.ayaan.hafeez@gmail.com · GitHub · LinkedIn · Resume (PDF)
