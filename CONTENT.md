@@ -52,7 +52,7 @@ or systems programming** roles, spending under a minute on the page.
   hours by 90%.
 - Took part in customer requirements meetings for AI and ERP projects and ran functional
   QA on end-to-end business scenarios before delivery.
-- Note: this work is under NDA, so there are no links. Do not show it as project cards.
+- This work is under NDA: no links, and no project cards for it (the page doesn't say so).
 
 ---
 
@@ -67,7 +67,7 @@ or systems programming** roles, spending under a minute on the page.
      external monitor: recovery now ignores virtual displays and switches stranded physical
      displays back on, with regression tests for headless setups.
    - PR #624, merged Aug 2026: https://github.com/vorssaint/vorssaint-utils/pull/624
-3. **Hyprspace** (AeroSpace fork for macOS window management), Swift
+3. **Hyprspace** (tiling window manager for macOS), Swift
    - Added smart single-window gaps and floating-window resize/centre keys (PR #4), and
      modifier-drag to move windows with retiling on drop (PR #5). Both merged Sep 2026.
    - https://github.com/PeachlifeAB/hyprspace-core/pull/4
