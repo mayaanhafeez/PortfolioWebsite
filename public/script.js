@@ -30,10 +30,16 @@
     e.preventDefault();
     const raw = input.value.trim().toLowerCase().replace(/^:/, "");
     close();
-    if (raw === "q" || raw === "top" || raw === "") return window.scrollTo({ top: 0 });
+    if (raw === "q" || raw === "top" || raw === "") {
+      window.scrollTo({ top: 0 });
+      return document.dispatchEvent(new CustomEvent("section:jump", { detail: "top" }));
+    }
     const id = alias[raw] || (order[Number(raw) - 1]) || (order.includes(raw) ? raw : null);
     const el = id && document.getElementById(id);
-    if (el) el.scrollIntoView();
+    if (el) {
+      el.scrollIntoView();
+      document.dispatchEvent(new CustomEvent("section:jump", { detail: id }));
+    }
     else flash(`E492: Not an editor command: ${raw}`);
   });
 
@@ -41,10 +47,16 @@
 })();
 
 // Mark the section in view on the tab bar, the way tmux marks the active window.
+// A clicked tab (or a ":" jump) stays marked until the reader scrolls themselves:
+// the last few sections are short, so the page often bottoms out before the
+// target reaches the top, and a position-based guess would pick a neighbour.
 (() => {
   const bar = document.querySelector(".tabs");
-  if (!bar || !("IntersectionObserver" in window)) return;
+  if (!bar) return;
   const links = new Map([...bar.querySelectorAll("a")].map((a) => [a.hash.slice(1), a]));
+  const sections = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+  let pinned = null;
+
   const mark = (id) => {
     links.forEach((a, key) => (key === id ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
     const a = links.get(id);
@@ -53,9 +65,35 @@
       bar.scrollLeft = a.offsetLeft - 16;
     }
   };
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((e) => e.isIntersecting && mark(e.target.id)),
-    { rootMargin: "-45% 0px -50% 0px" } // the section crossing the middle of the screen
-  );
-  links.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+
+  // the last section whose top has passed a line a little below the bar; at the very
+  // bottom of the page, the last section
+  const inView = () => {
+    const doc = document.documentElement;
+    if (window.scrollY + window.innerHeight >= doc.scrollHeight - 2) return sections[sections.length - 1].id;
+    const line = bar.offsetHeight + window.innerHeight * 0.25;
+    let id = sections[0].id;
+    for (const el of sections) if (el.getBoundingClientRect().top <= line) id = el.id;
+    return id;
+  };
+
+  let queued = false;
+  const update = () => {
+    queued = false;
+    mark(pinned || inView());
+  };
+  window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+
+  const pin = (id) => { if (links.has(id)) { pinned = id; mark(id); } };
+  const unpin = () => { if (pinned) { pinned = null; update(); } };
+  bar.addEventListener("click", (e) => { const a = e.target.closest("a"); if (a) pin(a.hash.slice(1)); });
+  document.addEventListener("section:jump", (e) => pin(e.detail));
+  // only the reader's own scrolling releases a pinned tab, not the smooth scroll a click starts
+  ["wheel", "touchmove"].forEach((t) => window.addEventListener(t, unpin, { passive: true }));
+  window.addEventListener("keydown", (e) => {
+    if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) unpin();
+  });
+
+  if (location.hash) pin(location.hash.slice(1));
+  update();
 })();
