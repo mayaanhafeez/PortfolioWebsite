@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ayaan Hafeez · Backend, AI systems &amp; systems programming</title>
+  <meta name="description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Systems work in Rust and C; merged PRs to Omarchy and Vorssaint.">
+  <link rel="canonical" href="https://www.ayaanhafeez.dev/">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#191724">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ayaan Hafeez · Backend, AI systems &amp; systems programming">
+  <meta property="og:description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Systems work in Rust and C; merged PRs to Omarchy and Vorssaint.">
+  <meta property="og:url" content="https://www.ayaanhafeez.dev/">
+  <meta property="og:image" content="https://www.ayaanhafeez.dev/opengraph-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ayaan Hafeez · Backend, AI systems &amp; systems programming">
+  <meta name="twitter:image" content="https://www.ayaanhafeez.dev/opengraph-image">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ayaan Hafeez",
+    "url": "https://www.ayaanhafeez.dev/",
+    "jobTitle": "Student",
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Alberta" },
+    "sameAs": ["https://github.com/mayaanhafeez", "https://www.linkedin.com/in/ayaanhafeez"]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23191724%27/%3E%3Ctext x=%274%27 y=%2723%27 font-family=%27monospace%27 font-size=%2718%27 fill=%27%239ccfd8%27%3E%3E_%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- the tube switching on: decorative, CSS-only, gone after ~1s -->
+  <div class="power" aria-hidden="true"><div class="half top"></div><div class="half bottom"></div><div class="hotline"></div></div>
+
+  <div class="screen">
+    <header class="hero" id="top">
+      <div class="banner" aria-hidden="true"> █████  ██    ██  █████   █████  ███    ██
+██   ██  ██  ██  ██   ██ ██   ██ ████   ██
+███████   ████   ███████ ███████ ██ ██  ██
+██   ██    ██    ██   ██ ██   ██ ██  ██ ██
+██   ██    ██    ██   ██ ██   ██ ██   ████
+
+██   ██  █████  ███████ ███████ ███████ ███████
+██   ██ ██   ██ ██      ██      ██         ███
+███████ ███████ █████   █████   █████     ███
+██   ██ ██   ██ ██      ██      ██       ███
+██   ██ ██   ██ ██      ███████ ███████ ███████</div>
+
+      <div class="console">
+        <p class="line"><span class="prompt" aria-hidden="true"><span class="prompt-host">guest@ayaanhafeez.dev:</span>~$ </span><span class="cmd">whoami</span></p>
+        <h1 class="name">Ayaan Hafeez</h1>
+        <p class="line"><span class="prompt" aria-hidden="true"><span class="prompt-host">guest@ayaanhafeez.dev:</span>~$ </span><span class="cmd">cat pitch.txt</span></p>
+        <p class="pitch">I build backend services, AI systems, and low-level software.</p>
+        <p class="out">4th-year Computer Engineering (Software Option) at the University of Alberta. Three co-op terms as an AI Developer at Elev8AI. Looking for 2027 internships in backend, AI infrastructure, and systems. Edmonton, AB.</p>
+        <p class="line"><span class="prompt" aria-hidden="true"><span class="prompt-host">guest@ayaanhafeez.dev:</span>~$ </span><span class="cmd">ls links/</span></p>
+        <nav class="links" aria-label="Resume and contact">
+          <a href="https://www.ayaanhafeez.dev/Ayaan_Hafeez_Resume.pdf">resume.pdf</a>
+          <a href="https://github.com/mayaanhafeez">github</a>
+          <a href="https://www.linkedin.com/in/ayaanhafeez">linkedin</a>
+          <a href="mailto:mhafeez1@ualberta.ca">email</a>
+        </nav>
+        <p class="status">STATUS: OPEN TO 2027 INTERNSHIPS</p>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Sections">
+      <a href="#experience">experience</a>
+      <a href="#open-source">open-source</a>
+      <a href="#projects">projects</a>
+      <a href="#more">more</a>
+      <a href="#skills">skills</a>
+      <a href="#education">education</a>
+      <a href="#contact">contact</a>
+    </nav>
+
+    <main id="main">
+      <section id="experience">
+        <h2><span class="prompt" aria-hidden="true">$ cat ~/</span>experience</h2>
+        <article class="job">
+          <h3>AI Developer <span class="at">@ Elev8AI</span> <span class="dim">(Remote)</span></h3>
+          <p class="when">Co-op Summer 2025, Winter 2026, Summer 2026 · Part-time <time datetime="2026-09">Sep 2026</time> – Present</p>
+          <ul class="bullets">
+            <li>Built an NL2SQL network-monitoring chatbot with LangChain, Ollama, ChromaDB, and PostgreSQL: an intent classifier routes questions to SQL generation, RAG retrieval, or general answers, with session-aware context across turns; 85% answer accuracy on internal benchmarks.</li>
+            <li>Built the backend for a social media platform: FastAPI with PostgreSQL and Redis, RBAC and JWT auth, Stripe subscriptions synced by webhooks, and ML identity verification; deployed with Docker and nginx behind a React/TypeScript frontend.</li>
+            <li>Built an API documentation scraper (Selenium + OpenAI) that crawls docs sites, GitHub repos, and PDFs into typed OpenAPI schemas; extracted 100+ endpoints and cut developer hours by 90%.</li>
+            <li>Took part in customer requirements meetings for AI and ERP projects and ran functional QA on end-to-end business scenarios before delivery.</li>
+          </ul>
+          <p class="note">This work is under NDA, so there are no links.</p>
+        </article>
+      </section>
+
+      <section id="open-source">
+        <h2><span class="prompt" aria-hidden="true">$ git log --author=ayaan --merged ~/</span>open-source</h2>
+        <ul class="oss">
+          <li>
+            <h3>Omarchy <span class="dim">Arch + Hyprland Linux distribution · 45K GitHub stars</span></h3>
+            <p>Fixed a lopsided keyboard/hover highlight on the network panel's header actions and made the shared square action button pixel-snap its icon at fractional display scales.</p>
+            <p class="pr"><a href="https://github.com/omacom/omarchy/pull/8787">PR #8787</a> merged <time datetime="2026-10">Oct 2026</time></p>
+          </li>
+          <li>
+            <h3>Vorssaint <span class="dim">macOS menu bar toolkit · 29K GitHub stars · Swift</span></h3>
+            <p>Fixed a bug that could leave a laptop with no usable screen after unplugging an external monitor: recovery now ignores virtual displays and switches stranded physical displays back on, with regression tests for headless setups.</p>
+            <p class="pr"><a href="https://github.com/vorssaint/vorssaint-utils/pull/624">PR #624</a> merged <time datetime="2026-08">Aug 2026</time></p>
+          </li>
+          <li>
+            <h3>Hyprspace <span class="dim">AeroSpace fork for macOS window management · Swift</span></h3>
+            <p>Added smart single-window gaps and floating-window resize/centre keys (PR #4), and modifier-drag to move windows with retiling on drop (PR #5).</p>
+            <p class="pr"><a href="https://github.com/PeachlifeAB/hyprspace-core/pull/4">PR #4</a> · <a href="https://github.com/PeachlifeAB/hyprspace-core/pull/5">PR #5</a> both merged <time datetime="2026-09">Sep 2026</time></p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="projects">
+        <h2><span class="prompt" aria-hidden="true">$ ls ~/</span>projects</h2>
+
+        <article class="project">
+          <h3>ssht <span class="dim">persistent SSH sessions</span></h3>
+          <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-08">Aug 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>Turns every SSH connection into a resumable tmux session, so work survives sleep, network drops, and switching machines.</dd>
+            <dt>hard part</dt><dd>It wraps the system <code>ssh</code> instead of reimplementing it, so ProxyJump, keys, and hardware tokens keep working. A hand-written <code>~/.ssh/config</code> parser handles Include recursion, Match blocks, and wildcard hosts, and tokio probes hosts concurrently so the fuzzy picker never blocks on a slow one. Optional Mosh transport and local-echo mode for high-latency links.</dd>
+            <dt>tech</dt><dd class="tags">Rust / tokio / ratatui / SQLite / tmux / mosh</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/ssht">GitHub</a> · <a href="https://crates.io/crates/ssht">crates.io</a></dd>
+          </dl>
+          <pre class="proof"><code>$ brew install mayaanhafeez/tap/ssht
+$ cargo install ssht</code></pre>
+        </article>
+
+        <article class="project">
+          <h3>Bare-metal Raspberry Pi 3 kernel</h3>
+          <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>A single-core AArch64 kernel for the Raspberry Pi 3 in C and ARMv8 assembly, with no libc, built by following Sergey Matyukevich's raspberry-pi-os lesson series.</dd>
+            <dt>hard part</dt><dd>Boot and BSS setup, dropping from EL3/EL2 to EL1, exception vectors and timer IRQs, and a round-robin preemptive scheduler with context switching; then EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process page tables, where fork copies the parent's user pages. Tested under QEMU.</dd>
+            <dt>tech</dt><dd class="tags">C / ARMv8 assembly / QEMU</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/raspberry-pi-os">GitHub</a></dd>
+          </dl>
+          <figure>
+            <pre class="proof"><code>$ ./run.sh
+Kernel proess started. EL 1
+user process
+1234512345abcdeabcdeabcde1234512345...</code></pre>
+            <figcaption>Real QEMU output: two forked user processes with separate page tables, interleaved by the preemptive scheduler.</figcaption>
+          </figure>
+        </article>
+
+        <article class="project">
+          <h3>macwifi <span class="dim">Wi-Fi manager for the macOS terminal</span></h3>
+          <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-09">Sep 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>A terminal UI for scanning, joining, and managing Wi-Fi on macOS; a clean-room port of the Linux tool impala.</dd>
+            <dt>hard part</dt><dd>Split into a LaunchAgent daemon that owns the CoreWLAN interface and a client that talks to it over a Unix socket, so scans run in a session that gets real network names instead of redacted ones. Speed tests from four backends are normalized into one schema and streamed as JSONL events that other front ends can follow live.</dd>
+            <dt>tech</dt><dd class="tags">Rust / tokio / ratatui / CoreWLAN / Keychain / Unix sockets</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/macwifi">GitHub</a></dd>
+          </dl>
+          <figure>
+            <img src="https://raw.githubusercontent.com/mayaanhafeez/macwifi/main/images/demo.png" width="3420" height="2224" loading="lazy" alt="macwifi TUI showing known networks, new networks, and device tables">
+          </figure>
+          <pre class="proof"><code>$ brew install mayaanhafeez/tap/macwifi</code></pre>
+        </article>
+
+        <article class="project">
+          <h3>surgraft <span class="dim">token-efficient code moves for LLM tools</span></h3>
+          <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>Moves functions between files for LLM coding tools without spending tokens on code that didn't change.</dd>
+            <dt>hard part</dt><dd>Locates function boundaries with Python's AST (a regex heuristic for JS/TS), byte-copies the exact range, and only sends the snippet to the model for an optional edit pass. Ships as a CLI, a Python library, and an MCP server.</dd>
+            <dt>tech</dt><dd class="tags">Python / AST / Claude API / MCP</dd>
+            <dt>links</dt><dd><a href="https://pypi.org/project/surgraft/">PyPI</a> · <a href="https://github.com/mayaanhafeez/surgraft">GitHub</a></dd>
+          </dl>
+          <table class="proof-table">
+            <caption>Moving one 20-line function out of a 5,000-line file</caption>
+            <thead><tr><th scope="col">approach</th><th scope="col">input tokens</th></tr></thead>
+            <tbody>
+              <tr><td>naive LLM rewrite</td><td>~44,000</td></tr>
+              <tr><td>surgraft, copy only</td><td>0</td></tr>
+              <tr><td>surgraft + edit pass</td><td>~180</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="project">
+          <h3>simdlings <span class="dim">learn ARM NEON SIMD by fixing broken kernels</span></h3>
+          <dl>
+            <dt>what</dt><dd>A rustlings-style course in C: 24 exercises where you repair broken NEON vector code, then write kernels that must beat the scalar version by 1.6×–3×.</dd>
+            <dt>hard part</dt><dd>The test harness is adversarial. Buffers end against a PROT_NONE guard page so a one-byte overread faults immediately, canaries catch negative indexing, every kernel is checked at awkward lengths (0, 1, 3, 17, 1001, ...), and the scalar reference is compiled with autovectorization off so measured speedups are real.</dd>
+            <dt>tech</dt><dd class="tags">C / ARM NEON / Bash</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/simdlings">GitHub</a></dd>
+          </dl>
+        </article>
+      </section>
+
+      <section id="more">
+        <h2><span class="prompt" aria-hidden="true">$ ls ~/projects/</span>more</h2>
+        <ul class="more">
+          <li><a href="https://github.com/mayaanhafeez/agent-usage">agent-usage</a> <span>Rust TUI showing token usage and rate limits for Claude Code, Codex, OpenCode, and Gemini CLI side by side, read from each tool's local history.</span></li>
+          <li><a href="https://github.com/mayaanhafeez/agent-sudo-mac">agent-sudo-mac</a> <span>Lets coding agents run sudo on macOS without a TTY, using Touch ID with a GUI password fallback.</span></li>
+          <li><a href="https://kitsune.ayaanhafeez.dev">Kitsune</a> <span>Keyboard launcher for macOS in Swift and AppKit, scriptable with embedded Lua 5.4; installs via Homebrew. <a href="https://github.com/mayaanhafeez/app_launcher">GitHub</a></span></li>
+          <li><a href="https://github.com/mayaanhafeez/FocusNode">FocusNode</a> <span>Site-blocking browser extension published on the Chrome Web Store and Firefox Add-ons.</span></li>
+        </ul>
+      </section>
+
+      <section id="skills">
+        <h2><span class="prompt" aria-hidden="true">$ cat ~/</span>skills</h2>
+        <dl class="kv">
+          <dt>comfortable with</dt><dd>Python, C, Rust, TypeScript, PostgreSQL, Docker, FastAPI, Linux</dd>
+          <dt>have used</dt><dd>Swift, Kotlin, ARM assembly, LangChain, Ollama, ChromaDB, Redis, tokio, React</dd>
+        </dl>
+      </section>
+
+      <section id="education">
+        <h2><span class="prompt" aria-hidden="true">$ cat ~/</span>education</h2>
+        <p><strong>University of Alberta</strong>: BSc Computer Engineering, Co-op, Software Option. Expected <time datetime="2028-05">May 2028</time>.</p>
+        <p class="out">Relevant coursework: Operating Systems (in progress), Database Management (in progress), Software Testing &amp; Maintenance (in progress), Data Structures &amp; Algorithms, Computer Organization &amp; Assembly, Software Requirements.</p>
+      </section>
+
+      <section id="contact">
+        <h2><span class="prompt" aria-hidden="true">$ ./</span>contact</h2>
+        <p>The fastest way to reach me is email.</p>
+        <p class="links"><a href="mailto:mhafeez1@ualberta.ca">mhafeez1@ualberta.ca</a> <a href="https://github.com/mayaanhafeez">GitHub</a> <a href="https://www.linkedin.com/in/ayaanhafeez">LinkedIn</a> <a href="https://www.ayaanhafeez.dev/Ayaan_Hafeez_Resume.pdf">Resume (PDF)</a></p>
+        <p class="line end"><span class="prompt" aria-hidden="true"><span class="prompt-host">guest@ayaanhafeez.dev:</span>~$ </span><span class="cursor" aria-hidden="true"></span></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p><a href="https://the-rubber-duck-blog.vercel.app/">Blog</a> · © 2026 Ayaan Hafeez · Edmonton, AB</p>
+    </footer>
+  </div>
+
+  <!-- the game's status bar, kept as decoration; the command line opens here when JS runs -->
+  <div class="status-bar" aria-hidden="true">
+    <span>user: guest</span>
+    <span>ayaanhafeez.dev</span>
+    <span class="hint">build: 2026.10</span>
+  </div>
+  <form class="cmdline" hidden>
+    <label for="cmd" class="prompt">:</label>
+    <input id="cmd" name="cmd" autocomplete="off" spellcheck="false" aria-label="Command: a section name, or q for top">
+  </form>
+</body>
+</html>

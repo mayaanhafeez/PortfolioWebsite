@@ -1,77 +1,45 @@
-# Portfolio
+# portfolio v2
 
-My personal portfolio site, styled as a [Neovim](https://neovim.io/) editor —
-sidebar file tree, tabline, statusline, a Telescope-style fuzzy finder, vim
-keybindings for navigation, and an agentic AI assistant. Built with Next.js 16
-(App Router) and React 19.
+The next version of [ayaanhafeez.dev](https://www.ayaanhafeez.dev): a CRT terminal design
+after the Terminal Mystery launch site (Rosé Pine on JetBrains Mono, block-letter banner,
+boot-log hero, the game's status bar). Aimed at backend, AI systems, and systems
+programming internships.
 
-## Develop
+Right now it is a static site in `public/`: `index.html`, `styles.css`, and `script.js` (only the optional
+`:` command line). `CONTENT.md` is the fact-checked source for every claim on the page.
 
 ```bash
-npm install
-npm run dev      # dev server at http://localhost:3000
-npm run build    # production build
-npm start        # serve the production build
-npm run lint     # ESLint (next/core-web-vitals)
+python3 -m http.server 4100 -d public   # then open http://127.0.0.1:4100/
 ```
 
-No test framework is configured.
+## Rules the design keeps
 
-### Environment variables
+- **No gradients.** Flat colour only. The scanlines are a tiled 4×3 SVG stripe; the power-on
+  is two flat panels opening from a glowing centre line. Text glow is `text-shadow`.
+- **Parsable.** Every word of content is in the HTML source, and the page works with JS off.
+  `curl … | grep -i rust` must find content. One `h1` (the name, as real text; the ASCII
+  banner is `aria-hidden` decoration), an `h2` per section, an `article` + `h3` per project.
+- **First screen.** Name, pitch, and Resume / GitHub / LinkedIn / Email are visible without
+  scrolling at 1280×800, 390×844 and 360×740. No keyboard shortcut is ever required.
+- **Section order:** hero → experience → open source → featured projects → more projects →
+  skills → education → contact.
+- **Honest content.** Only what `CONTENT.md` states: no invented metrics, users, or dates.
+- **Mobile and a11y.** No horizontal scroll from 320px up, 44px tap targets, AA contrast,
+  visible focus, and `prefers-reduced-motion` turns off the power-on, flicker, glow pulse, and
+  cursor blink.
+- **Light.** HTML + CSS + JS under 100 KB.
 
-```
-GEMINI_API_KEY=      # Google AI Studio API key for the AI assistant
-UPSTASH_REDIS_REST_URL=    # Upstash Redis URL for rate limiting
-UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis token
-```
+## Dropped from the Terminal Mystery look
 
-## How it works
+The vignette, glass glare and rolling band (each is a gradient), and the barrel warp (it
+would distort a long scrolling page).
 
-Core files:
+## Before this replaces `main`
 
-- `src/app/page.js` — single `"use client"` component: all state, logic, content, rendering.
-- `src/app/globals.css` — all styling and the 15 color themes.
-- `src/app/components/AIChat.js` — AI chat modal component.
-- `src/app/api/ai/` — streaming API route that calls Gemini with tool-call support.
+v1 (the Neovim Next.js site) is tagged `v1`. Before merging this branch into `main`:
 
-### Views
-
-A `view` state variable switches between:
-- **welcome** — landing screen with ASCII art and action prompts
-- **editor** — the nvim-style UI (sidebar, tabline, content pane, statusline)
-
-The editor has five sections — *about, projects, experience, skills, contact* —
-and all portfolio content (projects, experience, skills, links) is hardcoded as
-constants at the top of `page.js`.
-
-### Modal overlays
-
-- **Telescope** (`Ctrl+P`) — fuzzy finder over the site's content
-- **AI assistant** (`:ai` or `:chat`, or "ask AI" on any project card) — chat with an
-  LLM that knows the portfolio content and can navigate sections, switch themes,
-  open links, and summarize recent public GitHub activity via tool calls. Each
-  "ask AI" button on a project card opens a fresh conversation pre-loaded with a
-  question about that project.
-- **Help** (`:help`) — keybindings reference
-- **Command bar** (`:` or `/`) — vim-style commands dispatched to a handler
-
-### Keybindings
-
-Handled via a `keydown` listener on `window`: `j`/`k` scroll, `gg`/`G` jump,
-`Ctrl+P` Telescope, `Ctrl+T` cycle theme, `Ctrl+S` cycle style, `:` command
-mode, `Esc` close overlays.
-
-### Theming
-
-Fifteen dark themes (Tokyo Night default, Catppuccin, Rosé Pine, Gruvbox, Nord,
-Dracula, One Dark, Solarized, Everforest, Monokai, Tomorrow Night Burns,
-Andromeda, Hinterlands, Vanta Black, Retro '82),
-defined as `[data-theme="…"]` blocks in `globals.css`. The selected theme is
-persisted to `localStorage` and applied as `data-theme` on the root element.
-
-## Deploy
-
-Optimized for [Vercel](https://vercel.com/) — push to deploy. Uses
-[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
-to load and optimize fonts. Set the environment variables above in the Vercel
-project settings.
+- Keep `/resume.pdf` and `/Ayaan_Hafeez_Resume.pdf` working; past applications link to them.
+- Bring back a link-preview image at `/opengraph-image` (v1 generated it in Next.js), or point
+  `og:image` somewhere that exists.
+- Vercel's project is set up for Next.js; a static `public/` site needs its framework preset and
+  output directory changed (or the site ported back into Next.js).

@@ -1,0 +1,233 @@
+/* CRT terminal portfolio, after the Terminal Mystery launch site: Rosé Pine on
+   JetBrains Mono behind a steady CRT treatment, in flat colour only: the
+   scanlines are a tiled 3px SVG stripe and the power-on is two flat panels. */
+
+:root {
+  /* Rosé Pine, the game's palette */
+  --base: #191724;
+  --surface: #1f1d2e;
+  --outline: #393552;
+  --foam: #9ccfd8;   /* banner, links */
+  --text: #8099e0;   /* output */
+  --user: #c2d1ff;   /* typed input, headings */
+  --prompt: #6b80c7;
+  --gold: #f6c177;   /* status, dates */
+  --dim: #908caa;
+  --rose: #eb6f92;
+
+  --pad: clamp(16px, 4.5vw, 48px);
+  --col: 880px;
+  --fringe: 0.6px 0 rgba(235, 111, 146, 0.22), -0.6px 0 rgba(156, 207, 216, 0.22), 0 0 10px rgba(128, 153, 224, 0.25);
+
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+
+body {
+  margin: 0;
+  background: var(--base);
+  color: var(--text);
+  font: 15px/1.6 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-ligatures: none;
+  text-shadow: var(--fringe);
+  padding-bottom: 44px; /* room for the status bar */
+}
+
+/* Scanlines over everything: one dark row in every three, as a tiled image. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect y='2' width='4' height='1' fill='%23000' fill-opacity='0.24'/%3E%3C/svg%3E");
+}
+
+a { color: var(--foam); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--user); background: var(--outline); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 60; background: var(--gold); color: var(--base); padding: 8px 12px; }
+.skip:focus { left: 8px; }
+
+.screen {
+  max-width: var(--col);
+  margin: 0 auto;
+  padding: var(--pad);
+  animation: flicker 5s steps(1, end) infinite;
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.hero { min-height: calc(100svh - 44px); display: flex; flex-direction: column; justify-content: center; gap: 28px; padding-block: 8px 24px; }
+
+.banner {
+  /* 47 columns of JetBrains Mono (0.6em each) must fit the padded width */
+  font-size: min(22px, calc((100vw - 2 * var(--pad)) / 30));
+  line-height: 1;
+  white-space: pre;
+  color: var(--foam);
+  text-shadow: 0 0 1px var(--outline), 1px 1px 0 var(--outline), -1px 1px 0 var(--outline);
+  animation: banner-glow 4.5s ease-in-out infinite;
+}
+
+@keyframes banner-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(156, 207, 216, 0.3)) drop-shadow(0 0 14px rgba(156, 207, 216, 0.15)); }
+  50%      { filter: drop-shadow(0 0 8px rgba(156, 207, 216, 0.5)) drop-shadow(0 0 26px rgba(156, 207, 216, 0.3)); }
+}
+
+.console p, .console h1 { margin: 0; }
+.prompt { color: var(--prompt); }
+.cmd { color: var(--user); }
+.out { color: var(--text); }
+.dim { color: var(--dim); font-weight: 400; }
+
+.name { font-size: 1.5rem; line-height: 1.4; color: var(--user); font-weight: 700; margin-bottom: 10px !important; }
+.pitch { color: var(--user); font-size: 1.15rem; line-height: 1.5; }
+.console .out { margin-bottom: 10px; max-width: 72ch; }
+
+.links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0 10px; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; margin-left: -4px; }
+.links a::before { content: "./"; color: var(--prompt); }
+
+.status { color: var(--gold); letter-spacing: 0.18em; text-shadow: 0 0 14px rgba(246, 193, 119, 0.45); }
+
+/* --------------------------------------------------------------- sections */
+
+.toc { display: flex; flex-wrap: wrap; gap: 0 16px; padding: 10px 0; border-block: 1px solid var(--outline); font-size: 0.9rem; }
+.toc a { display: inline-flex; align-items: center; min-height: 44px; }
+
+section { padding-top: 56px; }
+
+h2 { font-size: 1.05rem; color: var(--user); margin: 0 0 20px; font-weight: 700; }
+h2 .prompt { font-weight: 400; }
+
+h3 { font-size: 1rem; color: var(--user); margin: 0; }
+.at { color: var(--foam); }
+
+.when { color: var(--gold); margin: 2px 0 12px; font-size: 0.9rem; }
+.note { color: var(--dim); font-size: 0.9rem; }
+
+.bullets { margin: 0; padding-left: 0; list-style: none; }
+.bullets li { position: relative; padding-left: 2ch; margin-bottom: 10px; }
+.bullets li::before { content: "-"; position: absolute; left: 0; color: var(--prompt); }
+
+.oss { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.oss p { margin: 6px 0 0; }
+.pr { color: var(--dim); }
+.pr a { color: var(--gold); }
+
+/* one project = one block on a slightly raised surface */
+.project { border: 1px solid var(--outline); background: var(--surface); padding: 18px 20px; margin-bottom: 18px; }
+
+dl { display: grid; grid-template-columns: 11ch 1fr; gap: 6px 16px; margin: 0; }
+dt { color: var(--prompt); }
+dt::after { content: ":"; }
+dd { margin: 0; }
+.tags { color: var(--foam); }
+
+figure { margin: 14px 0 0; }
+figcaption { color: var(--dim); font-size: 0.85rem; margin-top: 6px; }
+img { display: block; max-width: 100%; height: auto; border: 1px solid var(--outline); }
+
+pre.proof { margin: 14px 0 0; padding: 12px 14px; background: var(--base); border: 1px solid var(--outline); color: var(--user); overflow-x: auto; font: inherit; font-size: 0.88rem; line-height: 1.5; }
+code { font: inherit; color: var(--user); }
+
+.proof-table { margin-top: 14px; border-collapse: collapse; font-size: 0.88rem; }
+.proof-table caption { text-align: left; color: var(--dim); padding-bottom: 6px; }
+.proof-table th, .proof-table td { border: 1px solid var(--outline); padding: 6px 12px; text-align: left; }
+.proof-table th { color: var(--prompt); font-weight: 400; }
+.proof-table td:last-child { color: var(--gold); text-align: right; }
+
+.more { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.more > li > a:first-child { font-weight: 700; margin-right: 1ch; }
+
+.kv { grid-template-columns: 18ch 1fr; }
+
+#education p { margin: 0 0 8px; }
+strong { color: var(--user); }
+
+#contact .links { gap: 4px 22px; }
+.end { margin-top: 16px; }
+
+.cursor { display: inline-block; width: 0.6em; height: 1.14em; vertical-align: -0.28em; background: var(--user); box-shadow: 0 0 10px rgba(194, 209, 255, 0.5); animation: blink 0.9s steps(1, end) infinite; }
+
+.footer { margin-top: 64px; padding-top: 14px; border-top: 1px solid var(--outline); color: var(--dim); font-size: 0.85rem; }
+.footer p { margin: 0; }
+
+/* ----------------------------------------------------- the game's status bar */
+
+.status-bar, .cmdline {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 32px;
+  align-items: center;
+  padding: 0 var(--pad);
+  background: var(--surface);
+  border-top: 1px solid var(--outline);
+  color: #adb3d1;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+.status-bar span:nth-child(2) { opacity: 0.75; }
+
+.cmdline { justify-content: flex-start; gap: 0.5ch; z-index: 41; }
+.cmdline[hidden] { display: none; }
+.cmdline input { flex: 1; background: transparent; border: 0; color: var(--user); font: inherit; letter-spacing: 0; text-shadow: var(--fringe); }
+.cmdline input:focus { outline: none; }
+
+/* ---------------------------------------------------- switching the tube on */
+
+.power { position: fixed; inset: 0; z-index: 70; pointer-events: none; animation: power-gone 1.2s linear both; }
+.half { position: absolute; left: 0; right: 0; height: 50%; background: #050409; }
+.top { top: 0; transform-origin: top; animation: open-top 1.2s linear both; }
+.bottom { bottom: 0; transform-origin: bottom; animation: open-bottom 1.2s linear both; }
+.hotline {
+  position: absolute; left: 0; right: 0; top: calc(50% - 1px); height: 2px;
+  background: #f2fbff;
+  box-shadow: 0 0 12px 2px rgba(226, 246, 255, 0.95), 0 0 44px 10px rgba(180, 226, 240, 0.55);
+  animation: hotline 1.2s linear both;
+}
+
+/* the beam holds as a line, then the raster opens past full height and settles */
+@keyframes open-top    { 0%, 30% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } 62%, 100% { transform: scaleY(0); } }
+@keyframes open-bottom { 0%, 30% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } 62%, 100% { transform: scaleY(0); } }
+@keyframes hotline {
+  0%   { transform: scaleX(0); opacity: 0; }
+  6%   { transform: scaleX(1.05); opacity: 1; }
+  30%  { transform: scaleX(1) scaleY(1.4); opacity: 1; }
+  42%  { transform: scaleX(1) scaleY(2.6); opacity: 0.8; }
+  56%  { opacity: 0.25; }
+  66%, 100% { opacity: 0; }
+}
+@keyframes power-gone { 0%, 99% { visibility: visible; } 100% { visibility: hidden; } }
+
+@keyframes flicker { 0%, 96%, 100% { opacity: 1; } 97% { opacity: 0.95; } 98% { opacity: 1; } 99% { opacity: 0.97; } }
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+/* ------------------------------------------------------------------ small */
+
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  .name { font-size: 1.3rem; }
+  .pitch { font-size: 1.05rem; }
+  .prompt-host { display: none; }
+  dl, .kv { grid-template-columns: 1fr; gap: 0; }
+  dd { margin-bottom: 10px; }
+  .project { padding: 14px; }
+  .status-bar span:nth-child(2) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .power { display: none; }
+  .screen, .banner, .cursor { animation: none; }
+  .banner { filter: drop-shadow(0 0 6px rgba(156, 207, 216, 0.4)); }
+}
