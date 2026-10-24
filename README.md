@@ -17,8 +17,8 @@ python3 -m http.server 4100 -d public   # then open http://127.0.0.1:4100/
 - **No gradients.** Flat colour only. The scanlines are a tiled 4×3 SVG stripe; the power-on
   is two flat panels opening from a glowing centre line. Text glow is `text-shadow`.
 - **Parsable.** Every word of content is in the HTML source, and the page works with JS off.
-  `curl … | grep -i rust` must find content. One `h1` (the name, as real text; the ASCII
-  banner is `aria-hidden` decoration), an `h2` per section, an `article` + `h3` per project.
+  `curl … | grep -i rust` must find content. One `h1`: the banner, which is an
+  `aria-hidden` SVG next to the name as visually hidden real text, an `h2` per section, an `article` + `h3` per project.
 - **First screen.** Name, pitch, and Resume / GitHub / LinkedIn / Email are visible without
   scrolling at 1280×800, 390×844 and 360×740. No keyboard shortcut is ever required.
 - **Section order:** hero → experience → open source → featured projects → more projects →
