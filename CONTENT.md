@@ -24,6 +24,7 @@ or systems programming** roles, spending under a minute on the page.
 - Email: mhafeez1@ualberta.ca (mailto:)
 - Personal email: m.ayaan.hafeez@gmail.com (mailto:)
 - Blog: https://the-rubber-duck-blog.vercel.app/ (also in the footer)
+- Top bar, right-aligned with logos: GitHub, email (m.ayaan.hafeez@gmail.com), LinkedIn
 - The two emails live in the contact section, not the first-screen links.
 
 ## Hero

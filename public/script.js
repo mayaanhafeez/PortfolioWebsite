@@ -52,8 +52,9 @@
 // target reaches the top, and a position-based guess would pick a neighbour.
 (() => {
   const bar = document.querySelector(".tabs");
-  if (!bar) return;
-  const links = new Map([...bar.querySelectorAll("a")].map((a) => [a.hash.slice(1), a]));
+  const list = document.querySelector(".tab-list");
+  if (!bar || !list) return;
+  const links = new Map([...list.querySelectorAll("a")].map((a) => [a.hash.slice(1), a]));
   const sections = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean);
   let pinned = null;
 
@@ -61,8 +62,8 @@
     links.forEach((a, key) => (key === id ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
     const a = links.get(id);
     // keep the active tab visible when the bar is scrolled sideways on a phone
-    if (a && (a.offsetLeft < bar.scrollLeft || a.offsetLeft + a.offsetWidth > bar.scrollLeft + bar.clientWidth)) {
-      bar.scrollLeft = a.offsetLeft - 16;
+    if (a && (a.offsetLeft < list.scrollLeft || a.offsetLeft + a.offsetWidth > list.scrollLeft + list.clientWidth)) {
+      list.scrollLeft = a.offsetLeft - 16;
     }
   };
 
@@ -86,7 +87,7 @@
 
   const pin = (id) => { if (links.has(id)) { pinned = id; mark(id); } };
   const unpin = () => { if (pinned) { pinned = null; update(); } };
-  bar.addEventListener("click", (e) => { const a = e.target.closest("a"); if (a) pin(a.hash.slice(1)); });
+  list.addEventListener("click", (e) => { const a = e.target.closest("a"); if (a) pin(a.hash.slice(1)); });
   document.addEventListener("section:jump", (e) => pin(e.detail));
   // only the reader's own scrolling releases a pinned tab, not the smooth scroll a click starts
   ["wheel", "touchmove"].forEach((t) => window.addEventListener(t, unpin, { passive: true }));
