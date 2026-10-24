@@ -8,7 +8,7 @@
   --surface: #1f1d2e;
   --outline: #393552;
   --foam: #9ccfd8;   /* banner, links */
-  --text: #8099e0;   /* output */
+  --text: #a3b2ea;   /* output: lifted from the game's #8099e0 for long-form reading */
   --user: #c2d1ff;   /* typed input, headings */
   --prompt: #6b80c7;
   --gold: #f6c177;   /* status, dates */
@@ -17,7 +17,7 @@
 
   --pad: clamp(16px, 4.5vw, 48px);
   --col: 880px;
-  --fringe: 0.6px 0 rgba(235, 111, 146, 0.22), -0.6px 0 rgba(156, 207, 216, 0.22), 0 0 10px rgba(128, 153, 224, 0.25);
+  --glow: 0 0 8px rgba(156, 207, 216, 0.22); /* faint phosphor, only on a few hero lines */
 
   color-scheme: dark;
 }
@@ -30,9 +30,8 @@ body {
   margin: 0;
   background: var(--base);
   color: var(--text);
-  font: 15px/1.6 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 16px/1.65 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-ligatures: none;
-  text-shadow: var(--fringe);
   padding-bottom: 44px; /* room for the status bar */
 }
 
@@ -43,7 +42,7 @@ body::after {
   inset: 0;
   z-index: 50;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect y='2' width='4' height='1' fill='%23000' fill-opacity='0.24'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect y='2' width='4' height='1' fill='%23000' fill-opacity='0.08'/%3E%3C/svg%3E");
 }
 
 a { color: var(--foam); text-underline-offset: 3px; text-decoration-thickness: 1px; }
@@ -57,7 +56,6 @@ a:hover { color: var(--user); background: var(--outline); }
   max-width: var(--col);
   margin: 0 auto;
   padding: var(--pad);
-  animation: flicker 5s steps(1, end) infinite;
 }
 
 /* ------------------------------------------------------------------ hero */
@@ -65,18 +63,18 @@ a:hover { color: var(--user); background: var(--outline); }
 .hero { min-height: calc(100svh - 44px); display: flex; flex-direction: column; justify-content: center; gap: 28px; padding-block: 8px 24px; }
 
 .banner {
-  /* 47 columns of JetBrains Mono (0.6em each) must fit the padded width */
-  font-size: min(22px, calc((100vw - 2 * var(--pad)) / 30));
-  line-height: 1;
-  white-space: pre;
+  /* drawn as rects (see index.html) so it never depends on a font having U+2588 */
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
   color: var(--foam);
-  text-shadow: 0 0 1px var(--outline), 1px 1px 0 var(--outline), -1px 1px 0 var(--outline);
   animation: banner-glow 4.5s ease-in-out infinite;
 }
 
 @keyframes banner-glow {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(156, 207, 216, 0.3)) drop-shadow(0 0 14px rgba(156, 207, 216, 0.15)); }
-  50%      { filter: drop-shadow(0 0 8px rgba(156, 207, 216, 0.5)) drop-shadow(0 0 26px rgba(156, 207, 216, 0.3)); }
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(156, 207, 216, 0.22)); }
+  50%      { filter: drop-shadow(0 0 7px rgba(156, 207, 216, 0.35)); }
 }
 
 .console p, .console h1 { margin: 0; }
@@ -85,15 +83,15 @@ a:hover { color: var(--user); background: var(--outline); }
 .out { color: var(--text); }
 .dim { color: var(--dim); font-weight: 400; }
 
-.name { font-size: 1.5rem; line-height: 1.4; color: var(--user); font-weight: 700; margin-bottom: 10px !important; }
-.pitch { color: var(--user); font-size: 1.15rem; line-height: 1.5; }
+.name { text-shadow: var(--glow); font-size: 1.5rem; line-height: 1.4; color: var(--user); font-weight: 700; margin-bottom: 10px !important; }
+.pitch { text-shadow: var(--glow); color: var(--user); font-size: 1.15rem; line-height: 1.5; }
 .console .out { margin-bottom: 10px; max-width: 72ch; }
 
 .links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0 10px; }
 .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; margin-left: -4px; }
 .links a::before { content: "./"; color: var(--prompt); }
 
-.status { color: var(--gold); letter-spacing: 0.18em; text-shadow: 0 0 14px rgba(246, 193, 119, 0.45); }
+.status { color: var(--gold); letter-spacing: 0.18em; text-shadow: 0 0 10px rgba(246, 193, 119, 0.3); }
 
 /* --------------------------------------------------------------- sections */
 
@@ -180,7 +178,7 @@ strong { color: var(--user); }
 
 .cmdline { justify-content: flex-start; gap: 0.5ch; z-index: 41; }
 .cmdline[hidden] { display: none; }
-.cmdline input { flex: 1; background: transparent; border: 0; color: var(--user); font: inherit; letter-spacing: 0; text-shadow: var(--fringe); }
+.cmdline input { flex: 1; background: transparent; border: 0; color: var(--user); font: inherit; letter-spacing: 0; }
 .cmdline input:focus { outline: none; }
 
 /* ---------------------------------------------------- switching the tube on */
@@ -209,13 +207,12 @@ strong { color: var(--user); }
 }
 @keyframes power-gone { 0%, 99% { visibility: visible; } 100% { visibility: hidden; } }
 
-@keyframes flicker { 0%, 96%, 100% { opacity: 1; } 97% { opacity: 0.95; } 98% { opacity: 1; } 99% { opacity: 0.97; } }
 @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
 
 /* ------------------------------------------------------------------ small */
 
 @media (max-width: 640px) {
-  body { font-size: 14px; }
+  body { font-size: 15px; }
   .name { font-size: 1.3rem; }
   .pitch { font-size: 1.05rem; }
   .prompt-host { display: none; }
@@ -228,6 +225,6 @@ strong { color: var(--user); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .power { display: none; }
-  .screen, .banner, .cursor { animation: none; }
-  .banner { filter: drop-shadow(0 0 6px rgba(156, 207, 216, 0.4)); }
+  .banner, .cursor { animation: none; }
+  .banner { filter: drop-shadow(0 0 4px rgba(156, 207, 216, 0.28)); }
 }
