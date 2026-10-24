@@ -29,12 +29,10 @@ or systems programming** roles, spending under a minute on the page.
 ## Hero
 
 - Name: **Ayaan Hafeez**
-- One-line pitch, shown as the first of five short bullets in the hero:
+- One-line pitch, shown as the first of three short bullets in the hero:
   - Backend services, AI systems, and low-level software
   - 4th-year Computer Engineering (Software Option), University of Alberta
   - 3 co-op terms as an AI Developer at Elev8AI
-  - Looking for 2027 internships
-  - Edmonton, AB
 
 ---
 
