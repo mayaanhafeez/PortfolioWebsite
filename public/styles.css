@@ -123,7 +123,9 @@ a:hover { color: var(--user); background: var(--outline); }
 .tab-list { position: relative; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .tab-list::-webkit-scrollbar { display: none; }
 .bar-links { display: flex; flex: none; margin: 0 0 0 1ch; padding: 0; list-style: none; }
-.bar-links svg { width: 14px; height: 14px; margin-right: 0.8ch; flex: none; }
+.bar-links svg { width: 16px; height: 16px; flex: none; }
+.bar-links a { justify-content: center; min-width: 44px; padding: 0; } /* 44px tap target around a 16px logo */
+.bar-links .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .session { display: flex; align-items: center; padding: 0 1.2ch; margin-right: 1ch; background: var(--foam); color: var(--base); font-weight: 700; }
 .tabs ol { display: flex; height: 100%; margin: 0; padding: 0; list-style: none; }
 .tabs a { display: flex; align-items: center; height: 100%; padding: 0 1ch; color: #adb3d1; text-decoration: none; }
@@ -268,9 +270,6 @@ strong { color: var(--user); }
   .card { padding: 14px; }
   .more { grid-template-columns: 1fr; }
   .status-bar span:nth-child(2) { display: none; }
-  .bar-links .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* logos only */
-  .bar-links svg { margin-right: 0; }
-  .bar-links a { padding: 0 1.2ch; }
 }
 
 @media (prefers-reduced-motion: reduce) {
