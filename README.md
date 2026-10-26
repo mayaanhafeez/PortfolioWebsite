@@ -2,8 +2,8 @@
 
 The next version of [ayaanhafeez.dev](https://www.ayaanhafeez.dev): a CRT terminal design
 after the Terminal Mystery launch site (Rosé Pine on JetBrains Mono, block-letter banner,
-boot-log hero, the game's status bar). Aimed at backend, AI systems, and systems
-programming internships.
+boot-log hero, the game's status bar). Aimed at software internships: backend, AI tooling,
+and apps, with systems as an interest.
 
 Right now it is a static site in `public/`: `index.html`, `styles.css`, and `script.js` (only the optional
 `:` command line). `CONTENT.md` is the fact-checked source for every claim on the page.

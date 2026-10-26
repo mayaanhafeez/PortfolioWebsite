@@ -4,15 +4,16 @@ Use this content as written. You may shorten a sentence to fit a layout, but nev
 add claims, numbers, users, dates, adjectives like "production-grade", or anything
 not stated here. Every fact below has been checked against the repos.
 
-Target reader: an internship recruiter or engineer hiring for **backend, AI systems,
-or systems programming** roles, spending under a minute on the page.
+Target reader: an internship recruiter or engineer hiring for **software roles: backend,
+AI tooling, and apps**, spending under a minute on the page. Systems is a stated interest,
+not the whole pitch.
 
 ---
 
 ## Meta
 
-- Page title: `Ayaan Hafeez · Backend, AI systems & systems programming`
-- Meta description: `4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Systems work in Rust and C; merged PRs to Omarchy and Vorssaint.`
+- Page title: `Ayaan Hafeez · Software developer: backend, AI tooling & systems`
+- Meta description: `4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Ships macOS apps, AI dev tools, and systems projects; merged PRs to Omarchy and Vorssaint.`
 - Canonical / og:url: `https://www.ayaanhafeez.dev/`
 - og:image: `https://www.ayaanhafeez.dev/opengraph-image` (1200×630)
 
@@ -31,7 +32,7 @@ or systems programming** roles, spending under a minute on the page.
 
 - Name: **Ayaan Hafeez**
 - One-line pitch, shown as the first of three short bullets in the hero:
-  - Backend services, AI systems, and low-level software
+  - Backend, AI tooling, and apps; interested in systems
   - 4th-year Computer Engineering (Software Option), University of Alberta
   - 3 co-op terms as an AI Developer at Elev8AI
 
@@ -76,12 +77,46 @@ or systems programming** roles, spending under a minute on the page.
 
 ---
 
-## Featured projects (5) — show every field, open by default, no "show more"
+## Featured projects (5, a mix: app, AI tooling, dev tool, extension, one systems deep-dive) — show every field, open by default, no "show more"
 
 Each has: name, what it does (one line), what was hard or interesting, tech tags, links,
 and a proof element.
 
-### 1. ssht: persistent SSH sessions
+### 1. Kitsune: keyboard launcher for macOS
+- What: A launcher that opens on a global hotkey to fuzzy-search apps, a nested command menu,
+  search providers, and system actions.
+- Hard part: AppKit owns everything native (the panel, rendering, the app index, fuzzy
+  matching, the hotkey, and IPC) while an embedded Lua 5.4 runtime owns the data (menus,
+  actions, plugins, and the theme), so configs and plugins reshape it without touching Swift.
+  Releases publish to a Homebrew cask from a tag push, and a `kitsunectl` CLI drives it from
+  scripts.
+- Tech: Swift, AppKit, Lua 5.4, Unix sockets, Homebrew
+- Links: Site https://kitsune.ayaanhafeez.dev · GitHub https://github.com/mayaanhafeez/app_launcher
+- Proof: `public/img/kitsune.jpg`, a 1280×1040 crop of the repo's
+  `docs/kitsune-rose-pine-moon-launcher.jpg` around the panel, and the install commands:
+  ```
+  brew tap mayaanhafeez/kitsune https://github.com/mayaanhafeez/app_launcher
+  brew install --cask kitsune
+  ```
+- Dates: Aug 2026 – Present (v0.9.0 Sep 29, v0.9.1 Oct 26)
+
+### 2. surgraft: token-efficient code moves for LLM tools
+- What: Moves functions between files for LLM coding tools without spending tokens on code
+  that didn't change.
+- Hard part: Locates function boundaries with Python's AST (a regex heuristic for
+  JS/TS), byte-copies the exact range, and only sends the snippet to the model for an
+  optional edit pass. Ships as a CLI, a Python library, and an MCP server.
+- Tech: Python, AST, Claude API, MCP
+- Links: PyPI https://pypi.org/project/surgraft/ · GitHub https://github.com/mayaanhafeez/surgraft
+- Proof (show as a small table): moving one 20-line function out of a 5,000-line file
+  | approach | input tokens |
+  |---|---|
+  | naive LLM rewrite | ~44,000 |
+  | surgraft, copy only | 0 |
+  | surgraft + edit pass | ~180 |
+- Dates: May – Jul 2026
+
+### 3. ssht: persistent SSH sessions
 - What: Turns every SSH connection into a resumable tmux session, so work survives sleep,
   network drops, and switching machines.
 - Hard part: It wraps the system `ssh` instead of reimplementing it, so ProxyJump, keys,
@@ -98,7 +133,22 @@ and a proof element.
   ```
 - Dates: Jun – Aug 2026
 
-### 2. Bare-metal Raspberry Pi 3 kernel
+### 4. FocusNode: site blocker for Chrome and Firefox
+- What: A browser extension that blocks distracting sites while focus mode is on, published
+  on the Chrome Web Store and Firefox Add-ons.
+- Hard part: One React + Vite codebase ships to Chrome, Firefox, and Zen through the
+  WebExtensions API. Blocking covers subdomains, turning focus mode off sends a blocked tab
+  back to the page it came from, and settings persist through the storage API with only the
+  storage and tabs permissions.
+- Tech: React, Vite, JavaScript, WebExtensions API
+- Links: Chrome Web Store https://chromewebstore.google.com/detail/focus-mode-blocker/bhkiedimpjpeoggbodjedjcopedhdaoo ·
+  Firefox Add-ons https://addons.mozilla.org/en-US/firefox/addon/focusnode-website-blocker/ ·
+  GitHub https://github.com/mayaanhafeez/FocusNode
+- Proof: screenshot `https://raw.githubusercontent.com/mayaanhafeez/FocusNode/main/screenshots/popup.png` (486×550).
+  Don't cite user counts (5 Chrome, 1 Firefox as of Oct 2026).
+- Dates: Jan – Jul 2026
+
+### 5. Bare-metal Raspberry Pi 3 kernel
 - What: A single-core AArch64 kernel for the Raspberry Pi 3 in C and ARMv8 assembly, with
   no libc, built by following Sergey Matyukevich's raspberry-pi-os lesson series.
 - Hard part: Boot and BSS setup, dropping from EL3/EL2 to EL1, exception vectors and timer
@@ -118,61 +168,23 @@ and a proof element.
   preemptive scheduler. (Keep the "proess" typo; it is the kernel's real output.)
 - Dates: May – Jul 2026
 
-### 3. macwifi: Wi-Fi manager for the macOS terminal
-- What: A terminal UI for scanning, joining, and managing Wi-Fi on macOS; a clean-room port
-  of the Linux tool impala.
-- Hard part: Split into a LaunchAgent daemon that owns the CoreWLAN interface and a client
-  that talks to it over a Unix socket, so scans run in a session that gets real network
-  names instead of redacted ones. Speed tests from four backends are normalized into one
-  schema and streamed as JSONL events that other front ends can follow live.
-- Tech: Rust, tokio, ratatui, CoreWLAN, Keychain, Unix sockets
-- Links: GitHub https://github.com/mayaanhafeez/macwifi
-- Proof: screenshot
-  `https://raw.githubusercontent.com/mayaanhafeez/macwifi/main/images/demo.png`
-  alt: "macwifi TUI showing known networks, new networks, and device tables"
-  Also: `brew install mayaanhafeez/tap/macwifi`
-- Dates: Jun – Sep 2026
-
-### 4. surgraft: token-efficient code moves for LLM tools
-- What: Moves functions between files for LLM coding tools without spending tokens on code
-  that didn't change.
-- Hard part: Locates function boundaries with Python's AST (a regex heuristic for
-  JS/TS), byte-copies the exact range, and only sends the snippet to the model for an
-  optional edit pass. Ships as a CLI, a Python library, and an MCP server.
-- Tech: Python, AST, Claude API, MCP
-- Links: PyPI https://pypi.org/project/surgraft/ · GitHub https://github.com/mayaanhafeez/surgraft
-- Proof (show as a small table): moving one 20-line function out of a 5,000-line file
-  | approach | input tokens |
-  |---|---|
-  | naive LLM rewrite | ~44,000 |
-  | surgraft, copy only | 0 |
-  | surgraft + edit pass | ~180 |
-- Dates: May – Jul 2026
-
-### 5. simdlings: learn ARM NEON SIMD by fixing broken kernels
-- What: A rustlings-style course in C: 24 exercises where you repair broken NEON vector
-  code, then write kernels that must beat the scalar version by 1.6×–3×.
-- Hard part: The test harness is adversarial. Buffers end against a PROT_NONE guard page so
-  a one-byte overread faults immediately, canaries catch negative indexing, every kernel is
-  checked at awkward lengths (0, 1, 3, 17, 1001, ...), and the scalar reference is compiled
-  with autovectorization off so measured speedups are real.
-- Tech: C, ARM NEON, Bash
-- Links: GitHub https://github.com/mayaanhafeez/simdlings
-
 ---
 
-## More projects (compact list: name, one line, link)
+## More projects (compact cards: name, one line, links)
 
-- **agent-usage**: Rust TUI showing token usage and rate limits for Claude Code, Codex,
-  OpenCode, and Gemini CLI side by side, read from each tool's local history.
-  https://github.com/mayaanhafeez/agent-usage
+- **macwifi**: Terminal UI for managing Wi-Fi on macOS, a clean-room port of the Linux tool
+  impala, with a LaunchAgent daemon and client talking over a Unix socket.
+  https://github.com/mayaanhafeez/macwifi
+- **simdlings**: A rustlings-style course for ARM NEON SIMD in C: 24 exercises with an
+  adversarial test harness, where your kernels must beat the scalar version.
+  https://github.com/mayaanhafeez/simdlings
+- **ASCII**: Image-to-ASCII converter with a drag-and-drop web UI, a serverless Python API on
+  Vercel, and a CLI. https://ascii.ayaanhafeez.dev · https://github.com/mayaanhafeez/ASCII
 - **agent-sudo-mac**: Lets coding agents run sudo on macOS without a TTY, using Touch ID
   with a GUI password fallback. https://github.com/mayaanhafeez/agent-sudo-mac
-- **Kitsune**: Keyboard launcher for macOS in Swift and AppKit, scriptable with embedded
-  Lua 5.4; installs via Homebrew. https://kitsune.ayaanhafeez.dev ·
-  https://github.com/mayaanhafeez/app_launcher
-- **FocusNode**: Site-blocking browser extension published on the Chrome Web Store and
-  Firefox Add-ons. https://github.com/mayaanhafeez/FocusNode
+
+Left off on purpose: Tuesday.com, agent-usage, the EMG controller (1 of 14 commits, so its
+latency claims can't be backed), BookmarkAPI.
 
 ---
 

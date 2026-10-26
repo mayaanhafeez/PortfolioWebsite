@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ayaan Hafeez · Backend, AI systems &amp; systems programming</title>
-  <meta name="description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Systems work in Rust and C; merged PRs to Omarchy and Vorssaint.">
+  <title>Ayaan Hafeez · Software developer: backend, AI tooling &amp; systems</title>
+  <meta name="description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Ships macOS apps, AI dev tools, and systems projects; merged PRs to Omarchy and Vorssaint.">
   <link rel="canonical" href="https://www.ayaanhafeez.dev/">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#191724">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Ayaan Hafeez · Backend, AI systems &amp; systems programming">
-  <meta property="og:description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Systems work in Rust and C; merged PRs to Omarchy and Vorssaint.">
+  <meta property="og:title" content="Ayaan Hafeez · Software developer: backend, AI tooling &amp; systems">
+  <meta property="og:description" content="4th-year Computer Engineering (Software Option) student at the University of Alberta. Three co-op terms building LLM pipelines and backends at Elev8AI. Ships macOS apps, AI dev tools, and systems projects; merged PRs to Omarchy and Vorssaint.">
   <meta property="og:url" content="https://www.ayaanhafeez.dev/">
   <meta property="og:image" content="https://www.ayaanhafeez.dev/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Ayaan Hafeez: backend services, AI systems, and low-level software">
+  <meta property="og:image:alt" content="Ayaan Hafeez: backend, AI tooling, and apps; interested in systems">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ayaan Hafeez · Backend, AI systems &amp; systems programming">
+  <meta name="twitter:title" content="Ayaan Hafeez · Software developer: backend, AI tooling &amp; systems">
   <meta name="twitter:image" content="https://www.ayaanhafeez.dev/og.png">
 
   <script type="application/ld+json">
@@ -78,7 +78,7 @@
             <p class="line"><span class="prompt" aria-hidden="true">$ cat </span>pitch.txt</p>
             <div class="card">
               <ul class="bullets">
-                <li>Backend services, AI systems, and low-level software</li>
+                <li>Backend, AI tooling, and apps; interested in systems</li>
                 <li>4th-year Computer Engineering (Software Option), University of Alberta</li>
                 <li>3 co-op terms as an AI Developer at Elev8AI</li>
               </ul>
@@ -140,49 +140,19 @@
         <h2><span class="prompt" aria-hidden="true">$ ls ~/</span>projects</h2>
 
         <article class="project card">
-          <h3>ssht <span class="dim">persistent SSH sessions</span></h3>
-          <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-08">Aug 2026</time></p>
+          <h3>Kitsune <span class="dim">keyboard launcher for macOS</span></h3>
+          <p class="when"><time datetime="2026-08">Aug 2026</time> – Present</p>
           <dl>
-            <dt>what</dt><dd>Turns every SSH connection into a resumable tmux session, so work survives sleep, network drops, and switching machines.</dd>
-            <dt>hard part</dt><dd>It wraps the system <code>ssh</code> instead of reimplementing it, so ProxyJump, keys, and hardware tokens keep working. A hand-written <code>~/.ssh/config</code> parser handles Include recursion, Match blocks, and wildcard hosts, and tokio probes hosts concurrently so the fuzzy picker never blocks on a slow one. Optional Mosh transport and local-echo mode for high-latency links.</dd>
-            <dt>tech</dt><dd class="tags">Rust / tokio / ratatui / SQLite / tmux / mosh</dd>
-            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/ssht" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://crates.io/crates/ssht" target="_blank" rel="noopener noreferrer">crates.io</a></dd>
-          </dl>
-          <pre class="proof"><code>$ brew install mayaanhafeez/tap/ssht
-$ cargo install ssht</code></pre>
-        </article>
-
-        <article class="project card">
-          <h3>Bare-metal Raspberry Pi 3 kernel</h3>
-          <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
-          <dl>
-            <dt>what</dt><dd>A single-core AArch64 kernel for the Raspberry Pi 3 in C and ARMv8 assembly, with no libc, built by following Sergey Matyukevich's raspberry-pi-os lesson series.</dd>
-            <dt>hard part</dt><dd>Boot and BSS setup, dropping from EL3/EL2 to EL1, exception vectors and timer IRQs, and a round-robin preemptive scheduler with context switching; then EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process page tables, where fork copies the parent's user pages. Tested under QEMU.</dd>
-            <dt>tech</dt><dd class="tags">C / ARMv8 assembly / QEMU</dd>
-            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/raspberry-pi-os" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
+            <dt>what</dt><dd>A launcher that opens on a global hotkey to fuzzy-search apps, a nested command menu, search providers, and system actions.</dd>
+            <dt>hard part</dt><dd>AppKit owns everything native (the panel, rendering, the app index, fuzzy matching, the hotkey, and IPC) while an embedded Lua 5.4 runtime owns the data (menus, actions, plugins, and the theme), so configs and plugins reshape it without touching Swift. Releases publish to a Homebrew cask from a tag push, and a <code>kitsunectl</code> CLI drives it from scripts.</dd>
+            <dt>tech</dt><dd class="tags">Swift / AppKit / Lua 5.4 / Unix sockets / Homebrew</dd>
+            <dt>links</dt><dd><a href="https://kitsune.ayaanhafeez.dev" target="_blank" rel="noopener noreferrer">Site</a> · <a href="https://github.com/mayaanhafeez/app_launcher" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
           </dl>
           <figure>
-            <pre class="proof"><code>$ ./run.sh
-Kernel proess started. EL 1
-user process
-1234512345abcdeabcdeabcde1234512345...</code></pre>
-            <figcaption>Real QEMU output: two forked user processes with separate page tables, interleaved by the preemptive scheduler.</figcaption>
+            <img src="/img/kitsune.jpg" width="1280" height="1040" loading="lazy" alt="Kitsune's launcher panel open over a macOS desktop, Rosé Pine Moon theme">
           </figure>
-        </article>
-
-        <article class="project card">
-          <h3>macwifi <span class="dim">Wi-Fi manager for the macOS terminal</span></h3>
-          <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-09">Sep 2026</time></p>
-          <dl>
-            <dt>what</dt><dd>A terminal UI for scanning, joining, and managing Wi-Fi on macOS; a clean-room port of the Linux tool impala.</dd>
-            <dt>hard part</dt><dd>Split into a LaunchAgent daemon that owns the CoreWLAN interface and a client that talks to it over a Unix socket, so scans run in a session that gets real network names instead of redacted ones. Speed tests from four backends are normalized into one schema and streamed as JSONL events that other front ends can follow live.</dd>
-            <dt>tech</dt><dd class="tags">Rust / tokio / ratatui / CoreWLAN / Keychain / Unix sockets</dd>
-            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/macwifi" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
-          </dl>
-          <figure>
-            <img src="https://raw.githubusercontent.com/mayaanhafeez/macwifi/main/images/demo.png" width="3420" height="2224" loading="lazy" alt="macwifi TUI showing known networks, new networks, and device tables">
-          </figure>
-          <pre class="proof"><code>$ brew install mayaanhafeez/tap/macwifi</code></pre>
+          <pre class="proof"><code>$ brew tap mayaanhafeez/kitsune https://github.com/mayaanhafeez/app_launcher
+$ brew install --cask kitsune</code></pre>
         </article>
 
         <article class="project card">
@@ -206,13 +176,48 @@ user process
         </article>
 
         <article class="project card">
-          <h3>simdlings <span class="dim">learn ARM NEON SIMD by fixing broken kernels</span></h3>
+          <h3>ssht <span class="dim">persistent SSH sessions</span></h3>
+          <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-08">Aug 2026</time></p>
           <dl>
-            <dt>what</dt><dd>A rustlings-style course in C: 24 exercises where you repair broken NEON vector code, then write kernels that must beat the scalar version by 1.6×–3×.</dd>
-            <dt>hard part</dt><dd>The test harness is adversarial. Buffers end against a PROT_NONE guard page so a one-byte overread faults immediately, canaries catch negative indexing, every kernel is checked at awkward lengths (0, 1, 3, 17, 1001, ...), and the scalar reference is compiled with autovectorization off so measured speedups are real.</dd>
-            <dt>tech</dt><dd class="tags">C / ARM NEON / Bash</dd>
-            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/simdlings" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
+            <dt>what</dt><dd>Turns every SSH connection into a resumable tmux session, so work survives sleep, network drops, and switching machines.</dd>
+            <dt>hard part</dt><dd>It wraps the system <code>ssh</code> instead of reimplementing it, so ProxyJump, keys, and hardware tokens keep working. A hand-written <code>~/.ssh/config</code> parser handles Include recursion, Match blocks, and wildcard hosts, and tokio probes hosts concurrently so the fuzzy picker never blocks on a slow one. Optional Mosh transport and local-echo mode for high-latency links.</dd>
+            <dt>tech</dt><dd class="tags">Rust / tokio / ratatui / SQLite / tmux / mosh</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/ssht" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://crates.io/crates/ssht" target="_blank" rel="noopener noreferrer">crates.io</a></dd>
           </dl>
+          <pre class="proof"><code>$ brew install mayaanhafeez/tap/ssht
+$ cargo install ssht</code></pre>
+        </article>
+
+        <article class="project card">
+          <h3>FocusNode <span class="dim">site blocker for Chrome and Firefox</span></h3>
+          <p class="when"><time datetime="2026-01">Jan</time> – <time datetime="2026-07">Jul 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>A browser extension that blocks distracting sites while focus mode is on, published on the Chrome Web Store and Firefox Add-ons.</dd>
+            <dt>hard part</dt><dd>One React + Vite codebase ships to Chrome, Firefox, and Zen through the WebExtensions API. Blocking covers subdomains, turning focus mode off sends a blocked tab back to the page it came from, and settings persist through the storage API with only the storage and tabs permissions.</dd>
+            <dt>tech</dt><dd class="tags">React / Vite / JavaScript / WebExtensions API</dd>
+            <dt>links</dt><dd><a href="https://chromewebstore.google.com/detail/focus-mode-blocker/bhkiedimpjpeoggbodjedjcopedhdaoo" target="_blank" rel="noopener noreferrer">Chrome Web Store</a> · <a href="https://addons.mozilla.org/en-US/firefox/addon/focusnode-website-blocker/" target="_blank" rel="noopener noreferrer">Firefox Add-ons</a> · <a href="https://github.com/mayaanhafeez/FocusNode" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
+          </dl>
+          <figure>
+            <img src="https://raw.githubusercontent.com/mayaanhafeez/FocusNode/main/screenshots/popup.png" width="486" height="550" loading="lazy" alt="FocusNode popup with the Focus Mode toggle">
+          </figure>
+        </article>
+
+        <article class="project card">
+          <h3>Bare-metal Raspberry Pi 3 kernel</h3>
+          <p class="when"><time datetime="2026-05">May</time> – <time datetime="2026-07">Jul 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>A single-core AArch64 kernel for the Raspberry Pi 3 in C and ARMv8 assembly, with no libc, built by following Sergey Matyukevich's raspberry-pi-os lesson series.</dd>
+            <dt>hard part</dt><dd>Boot and BSS setup, dropping from EL3/EL2 to EL1, exception vectors and timer IRQs, and a round-robin preemptive scheduler with context switching; then EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process page tables, where fork copies the parent's user pages. Tested under QEMU.</dd>
+            <dt>tech</dt><dd class="tags">C / ARMv8 assembly / QEMU</dd>
+            <dt>links</dt><dd><a href="https://github.com/mayaanhafeez/raspberry-pi-os" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
+          </dl>
+          <figure>
+            <pre class="proof"><code>$ ./run.sh
+Kernel proess started. EL 1
+user process
+1234512345abcdeabcdeabcde1234512345...</code></pre>
+            <figcaption>Real QEMU output: two forked user processes with separate page tables, interleaved by the preemptive scheduler.</figcaption>
+          </figure>
         </article>
       </section>
 
@@ -220,24 +225,24 @@ user process
         <h2><span class="prompt" aria-hidden="true">$ ls -a ~/</span><span class="sr-only">more </span>projects</h2>
         <ul class="more">
           <li class="card">
-            <h3>agent-usage</h3>
-            <p>Rust TUI showing token usage and rate limits for Claude Code, Codex, OpenCode, and Gemini CLI side by side, read from each tool's local history.</p>
-            <p class="pr"><a href="https://github.com/mayaanhafeez/agent-usage" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+            <h3>macwifi</h3>
+            <p>Terminal UI for managing Wi-Fi on macOS, a clean-room port of the Linux tool impala, with a LaunchAgent daemon and client talking over a Unix socket.</p>
+            <p class="pr"><a href="https://github.com/mayaanhafeez/macwifi" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+          </li>
+          <li class="card">
+            <h3>simdlings</h3>
+            <p>A rustlings-style course for ARM NEON SIMD in C: 24 exercises with an adversarial test harness, where your kernels must beat the scalar version.</p>
+            <p class="pr"><a href="https://github.com/mayaanhafeez/simdlings" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+          </li>
+          <li class="card">
+            <h3>ASCII</h3>
+            <p>Image-to-ASCII converter with a drag-and-drop web UI, a serverless Python API on Vercel, and a CLI.</p>
+            <p class="pr"><a href="https://ascii.ayaanhafeez.dev" target="_blank" rel="noopener noreferrer">Live demo</a> · <a href="https://github.com/mayaanhafeez/ASCII" target="_blank" rel="noopener noreferrer">GitHub</a></p>
           </li>
           <li class="card">
             <h3>agent-sudo-mac</h3>
             <p>Lets coding agents run sudo on macOS without a TTY, using Touch ID with a GUI password fallback.</p>
             <p class="pr"><a href="https://github.com/mayaanhafeez/agent-sudo-mac" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-          </li>
-          <li class="card">
-            <h3>Kitsune</h3>
-            <p>Keyboard launcher for macOS in Swift and AppKit, scriptable with embedded Lua 5.4; installs via Homebrew.</p>
-            <p class="pr"><a href="https://kitsune.ayaanhafeez.dev" target="_blank" rel="noopener noreferrer">Site</a> · <a href="https://github.com/mayaanhafeez/app_launcher" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-          </li>
-          <li class="card">
-            <h3>FocusNode</h3>
-            <p>Site-blocking browser extension published on the Chrome Web Store and Firefox Add-ons.</p>
-            <p class="pr"><a href="https://github.com/mayaanhafeez/FocusNode" target="_blank" rel="noopener noreferrer">GitHub</a></p>
           </li>
         </ul>
       </section>
