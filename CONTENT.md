@@ -49,9 +49,6 @@ not the whole pitch.
 - Built the backend for a social media platform: FastAPI with PostgreSQL and Redis, RBAC
   and JWT auth, Stripe subscriptions synced by webhooks, and ML identity verification;
   deployed with Docker and nginx behind a React/TypeScript frontend.
-- Built an API documentation scraper (Selenium + OpenAI) that crawls docs sites, GitHub
-  repos, and PDFs into typed OpenAPI schemas; extracted 100+ endpoints and cut developer
-  hours by 90%.
 - Took part in customer requirements meetings for AI and ERP projects and ran functional
   QA on end-to-end business scenarios before delivery.
 - This work is under NDA: no links, and no project cards for it (the page doesn't say so).
@@ -77,7 +74,7 @@ not the whole pitch.
 
 ---
 
-## Featured projects (5, a mix: app, AI tooling, dev tool, extension, one systems deep-dive) — show every field, open by default, no "show more"
+## Featured projects (6, a mix: app, AI tooling, dev tool, extension, hackathon team project, one systems deep-dive) — show every field, open by default, no "show more"
 
 Each has: name, what it does (one line), what was hard or interesting, tech tags, links,
 and a proof element.
@@ -116,7 +113,34 @@ and a proof element.
   | surgraft + edit pass | ~180 |
 - Dates: May – Jul 2026
 
-### 3. ssht: persistent SSH sessions
+### 3. Trust Issues: drone survivability layer
+- What: Keeps a drone flying through GPS spoofing, a jammed or lost control link, and
+  attacks on the operator link, and shows the operator what's still trusted. Built at
+  NATHacks 2026 as Whats Your GPS, a team of four (didn't place).
+- Hard part: Telling jamming from a plain signal loss on a companion computer that isn't on
+  the operator's link: it counts the operator heartbeats ArduPilot forwards and reads the
+  telemetry radio's RSSI from `RC_CHANNELS`, so silence while the radio still hears strong
+  RF reads as jamming. Ayaan's parts: that detector, the autonomy layer (hold, return, land,
+  EKF failover over MAVLink), the Go/WebAssembly dashboard and MAVLink bridge, and the ESP32
+  port. Teammates built the GPS spoofing detector (Kalman filter, six checks) and link
+  signing; don't claim those. Everything ran in ArduPilot SITL; the ESP32 was fed simulated
+  telemetry, so never say it flew a real drone.
+- Tech: C, Go, WebAssembly, MAVLink, ESP32, ArduPilot SITL
+- Links: GitHub https://github.com/HameedFawwaz/NATHacks_2026 (upstream, not the fork)
+- Proof (show as a small table; `core_main` link results from the upstream core/README.md,
+  2026-11-09, ArduCopter 4.5 SITL; seconds after injection, one run each)
+  (stages as rows so it fits at 320px; landed 0.0 m from home both times)
+  | | jamming | link loss |
+  |---|---|---|
+  | detected | 10.5 | 5.2 |
+  | holding | 10.7 | 5.4 |
+  | returning | 40.5 | 35.1 |
+  | landed at home | 91.1 | 85.1 |
+  ESP32 vs desktop detection times differ by at most 1.5 s (jam 9.0 vs 10.5; GNSS
+  4.8/4.8, 16.4/16.0, 2.1/1.6).
+- Dates: Nov 6 – 9, 2026
+
+### 4. ssht: persistent SSH sessions
 - What: Turns every SSH connection into a resumable tmux session, so work survives sleep,
   network drops, and switching machines.
 - Hard part: It wraps the system `ssh` instead of reimplementing it, so ProxyJump, keys,
@@ -133,7 +157,7 @@ and a proof element.
   ```
 - Dates: Jun – Aug 2026
 
-### 4. FocusNode: site blocker for Chrome and Firefox
+### 5. FocusNode: site blocker for Chrome and Firefox
 - What: A browser extension that blocks distracting sites while focus mode is on, published
   on the Chrome Web Store and Firefox Add-ons.
 - Hard part: One React + Vite codebase ships to Chrome, Firefox, and Zen through the
@@ -148,7 +172,7 @@ and a proof element.
   Don't cite user counts (5 Chrome, 1 Firefox as of Oct 2026).
 - Dates: Jan – Jul 2026
 
-### 5. Bare-metal Raspberry Pi 3 kernel
+### 6. Bare-metal Raspberry Pi 3 kernel
 - What: A single-core AArch64 kernel for the Raspberry Pi 3 in C and ARMv8 assembly, with
   no libc, built by following Sergey Matyukevich's raspberry-pi-os lesson series.
 - Hard part: Boot and BSS setup, dropping from EL3/EL2 to EL1, exception vectors and timer

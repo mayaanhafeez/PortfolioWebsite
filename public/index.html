@@ -176,6 +176,27 @@ $ brew install --cask kitsune</code></pre>
         </article>
 
         <article class="project card">
+          <h3>Trust Issues <span class="dim">drone survivability layer</span></h3>
+          <p class="when"><time datetime="2026-11">Nov 2026</time></p>
+          <dl>
+            <dt>what</dt><dd>Keeps a drone flying through GPS spoofing, a jammed or lost control link, and attacks on the operator link, and shows the operator what's still trusted. Built at NATHacks 2026 as Whats Your GPS, a team of four.</dd>
+            <dt>hard part</dt><dd>Telling jamming from a plain signal loss on a companion computer that isn't on the operator's link: it counts the operator heartbeats ArduPilot forwards and reads the telemetry radio's RSSI from <code>RC_CHANNELS</code>, so silence while the radio still hears strong RF reads as jamming. I built that detector, the autonomy layer that turns trust scores into hold, return, and land commands over MAVLink, the Go/WebAssembly dashboard and its MAVLink bridge, and the ESP32 port that runs the loop as firmware. Teammates built the GPS spoofing detector and link signing.</dd>
+            <dt>tech</dt><dd class="tags">C / Go / WebAssembly / MAVLink / ESP32 / ArduPilot SITL</dd>
+            <dt>links</dt><dd><a href="https://github.com/HameedFawwaz/NATHacks_2026" target="_blank" rel="noopener noreferrer">GitHub</a></dd>
+          </dl>
+          <table class="proof-table">
+            <caption>Link attacks in ArduPilot SITL, seconds after injection</caption>
+            <thead><tr><td></td><th scope="col">jamming</th><th scope="col">link loss</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">detected</th><td>10.5</td><td>5.2</td></tr>
+              <tr><th scope="row">holding</th><td>10.7</td><td>5.4</td></tr>
+              <tr><th scope="row">returning</th><td>40.5</td><td>35.1</td></tr>
+              <tr><th scope="row">landed at home</th><td>91.1</td><td>85.1</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="project card">
           <h3>ssht <span class="dim">persistent SSH sessions</span></h3>
           <p class="when"><time datetime="2026-06">Jun</time> – <time datetime="2026-08">Aug 2026</time></p>
           <dl>
