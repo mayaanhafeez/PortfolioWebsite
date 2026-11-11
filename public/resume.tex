@@ -88,7 +88,7 @@
       {University of Alberta}{Edmonton, AB}
       {BSc in Computer Engineering, Co-op, Software Option}{Expected May 2028}
       \resumeItemListStart
-        \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Organization \& Assembly, Software Requirements, Digital Logic, Signals \& Systems, Operating Systems (in progress), Database Management (in progress), Software Testing \& Maintenance (in progress)}
+        \resumeItem{\textbf{Relevant Coursework:} Data Structures \& Algorithms, Software Requirements, Database Management (in progress)}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -96,13 +96,14 @@
 \section{Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {AI Developer (3 co-op terms, then part-time)}{Summer 2025, Winter 2026, Summer 2026 (co-op)}
+      {AI Developer (3 co-op terms, then part-time)}{May 2025 -- Aug 2025, Jan 2026 -- Aug 2026 (co-op)}
       {Elev8AI -- Remote}{Sep 2026 -- Present (part-time)}
       \resumeItemListStart
-        \resumeItem{Built an NL2SQL network-monitoring chatbot with LangChain, Ollama, ChromaDB, and PostgreSQL, using RAG retrieval and session-aware context management; reached 85\% answer accuracy on internal benchmarks}
-        \resumeItem{Took part in customer requirements meetings for AI and ERP projects, turning business processes into scoped requirements, workflows, and data models}
-        \resumeItem{Designed ERP modules and ran functional QA across end-to-end business scenarios, validating workflows with customers before delivery}
-        \resumeItem{Built a full-stack social media platform: FastAPI backend with PostgreSQL/Redis, RBAC and JWT auth, Stripe subscriptions, ML identity verification, and a React/TypeScript frontend deployed with Docker and nginx}
+        \resumeItem{Built an NL2SQL chatbot with LangChain, Ollama, ChromaDB, and RAG; 85\% accuracy on internal benchmarks}
+        \resumeItem{Built a full-stack social media platform: FastAPI, PostgreSQL, Redis, JWT auth, Stripe, React, TypeScript}
+        \resumeItem{Built internal tools and Python automation: geospatial lookups, report pipelines, a customized Kimai fork}
+        \resumeItem{Debugged and redeployed a production email-reporting job; migrating 170 NetSuite scripts to SuiteScript 2.1}
+        \resumeItem{Turned customer meetings into requirements and data models for AI and ERP projects; ran end-to-end QA}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -110,41 +111,56 @@
 \section{Open Source}
     \resumeSubHeadingListStart
       \resumeProjectHeading
-          {\href{https://github.com/omacom/omarchy/pull/8787}{\textbf{Omarchy -- PR \#8787 (merged)}} $|$ \emph{Arch + Hyprland Linux distro, 45K stars}}{Oct 2026}
+          {\href{https://github.com/omacom/omarchy/pull/8787}{\textbf{Omarchy -- PR \#8787 (merged)}} $|$ \emph{Arch + Hyprland Linux distro, 45K stars}}{Oct 2026 -- Oct 2026}
           \resumeItemListStart
-            \resumeItem{Fixed a lopsided keyboard/hover highlight on the network panel's header actions and made the shared square action button pixel-snap its icon at fractional display scales}
+            \resumeItem{Fixed a lopsided hover highlight in the network panel and pixel-snapped action icons at fractional scales}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\href{https://github.com/vorssaint/vorssaint-utils/pull/624}{\textbf{Vorssaint -- PR \#624 (merged)}} $|$ \emph{Swift, Core Graphics; macOS utility, 29K stars}}{Aug 2026}
+          {\href{https://github.com/vorssaint/vorssaint-utils/pull/624}{\textbf{Vorssaint -- PR \#624 (merged)}} $|$ \emph{Swift, Core Graphics; macOS utility, 29K stars}}{Aug 2026 -- Aug 2026}
           \resumeItemListStart
-            \resumeItem{Fixed a display-recovery bug that could leave a laptop with no usable screen after unplugging an external monitor: recovery now ignores virtual displays and switches stranded physical displays back on, with regression tests for headless setups}
+            \resumeItem{Fixed display recovery that could leave a laptop with no usable screen after unplugging a monitor; added tests}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{Hyprspace} -- \href{https://github.com/PeachlifeAB/hyprspace-core/pull/4}{\underline{PR \#4}}, \href{https://github.com/PeachlifeAB/hyprspace-core/pull/5}{\underline{PR \#5}} (merged) $|$ \emph{Swift; tiling window manager for macOS}}{Sep 2026}
+          {\textbf{Hyprspace} -- \href{https://github.com/PeachlifeAB/hyprspace-core/pull/4}{\underline{PR \#4}}, \href{https://github.com/PeachlifeAB/hyprspace-core/pull/5}{\underline{PR \#5}} (merged) $|$ \emph{Swift; tiling window manager for macOS}}{Sep 2026 -- Sep 2026}
           \resumeItemListStart
-            \resumeItem{Added smart single-window gaps, floating-window resize and centering keys, and modifier-drag to move windows with retiling on drop}
+            \resumeItem{Added smart single-window gaps, floating-window resize and centering keys, and modifier-drag to move windows}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 
 %-----------PROJECTS-----------
 \section{Projects}
     \resumeSubHeadingListStart
-    \resumeProjectHeading
-          {\href{https://github.com/mayaanhafeez/raspberry-pi-os}{\textbf{Bare-Metal Raspberry Pi 3 Kernel}} $|$ \emph{C, ARMv8 Assembly, QEMU}}{May -- Jul 2026}
+      \resumeProjectHeading
+          {\href{https://github.com/HameedFawwaz/NATHacks_2026}{\textbf{Trust Issues}} -- NATHacks 2026, team Whats Your GPS (4 people) $|$ \emph{C, Go, MAVLink, ESP32}}{Nov 2026 -- Nov 2026}
           \resumeItemListStart
-            \resumeItem{Following Sergey Matyukevich's raspberry-pi-os lesson series, implemented a single-core AArch64 kernel with no libc: boot and BSS setup, EL3/EL2 to EL1 transitions, exception vectors and timer IRQs, a mini UART driver, and a round-robin preemptive scheduler with context switching}
-            \resumeItem{Added EL0 user processes with system calls (write, malloc, clone/fork, exit) and per-process virtual memory: each task gets its own page tables and fork copies the parent's user pages; tested under QEMU}
+            \resumeItem{Built a lost-link detector that tells RF jamming from plain signal loss using heartbeats and radio RSSI}
+            \resumeItem{In ArduPilot SITL it flagged jamming in 10.5\,s and link loss in 5.2\,s, then returned and landed at home}
+            \resumeItem{Wrote the autonomy layer that sends EKF failover, hold, return, and land commands to the drone over MAVLink}
+            \resumeItem{Built the Go/WebAssembly operator dashboard with a live MAVLink bridge; ported the core loop to an ESP32}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\href{https://github.com/mayaanhafeez/ssht}{\textbf{ssht -- Persistent SSH Sessions}} $|$ \emph{Rust, ratatui, tokio, SQLite, tmux, mosh}}{Jun -- Aug 2026}
+          {\href{https://github.com/mayaanhafeez/surgraft}{\textbf{surgraft -- Token-Efficient Code Moves for LLM Tools}} $|$ \emph{Python, AST, Claude API, MCP}}{May 2026 -- Jul 2026}
           \resumeItemListStart
-            \resumeItem{Built a Rust TUI that reattaches tmux sessions over SSH from any machine, with recursive \texttt{\textasciitilde/.ssh/config} parsing, concurrent remote probes, SQLite history, and fuzzy search; published on crates.io and Homebrew}
+            \resumeItem{Built a CLI, Python library, and MCP server that moves functions between files for LLM coding tools}
+            \resumeItem{Finds function bounds with Python's AST and byte-copies the exact range instead of having a model rewrite it}
+            \resumeItem{Moving a 20-line function out of a 5,000-line file costs about 180 input tokens instead of about 44,000}
+            \resumeItem{Sends only the moved snippet to Claude for an optional edit pass; published on PyPI}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\href{https://github.com/mayaanhafeez/macwifi}{\textbf{macwifi -- Wi-Fi TUI for macOS}} $|$ \emph{Rust, ratatui, tokio, CoreWLAN}}{Jun -- Sep 2026}
+          {\href{https://github.com/mayaanhafeez/app_launcher}{\textbf{Kitsune -- Keyboard Launcher for macOS}} $|$ \emph{Swift, AppKit, Lua 5.4, Unix sockets}}{Aug 2026 -- Nov 2026}
           \resumeItemListStart
-            \resumeItem{Built a clean-room macOS port of the Linux Wi-Fi TUI impala, with WPA-Enterprise and hidden-network support, using a Unix-socket daemon/client design over CoreWLAN, Keychain, and a LaunchAgent}
-            \resumeItem{Exposed Wi-Fi operations and speed tests through a CLI that streams JSONL events, which drives a custom SketchyBar Wi-Fi popup}
+            \resumeItem{Built a macOS launcher that opens on a global hotkey to fuzzy-search apps, commands, and system actions}
+            \resumeItem{AppKit owns the native panel, app index, and IPC; an embedded Lua runtime owns menus, plugins, and themes}
+            \resumeItem{Configs and plugins reshape it without touching Swift, and a kitsunectl CLI drives it from scripts}
+            \resumeItem{Tag pushes publish releases to a Homebrew cask}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\href{https://github.com/mayaanhafeez/ssht}{\textbf{ssht -- Persistent SSH Sessions}} $|$ \emph{Rust, tokio, ratatui, SQLite, tmux, mosh}}{Jun 2026 -- Aug 2026}
+          \resumeItemListStart
+            \resumeItem{Built a Rust TUI that turns each SSH connection into a tmux session that survives sleep and network drops}
+            \resumeItem{Wraps the system ssh instead of reimplementing it, so ProxyJump, keys, and hardware tokens keep working}
+            \resumeItem{Hand-wrote an SSH config parser (Include recursion, Match blocks, wildcards); tokio probes hosts concurrently}
+            \resumeItem{Fuzzy host picker with SQLite history and optional Mosh transport; published on crates.io and Homebrew}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 
@@ -152,8 +168,11 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
-     \textbf{Languages:}{ Python, C, Rust, TypeScript} \\
-     \textbf{Tools:}{ Git, Docker, PostgreSQL, FastAPI, React, Linux}
+     \textbf{Languages:}{ Python, TypeScript, JavaScript, SQL, Go, C, Rust, Swift} \\
+     \textbf{Backend:}{ FastAPI, PostgreSQL, Redis, SQLite, REST APIs, JWT auth, Stripe} \\
+     \textbf{Frontend:}{ React, Vite, Tailwind CSS, WebExtensions API} \\
+     \textbf{AI / LLM:}{ LangChain, Ollama, ChromaDB, RAG, Claude API, OpenAI API, MCP} \\
+     \textbf{Tools:}{ Git, Docker, nginx, Linux, Homebrew}
     }}
  \end{itemize}
 
