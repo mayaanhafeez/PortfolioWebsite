@@ -46,11 +46,26 @@ not the whole pitch.
   PostgreSQL: an intent classifier routes questions to SQL generation, RAG retrieval, or
   general answers, with session-aware context across turns; 85% answer accuracy on
   internal benchmarks.
-- Built the backend for a social media platform: FastAPI with PostgreSQL and Redis, RBAC
-  and JWT auth, Stripe subscriptions synced by webhooks, and ML identity verification;
-  deployed with Docker and nginx behind a React/TypeScript frontend.
+- Built a full-stack social media platform: FastAPI backend with PostgreSQL and Redis, RBAC
+  and JWT auth, Stripe subscriptions synced by webhooks, and ML identity verification, plus
+  the React/TypeScript frontend (Ayaan built both, confirmed 2026-11-11); deployed with
+  Docker and nginx.
+- Built an API documentation scraper (Selenium + OpenAI) that crawls docs sites, GitHub
+  repos, and PDFs into typed OpenAPI schemas; extracted 100+ endpoints and cut developer
+  hours by 90%.
+- Built internal tools and Python automation for client operations: UK postcode and
+  grid-reference lookups built from open government data, a tool that turns a hand-drawn
+  coverage map into one boundary polygon per depot, spreadsheet and report pipelines, and a
+  customized fork of the Kimai time tracker.
+- Debugged a broken production email-reporting job (Microsoft Graph), fixed how it handled
+  its reporting time frame, then staged and redeployed it. Migrating 170 of a client's
+  NetSuite scripts (about 34,000 lines) from SuiteScript 1.0 to 2.1: in progress, so never
+  "migrated", and never say he deployed them (the client does).
 - Took part in customer requirements meetings for AI and ERP projects and ran functional
   QA on end-to-end business scenarios before delivery.
+- Keep these general (Ayaan's preference): kinds of work, not a task list. Never list PHP or
+  Odoo work; the TypeScript Kimai port was abandoned. Full detail is in
+  ~/personal/resume-tailoring/verified-experience-pool.md.
 - This work is under NDA: no links, and no project cards for it (the page doesn't say so).
 
 ---
